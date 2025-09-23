@@ -1,7 +1,6 @@
 "use client"
 
-import { Search, Bell, ChevronDown, LogOut, User } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { Bell, ChevronDown, LogOut, User } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -23,19 +22,8 @@ export function Navbar() {
   const unreadCount = notifications.filter((n) => !n.read).length
 
   return (
-    <header className="bg-white border-b border-[#efefef] px-6 py-[14px] w-full transition-all duration-300 sticky top-0">
-      <div className="flex items-center justify-between">
-        {/* Removed logo from navbar, it should be in sidebar */}
-        <div className="flex-1 max-w-md">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#767676] w-4 h-4" />
-            <Input
-              placeholder="Discover credentials, skills or organizations"
-              className="pl-10 bg-[#faf9f9] border-[#d9d9d9] text-gray-700 placeholder:text-[#767676]"
-            />
-          </div>
-        </div>
-
+    <header className="bg-white border-b border-[rgb(208,224,255)] px-6 py-[14px] w-full transition-all duration-300 sticky top-0">
+      <div className="flex items-center justify-end">
         <div className="flex items-center gap-6">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -82,7 +70,7 @@ export function Navbar() {
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <Avatar className="w-8 h-8">
-                  <AvatarImage src="/placeholder.svg?height=32&width=32" />
+                  <AvatarImage src="/images/profile.png" />
                   <AvatarFallback className="bg-[#d9d9d9] text-gray-700">U</AvatarFallback>
                 </Avatar>
                 <ChevronDown className="w-4 h-4 text-[#767676]" />

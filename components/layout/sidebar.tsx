@@ -1,15 +1,5 @@
 "use client"
-import {
-  CreditCard,
-  BarChart3,
-  Code,
-  User,
-  GraduationCap,
-  HelpCircle,
-  ExternalLink,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react"
+import { CreditCard, BarChart3, Code, User, GraduationCap, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useNavigation } from "@/hooks/use-navigation"
 import { Button } from "@/components/ui/button"
@@ -37,14 +27,14 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps)
     <TooltipProvider>
       <div
         className={cn(
-          "bg-white border-r border-[#efefef] flex flex-col relative transition-all duration-300 h-screen fixed left-0 top-0 z-20",
+          "bg-white border-r border-[rgb(208,224,255)] flex flex-col relative transition-all duration-300 h-screen fixed left-0 top-0 z-20",
           isCollapsed ? "w-16" : "w-64",
         )}
       >
         {onToggleCollapse && (
           <button
             onClick={onToggleCollapse}
-            className="absolute -right-4 top-[20px] w-8 h-8 bg-white border border-[#efefef] rounded-lg flex items-center justify-center hover:bg-[#faf9f9] transition-colors shadow-sm z-[60]"
+            className="absolute -right-4 top-[20px] w-8 h-8 bg-white border border-[rgb(208,224,255)] rounded-lg flex items-center justify-center hover:bg-[#faf9f9] transition-colors shadow-sm z-[60]"
           >
             {isCollapsed ? (
               <ChevronRight className="w-4 h-4 text-[#767676]" />
@@ -54,7 +44,12 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps)
           </button>
         )}
 
-        <div className={cn(isCollapsed ? "py-[20px]" : "py-[16px]","border-b border-[#efefef] flex items-center px-4")}>
+        <div
+          className={cn(
+            isCollapsed ? "py-[20px]" : "py-[16px]",
+            "border-b border-[rgb(208,224,255)] flex items-center px-4",
+          )}
+        >
           {!isCollapsed && (
             <div className="flex items-center gap-3">
               <Image
@@ -83,23 +78,6 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps)
         </div>
 
         <div className="p-4">
-          {!isCollapsed && (
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-6 h-6 bg-[#2b97cf] rounded flex items-center justify-center">
-                  <span className="text-white font-bold text-xs">K</span>
-                </div>
-                <div>
-                  <h3 className="text-gray-700 font-medium">Kaplan University</h3>
-                </div>
-              </div>
-              <button className="text-[#2b97cf] text-sm hover:underline flex items-center gap-1">
-                See Profile
-                <ExternalLink className="w-3 h-3" />
-              </button>
-            </div>
-          )}
-
           <nav className="space-y-2">
             {navigationItems.map((item) => {
               const Icon = item.icon
@@ -113,7 +91,7 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps)
                       className={cn(
                         "w-full gap-2 text-gray-700 hover:bg-[#faf9f9]",
                         isCollapsed ? "justify-center px-2" : "justify-start",
-                        isActive && "bg-[#2b97cf]/10 text-[#2b97cf] font-medium border-l-2 border-[#2b97cf]",
+                        isActive && "bg-[#2b97cf]/10 text-[#2b97cf] font-medium",
                       )}
                       onClick={() => setActiveNavItem(item.id)}
                     >
