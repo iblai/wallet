@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react"
+import Link from "next/link"
 
 interface CredentialItem {
   id: string
@@ -40,7 +41,7 @@ export function CredentialsTable() {
   return (
     <div className="bg-white">
       {/* Table Header */}
-      <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-[#efefef] text-sm font-medium text-gray-700">
+      <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-[#efefef] text-sm font-medium text-[#555d6b]">
         <div className="col-span-5">Name</div>
         <div className="col-span-2">State</div>
         <div className="col-span-3 flex items-center gap-1 cursor-pointer hover:text-[#2b97cf] transition-colors">
@@ -53,43 +54,42 @@ export function CredentialsTable() {
       {/* Table Rows */}
       <div className="divide-y divide-[#efefef]">
         {credentialsData.map((credential) => (
-          <div
-            key={credential.id}
-            className="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-[#faf9f9] transition-colors cursor-pointer group"
-          >
-            {/* Name Column */}
-            <div className="col-span-5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-[#efefef] shadow-sm">
-                <img
-                  src={credential.icon || "/placeholder.svg"}
-                  alt={credential.name}
-                  className="w-full h-full object-cover"
-                />
+          <Link key={credential.id} href={`/credentials/${credential.id}`}>
+            <div className="grid grid-cols-12 gap-4 px-6 py-4 hover:bg-[#faf9f9] transition-colors cursor-pointer group">
+              {/* Name Column */}
+              <div className="col-span-5 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border-2 border-[#2b97cf]/20 shadow-sm bg-gradient-to-br from-[#2b97cf]/5 to-[#455aa1]/5">
+                  <img
+                    src={credential.icon || "/placeholder.svg"}
+                    alt={credential.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-[#555d6b] font-medium group-hover:text-[#2b97cf] transition-colors">
+                  {credential.name}
+                </span>
               </div>
-              <span className="text-gray-700 font-medium group-hover:text-[#2b97cf] transition-colors">
-                {credential.name}
-              </span>
-            </div>
 
-            {/* State Column */}
-            <div className="col-span-2 flex items-center">
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
-                {credential.state}
-              </span>
-            </div>
+              {/* State Column */}
+              <div className="col-span-2 flex items-center">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#2b97cf]/10 text-[#2b97cf] border border-[#2b97cf]/20">
+                  {credential.state}
+                </span>
+              </div>
 
-            {/* Updated Column */}
-            <div className="col-span-3 flex items-center">
-              <span className="text-gray-700">{credential.updated}</span>
-            </div>
+              {/* Updated Column */}
+              <div className="col-span-3 flex items-center">
+                <span className="text-[#555d6b]">{credential.updated}</span>
+              </div>
 
-            {/* Issued Column */}
-            <div className="col-span-2 flex items-center">
-              <span className="inline-flex items-center justify-center w-8 h-6 rounded-md bg-[#faf9f9] text-gray-700 text-sm font-medium">
-                {credential.issued}
-              </span>
+              {/* Issued Column */}
+              <div className="col-span-2 flex items-center">
+                <span className="inline-flex items-center justify-center w-8 h-6 rounded-md bg-[#455aa1]/10 text-[#455aa1] text-sm font-medium border border-[#455aa1]/20">
+                  {credential.issued}
+                </span>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

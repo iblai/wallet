@@ -1,6 +1,7 @@
 import { Search, Filter, Plus } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export function CredentialsToolbar() {
   return (
@@ -31,10 +32,12 @@ export function CredentialsToolbar() {
         <span className="text-sm text-gray-700">Showing 1-3 of 3</span>
 
         <div className="flex items-center gap-3">
-          <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90 text-white shadow-sm">
-            <Plus className="w-4 h-4 mr-2" />
-            Create Template
-          </Button>
+          <Link href="/create-template">
+            <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90 text-white shadow-sm">
+              <Plus className="w-4 h-4 mr-2" />
+              Create Template
+            </Button>
+          </Link>
           <Button
             variant="outline"
             size="icon"
