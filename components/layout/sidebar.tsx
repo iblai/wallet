@@ -54,7 +54,7 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps)
           </button>
         )}
 
-        <div className="py-[16px] border-b border-[#efefef] flex items-center px-4">
+        <div className={cn(isCollapsed ? "py-[20px]" : "py-[16px]","border-b border-[#efefef] flex items-center px-4")}>
           {!isCollapsed && (
             <div className="flex items-center gap-3">
               <Image
