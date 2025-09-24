@@ -23,6 +23,8 @@ interface SidebarProps {
 export function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps) {
   const { activeNavItem, setActiveNavItem } = useNavigation()
 
+  console.log("[v0] Sidebar rendered, isCollapsed:", isCollapsed)
+
   return (
     <TooltipProvider>
       <div
@@ -83,24 +85,51 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps)
               const Icon = item.icon
               const isActive = item.id === activeNavItem
 
-              return (
-                <Tooltip key={item.id}>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className={cn(
-                        "w-full gap-2 text-gray-700 hover:bg-[#faf9f9]",
-                        isCollapsed ? "justify-center px-2" : "justify-start",
-                        isActive && "bg-[#2b97cf]/10 text-[#2b97cf] font-medium",
-                      )}
-                      onClick={() => setActiveNavItem(item.id)}
+              if (isCollapsed) {
+                return (
+                  <Tooltip key={item.id} delayDuration={300}>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className={cn(
+                          "w-full gap-2 text-gray-700 hover:bg-[#faf9f9] justify-center px-2",
+                          isActive && "bg-[#2b97cf]/10 text-[#2b97cf] font-medium",
+                        )}
+                        onClick={() => {
+                          console.log("[v0] Navigation item clicked:", item.id)
+                          setActiveNavItem(item.id)
+                        }}
+                      >
+                        <Icon className="w-4 h-4 flex-shrink-0" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="right"
+                      className="bg-gray-900 text-white border-gray-700 z-[100]"
+                      sideOffset={8}
                     >
-                      <Icon className="w-4 h-4 flex-shrink-0" />
-                      {!isCollapsed && <span className="flex-1 text-left">{item.label}</span>}
-                    </Button>
-                  </TooltipTrigger>
-                  {isCollapsed && <TooltipContent side="right">{item.label}</TooltipContent>}
-                </Tooltip>
+                      {item.label}
+                    </TooltipContent>
+                  </Tooltip>
+                )
+              }
+
+              return (
+                <Button
+                  key={item.id}
+                  variant="ghost"
+                  className={cn(
+                    "w-full gap-2 text-gray-700 hover:bg-[#faf9f9] justify-start",
+                    isActive && "bg-[#2b97cf]/10 text-[#2b97cf] font-medium",
+                  )}
+                  onClick={() => {
+                    console.log("[v0] Navigation item clicked:", item.id)
+                    setActiveNavItem(item.id)
+                  }}
+                >
+                  <Icon className="w-4 h-4 flex-shrink-0" />
+                  <span className="flex-1 text-left">{item.label}</span>
+                </Button>
               )
             })}
           </nav>

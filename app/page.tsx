@@ -9,10 +9,11 @@ import { PathwaysTable } from "@/components/credentials/pathways-table"
 import { CollectionsTable } from "@/components/credentials/collections-table"
 import { RecommendationsTable } from "@/components/credentials/recommendations-table"
 import { IssueTab } from "@/components/credentials/issue-tab"
+import { AnalyticsDashboard } from "@/components/analytics/analytics-dashboard"
 import { useNavigation } from "@/hooks/use-navigation"
 
 export default function HomePage() {
-  const { activeTab } = useNavigation()
+  const { activeTab, activeNavItem } = useNavigation()
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -33,14 +34,21 @@ export default function HomePage() {
     }
   }
 
-  return (
-    <MainLayout>
-      <div className="min-h-screen bg-[#fefefe]">
-        <CredentialsHeader />
-        <CredentialsToolbar />
+  const renderContent = () => {
+    switch (activeNavItem) {
+      case "analytics":
+        return <AnalyticsDashboard />
+      case "credentials":
+      default:
+        return (
+          <div className="min-h-screen bg-[#fefefe]">
+            <CredentialsHeader />
+            <CredentialsToolbar />
+            <div className="border-t border-[#efefef]">{renderTabContent()}</div>
+          </div>
+        )
+    }
+  }
 
-        <div className="border-t border-[#efefef]">{renderTabContent()}</div>
-      </div>
-    </MainLayout>
-  )
+  return <MainLayout>{renderContent()}</MainLayout>
 }
