@@ -1,9 +1,14 @@
+"use client"
+
 import { Search, Filter, Plus } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useNavigation } from "@/hooks/use-navigation"
 
 export function CredentialsToolbar() {
+  const { activeTab } = useNavigation()
+
   return (
     <div className="bg-white px-8 py-4">
       <div className="flex items-center justify-between mb-6">
@@ -29,27 +34,79 @@ export function CredentialsToolbar() {
 
       {/* Results Count and Actions */}
       <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-700">Showing 1-3 of 3</span>
+        {(activeTab === "templates" ||
+          activeTab === "earners" ||
+          activeTab === "pathways" ||
+          activeTab === "collections" ||
+          activeTab === "recommendations") && <span className="text-sm text-gray-700">Showing 1-3 of 3</span>}
 
-        <div className="flex items-center gap-3">
-          <Link href="/create-template">
-            <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90 text-white shadow-sm">
-              <Plus className="w-4 h-4 mr-2" />
-              Create Template
+        {activeTab === "issue" && <div />}
+
+        {activeTab === "templates" && (
+          <div className="flex items-center gap-3">
+            <Link href="/create-template">
+              <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90 text-white shadow-sm">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Template
+              </Button>
+            </Link>
+            <Button
+              variant="outline"
+              size="icon"
+              className="border-[#2b97cf] text-[#2b97cf] hover:bg-[#2b97cf]/10 transition-colors bg-transparent"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="5" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="12" cy="19" r="2" />
+              </svg>
             </Button>
-          </Link>
-          <Button
-            variant="outline"
-            size="icon"
-            className="border-[#2b97cf] text-[#2b97cf] hover:bg-[#2b97cf]/10 transition-colors bg-transparent"
-          >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-              <circle cx="12" cy="5" r="2" />
-              <circle cx="12" cy="12" r="2" />
-              <circle cx="12" cy="19" r="2" />
-            </svg>
-          </Button>
-        </div>
+          </div>
+        )}
+
+        {activeTab === "pathways" && (
+          <div className="flex items-center gap-3">
+            <Link href="/create-pathway">
+              <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90 text-white shadow-sm">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Pathway
+              </Button>
+            </Link>
+            <Button
+              variant="outline"
+              size="icon"
+              className="border-[#2b97cf] text-[#2b97cf] hover:bg-[#2b97cf]/10 transition-colors bg-transparent"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="5" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="12" cy="19" r="2" />
+              </svg>
+            </Button>
+          </div>
+        )}
+
+        {activeTab === "collections" && (
+          <div className="flex items-center gap-3">
+            <Link href="/create-collection">
+              <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90 text-white shadow-sm">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Collection
+              </Button>
+            </Link>
+          </div>
+        )}
+
+        {activeTab === "recommendations" && (
+          <div className="flex items-center gap-3">
+            <Link href="/create-recommendations">
+              <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90 text-white shadow-sm">
+                <Plus className="w-4 h-4 mr-2" />
+                Create Recommendations
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   )

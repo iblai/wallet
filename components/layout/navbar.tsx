@@ -22,7 +22,7 @@ export function Navbar() {
   const unreadCount = notifications.filter((n) => !n.read).length
 
   return (
-    <header className="bg-white border-b border-[rgb(208,224,255)] px-6 py-[14px] w-full transition-all duration-300 sticky top-0">
+    <header className="bg-white border-b border-[rgb(208,224,255)] px-6 py-[14px] w-full transition-all duration-300 sticky top-0 z-40">
       <div className="flex items-center justify-end">
         <div className="flex items-center gap-6">
           <DropdownMenu>
