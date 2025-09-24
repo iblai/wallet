@@ -3,7 +3,7 @@ import { CreditCard, BarChart3, Code, User, GraduationCap, HelpCircle, ChevronLe
 import { cn } from "@/lib/utils"
 import { useNavigation } from "@/hooks/use-navigation"
 import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
 import Image from "next/image"
 
 const navigationItems = [
