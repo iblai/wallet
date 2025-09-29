@@ -13,6 +13,12 @@ V0_Font_Geist({ weight: ["100","200","300","400","500","600","700","800","900"] 
 V0_Font_Geist_Mono({ weight: ["100","200","300","400","500","600","700","800","900"] })
 V0_Font_Source_Serif_4({ weight: ["200","300","400","500","600","700","800","900"] })
 
+const sourceSerif = V0_Font_Source_Serif_4({
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  variable: "--font-source-serif",
+})
+
 export const metadata: Metadata = {
   title: "CredentialsAI - Digital Credential Management",
   description: "Manage and issue digital credentials with AI-powered insights",
@@ -25,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${sourceSerif.variable}`}>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
         <Analytics />
