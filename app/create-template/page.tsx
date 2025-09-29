@@ -12,9 +12,23 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
-import { ChevronRight, Upload, Plus, X } from "lucide-react"
+import { ChevronRight, Upload, Plus, X, Sparkles } from "lucide-react"
 import Link from "next/link"
 import { SignatureCanvas } from "@/components/signature-canvas"
+
+interface Signatory {
+  id: string
+  signature: string | null
+  name: string
+  designation: string
+}
+
+interface Criteria {
+  id: string
+  type: string
+  description: string
+  url: string
+}
 
 export default function CreateTemplatePage() {
   const [skills, setSkills] = useState<string[]>([])
@@ -22,7 +36,11 @@ export default function CreateTemplatePage() {
   const [earnBadge, setEarnBadge] = useState("yes")
   const [signatureMethod, setSignatureMethod] = useState<"upload" | "draw">("upload")
   const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false)
-  const [savedSignatures, setSavedSignatures] = useState<string[]>([])
+
+  const [signatories, setSignatories] = useState<Signatory[]>([{ id: "1", signature: null, name: "", designation: "" }])
+  const [currentSignatoryId, setCurrentSignatoryId] = useState<string | null>(null)
+
+  const [criteriaList, setCriteriaList] = useState<Criteria[]>([{ id: "1", type: "", description: "", url: "" }])
 
   const addSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
@@ -43,11 +61,54 @@ export default function CreateTemplatePage() {
   }
 
   const handleSignatureSave = (signature: string) => {
-    setSavedSignatures([...savedSignatures, signature])
+    if (currentSignatoryId) {
+      setSignatories(signatories.map((sig) => (sig.id === currentSignatoryId ? { ...sig, signature } : sig)))
+    }
   }
 
-  const openSignatureModal = () => {
+  const openSignatureModal = (signatoryId: string) => {
+    setCurrentSignatoryId(signatoryId)
     setIsSignatureModalOpen(true)
+  }
+
+  const addSignatory = () => {
+    const newSignatory: Signatory = {
+      id: Date.now().toString(),
+      signature: null,
+      name: "",
+      designation: "",
+    }
+    setSignatories([...signatories, newSignatory])
+  }
+
+  const removeSignatory = (id: string) => {
+    if (signatories.length > 1) {
+      setSignatories(signatories.filter((sig) => sig.id !== id))
+    }
+  }
+
+  const updateSignatory = (id: string, field: "name" | "designation", value: string) => {
+    setSignatories(signatories.map((sig) => (sig.id === id ? { ...sig, [field]: value } : sig)))
+  }
+
+  const addCriteria = () => {
+    const newCriteria: Criteria = {
+      id: Date.now().toString(),
+      type: "",
+      description: "",
+      url: "",
+    }
+    setCriteriaList([...criteriaList, newCriteria])
+  }
+
+  const removeCriteria = (id: string) => {
+    if (criteriaList.length > 1) {
+      setCriteriaList(criteriaList.filter((crit) => crit.id !== id))
+    }
+  }
+
+  const updateCriteria = (id: string, field: "type" | "description" | "url", value: string) => {
+    setCriteriaList(criteriaList.map((crit) => (crit.id === id ? { ...crit, [field]: value } : crit)))
   }
 
   return (
@@ -129,64 +190,91 @@ export default function CreateTemplatePage() {
               <CardContent className="p-6">
                 <h2 className="text-lg font-medium text-[#374151] mb-6">Signatories</h2>
 
-                <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-medium text-[#374151] mb-4">Signature</label>
+                <div className="space-y-8">
+                  {signatories.map((signatory, index) => (
+                    <div
+                      key={signatory.id}
+                      className="space-y-6 pb-6 border-b border-[#efefef] last:border-b-0 last:pb-0"
+                    >
+                      <div className="flex items-center justify-between">
+                        <label className="block text-sm font-medium text-[#374151]">Signature {index + 1}</label>
+                        {signatories.length > 1 && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeSignatory(signatory.id)}
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
 
-                    <div className="border border-[#d9d9d9] rounded-lg p-6 bg-[#f6f6f6]">
-                      {savedSignatures.length > 0 ? (
-                        <div className="space-y-4">
-                          {savedSignatures.map((signature, index) => (
-                            <div key={index} className="border border-[#d9d9d9] rounded-lg p-4 bg-white">
-                              <img
-                                src={signature || "/placeholder.svg"}
-                                alt={`Signature ${index + 1}`}
-                                className="max-h-24 mx-auto"
-                              />
+                      <div className="border border-[#d9d9d9] rounded-lg p-6 bg-[#f6f6f6]">
+                        {signatory.signature ? (
+                          <div className="border border-[#d9d9d9] rounded-lg p-4 bg-white mb-4">
+                            <img
+                              src={signatory.signature || "/placeholder.svg"}
+                              alt={`Signature ${index + 1}`}
+                              className="max-h-24 mx-auto"
+                            />
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-center mb-4">
+                              <div className="w-16 h-16 bg-[#e8e9eb] rounded-lg flex items-center justify-center">
+                                <Upload className="w-6 h-6 text-[#767676]" />
+                              </div>
                             </div>
-                          ))}
+
+                            <div className="text-center mb-4">
+                              <span className="text-sm text-[#767676]">OR</span>
+                            </div>
+                          </>
+                        )}
+
+                        <div className="flex justify-center gap-4">
+                          <Button
+                            variant="link"
+                            className="text-[#2b97cf] p-0 h-auto"
+                            onClick={() => setSignatureMethod("upload")}
+                          >
+                            Upload image
+                          </Button>
+                          <Button
+                            variant="link"
+                            className="text-[#2b97cf] p-0 h-auto"
+                            onClick={() => openSignatureModal(signatory.id)}
+                          >
+                            Draw Signature
+                          </Button>
                         </div>
-                      ) : (
-                        <>
-                          <div className="flex items-center justify-center mb-4">
-                            <div className="w-16 h-16 bg-[#e8e9eb] rounded-lg flex items-center justify-center">
-                              <Upload className="w-6 h-6 text-[#767676]" />
-                            </div>
-                          </div>
+                      </div>
 
-                          <div className="text-center mb-4">
-                            <span className="text-sm text-[#767676]">OR</span>
-                          </div>
-                        </>
-                      )}
-
-                      <div className="flex justify-center gap-4">
-                        <Button
-                          variant="link"
-                          className="text-[#2b97cf] p-0 h-auto"
-                          onClick={() => setSignatureMethod("upload")}
-                        >
-                          Upload image
-                        </Button>
-                        <Button variant="link" className="text-[#2b97cf] p-0 h-auto" onClick={openSignatureModal}>
-                          Draw Signature
-                        </Button>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-[#374151] mb-2">Name</label>
+                          <Input
+                            placeholder="Write the name"
+                            className="border-[#d9d9d9] focus:border-[#2b97cf]"
+                            value={signatory.name}
+                            onChange={(e) => updateSignatory(signatory.id, "name", e.target.value)}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-[#374151] mb-2">Designation</label>
+                          <Input
+                            placeholder="Write the designation"
+                            className="border-[#d9d9d9] focus:border-[#2b97cf]"
+                            value={signatory.designation}
+                            onChange={(e) => updateSignatory(signatory.id, "designation", e.target.value)}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-[#374151] mb-2">Name</label>
-                      <Input placeholder="Write the name" className="border-[#d9d9d9] focus:border-[#2b97cf]" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-[#374151] mb-2">Designation</label>
-                      <Input placeholder="Write the designation" className="border-[#d9d9d9] focus:border-[#2b97cf]" />
-                    </div>
-                  </div>
-
-                  <Button variant="link" className="text-[#2b97cf] p-0 h-auto">
+                  <Button variant="link" className="text-[#2b97cf] p-0 h-auto" onClick={addSignatory}>
                     <Plus className="w-4 h-4 mr-1" />
                     Add Signature
                   </Button>
@@ -240,17 +328,20 @@ export default function CreateTemplatePage() {
                     .
                   </p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-[#374151] mb-2">Type</label>
                       <Select>
-                        <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf]">
+                        <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf] h-11">
                           <SelectValue placeholder="Select One" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="certification">Certification</SelectItem>
-                          <SelectItem value="course">Course</SelectItem>
+                          <SelectItem value="application">Application</SelectItem>
+                          <SelectItem value="assessment">Assessment</SelectItem>
+                          <SelectItem value="award">Award</SelectItem>
                           <SelectItem value="badge">Badge</SelectItem>
+                          <SelectItem value="course">Course</SelectItem>
+                          <SelectItem value="credential">Credential</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -258,7 +349,7 @@ export default function CreateTemplatePage() {
                     <div>
                       <label className="block text-sm font-medium text-[#374151] mb-2">Level</label>
                       <Select>
-                        <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf]">
+                        <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf] h-11">
                           <SelectValue placeholder="Select One" />
                         </SelectTrigger>
                         <SelectContent>
@@ -272,7 +363,7 @@ export default function CreateTemplatePage() {
                     <div>
                       <label className="block text-sm font-medium text-[#374151] mb-2">Time</label>
                       <Select>
-                        <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf]">
+                        <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf] h-11">
                           <SelectValue placeholder="Select One" />
                         </SelectTrigger>
                         <SelectContent>
@@ -287,7 +378,7 @@ export default function CreateTemplatePage() {
                     <div>
                       <label className="block text-sm font-medium text-[#374151] mb-2">Cost</label>
                       <Select>
-                        <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf]">
+                        <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf] h-11">
                           <SelectValue placeholder="Select One" />
                         </SelectTrigger>
                         <SelectContent>
@@ -313,34 +404,73 @@ export default function CreateTemplatePage() {
               <CardContent className="p-6">
                 <h2 className="text-lg font-medium text-[#374151] mb-6">Criteria</h2>
 
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-[#374151] mb-2">Criteria type</label>
-                    <Select>
-                      <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf]">
-                        <SelectValue placeholder="Select One" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="completion">Completion</SelectItem>
-                        <SelectItem value="assessment">Assessment</SelectItem>
-                        <SelectItem value="participation">Participation</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <div className="space-y-8">
+                  {criteriaList.map((criteria, index) => (
+                    <div
+                      key={criteria.id}
+                      className="space-y-4 pb-6 border-b border-[#efefef] last:border-b-0 last:pb-0"
+                    >
+                      <div className="flex items-center justify-between">
+                        <label className="block text-sm font-medium text-[#374151]">Criteria {index + 1}</label>
+                        {criteriaList.length > 1 && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeCriteria(criteria.id)}
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-[#374151] mb-2">Description</label>
-                    <Textarea
-                      placeholder="Write description for criteria"
-                      className="border-[#d9d9d9] focus:border-[#2b97cf] min-h-[120px] resize-none"
-                    />
-                    <div className="text-right text-xs text-[#767676] mt-1">0/500</div>
-                  </div>
+                      <div>
+                        <label className="block text-sm font-medium text-[#374151] mb-2">Criteria type</label>
+                        <Select
+                          value={criteria.type}
+                          onValueChange={(value) => updateCriteria(criteria.id, "type", value)}
+                        >
+                          <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf] w-full h-11">
+                            <SelectValue placeholder="Select One" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="application">Application</SelectItem>
+                            <SelectItem value="assessment">Assessment</SelectItem>
+                            <SelectItem value="award">Award</SelectItem>
+                            <SelectItem value="badge">Badge</SelectItem>
+                            <SelectItem value="course">Course</SelectItem>
+                            <SelectItem value="credential">Credential</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-[#374151] mb-2">URL to activity</label>
-                    <Input placeholder="https://" className="border-[#d9d9d9] focus:border-[#2b97cf]" />
-                  </div>
+                      <div>
+                        <label className="block text-sm font-medium text-[#374151] mb-2">Description</label>
+                        <Textarea
+                          placeholder="Write description for criteria"
+                          className="border-[#d9d9d9] focus:border-[#2b97cf] min-h-[120px] resize-none w-full"
+                          value={criteria.description}
+                          onChange={(e) => updateCriteria(criteria.id, "description", e.target.value)}
+                        />
+                        <div className="text-right text-xs text-[#767676] mt-1">{criteria.description.length}/500</div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-[#374151] mb-2">URL to activity</label>
+                        <Input
+                          placeholder="https://"
+                          className="border-[#d9d9d9] focus:border-[#2b97cf] w-full h-11"
+                          value={criteria.url}
+                          onChange={(e) => updateCriteria(criteria.id, "url", e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+
+                  <Button variant="link" className="text-[#2b97cf] p-0 h-auto" onClick={addCriteria}>
+                    <Plus className="w-4 h-4 mr-1" />
+                    Add Criteria
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -362,6 +492,18 @@ export default function CreateTemplatePage() {
                   </div>
 
                   <p className="text-sm text-[#767676]">You must add at least 3 skills.</p>
+
+                  <div className="bg-[#f6f6f6] border border-[#efefef] rounded-lg p-4 space-y-3">
+                    <h3 className="text-base font-semibold text-[#374151]">Suggested Skills</h3>
+                    <p className="text-sm text-[#5f6368] leading-relaxed">
+                      AI can generate a list of skills based on your template's description and earning criteria. Using
+                      these skills ensures your credential connects to meaningful opportunities for your earners.
+                    </p>
+                    <Button variant="link" className="text-[#2b97cf] p-0 h-auto flex items-center gap-2">
+                      <Sparkles className="w-4 h-4" />
+                      Suggest skills
+                    </Button>
+                  </div>
 
                   <div className="flex flex-wrap gap-2">
                     {skills.map((skill, index) => (

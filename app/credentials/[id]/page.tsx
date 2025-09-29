@@ -1,11 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronRight, MoreHorizontal } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { MoreHorizontal, GraduationCap, Layers, Clock, DollarSign } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { MainLayout } from "@/components/layout/main-layout"
-import Link from "next/link"
 
 const credentialsData = {
   "1": {
@@ -13,20 +12,20 @@ const credentialsData = {
     name: "Building High Performance Teams",
     issuer: "Lincoln Technologies",
     description:
-      "Earners of this badge have a fundamental understanding of team dynamics and high-performance methodologies. Earners are able to demonstrate effective leadership, collaboration strategies, and performance optimization techniques. These candidates can utilize these foundation tools to build and manage high-performing teams in various organizational contexts. This credential meets the JACET standard for 3 continuing education units (CEUs).",
+      "Earners of this badge have demonstrated expertise in building and leading high-performance teams. They understand team dynamics, collaboration strategies, and how to foster an environment of excellence. This credential covers team building methodologies, performance optimization, and leadership techniques that drive exceptional results.",
     image: "/team-collaboration-charts-graphs-business-analytic.jpg",
     attributes: {
       visibility: "Visible",
-      earnBadge: "Preview",
     },
     badges: [
-      { label: "Learning", icon: "🎓" },
-      { label: "Foundational", icon: "🏗️" },
-      { label: "Months", icon: "📅" },
-      { label: "Paid", icon: "💰" },
+      { label: "Learning", icon: GraduationCap },
+      { label: "Foundational", icon: Layers },
+      { label: "Months", icon: Clock },
+      { label: "Paid", icon: DollarSign },
     ],
-    skills: ["Knowledge", "Devotion to Mary", "Faith"],
-    criteria: "Complete all required coursework and demonstrate proficiency in team building methodologies.",
+    skills: ["Team Building", "Leadership", "Collaboration", "Performance Management"],
+    criteria:
+      "Complete all required coursework and demonstrate proficiency in team leadership and performance optimization.",
   },
   "2": {
     id: "3b951dd7-c185-5b73-b2ee-e04443g1d342",
@@ -37,35 +36,33 @@ const credentialsData = {
     image: "/leadership-communication-speech-bubble-microphone.jpg",
     attributes: {
       visibility: "Visible",
-      earnBadge: "Preview",
     },
     badges: [
-      { label: "Learning", icon: "🎓" },
-      { label: "Advanced", icon: "🚀" },
-      { label: "Weeks", icon: "📅" },
-      { label: "Paid", icon: "💰" },
+      { label: "Learning", icon: GraduationCap },
+      { label: "Advanced", icon: Layers },
+      { label: "Weeks", icon: Clock },
+      { label: "Paid", icon: DollarSign },
     ],
-    skills: ["Communication", "Leadership", "Influence"],
+    skills: ["Communication", "Leadership", "Influence", "Public Speaking"],
     criteria: "Complete communication assessments and demonstrate advanced leadership communication techniques.",
   },
   "3": {
     id: "4c062ee8-d296-6c84-c3ff-f15554h2e453",
-    name: "AI in Academia - Driving Innovation and Efficiency in...",
+    name: "AI in Academia - Driving Innovation and Efficiency",
     issuer: "Lincoln Technologies",
     description:
       "Earners of this badge have comprehensive knowledge of artificial intelligence applications in academic settings. They understand how AI can drive innovation, improve efficiency, and transform educational processes. This credential covers AI ethics, implementation strategies, and practical applications in academic environments.",
     image: "/artificial-intelligence-brain-circuit-academic-gra.jpg",
     attributes: {
       visibility: "Visible",
-      earnBadge: "Preview",
     },
     badges: [
-      { label: "Learning", icon: "🎓" },
-      { label: "Advanced", icon: "🚀" },
-      { label: "Months", icon: "📅" },
-      { label: "Premium", icon: "💎" },
+      { label: "Learning", icon: GraduationCap },
+      { label: "Advanced", icon: Layers },
+      { label: "Months", icon: Clock },
+      { label: "Premium", icon: DollarSign },
     ],
-    skills: ["Artificial Intelligence", "Innovation", "Academic Research"],
+    skills: ["Artificial Intelligence", "Innovation", "Academic Research", "Technology Integration"],
     criteria: "Complete AI coursework and demonstrate practical implementation of AI solutions in academic contexts.",
   },
 }
@@ -73,148 +70,138 @@ const credentialsData = {
 export default function CredentialDetailPage({ params }: { params: { id: string } }) {
   const [activeTab, setActiveTab] = useState("Details")
   const tabs = ["Details", "Occupation Insights", "Settings", "History"]
+  const router = useRouter()
 
   const credentialData = credentialsData[params.id as keyof typeof credentialsData]
 
   if (!credentialData) {
     return (
       <MainLayout>
-        <div className="min-h-screen bg-[#faf9f9] flex items-center justify-center">
+        <div className="min-h-screen bg-white flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-[#555d6b] mb-4">Credential Not Found</h1>
-            <p className="text-[#767676]">The requested credential could not be found.</p>
+            <h1 className="text-2xl font-semibold text-gray-900 mb-4">Credential Not Found</h1>
+            <p className="text-gray-600">The requested credential could not be found.</p>
           </div>
         </div>
       </MainLayout>
     )
   }
 
+  const handleIssueClick = () => {
+    router.push(`/credentials/${params.id}/issue`)
+  }
+
   return (
     <MainLayout>
-      <div className="min-h-screen bg-[#faf9f9]">
-        {/* Breadcrumb */}
-        <div className="px-8 pt-6 pb-4">
-          <div className="flex items-center gap-2 text-sm text-[#2b97cf]">
-            <Link href="/" className="text-[#2b97cf] hover:text-[#2b97cf]/80 transition-colors">
-              Credential
-            </Link>
-            <ChevronRight className="w-4 h-4 text-[#767676]" />
-            <span className="text-[#767676]">Templates</span>
-          </div>
-        </div>
+      <div className="min-h-screen bg-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
+          {/* Title */}
+          <h1 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-8">{credentialData.name}</h1>
 
-        {/* Header */}
-        <div className="px-8 pb-6">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-semibold text-[#555d6b]">{credentialData.name}</h1>
-            <div className="flex items-center gap-3">
-              <Link href={`/credentials/${params.id}/issue`}>
-                <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90 text-white">Issue</Button>
-              </Link>
-              <Button variant="outline" size="icon" className="border-[#2b97cf] text-[#2b97cf] bg-transparent">
-                <MoreHorizontal className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Tabs */}
-          <div className="flex border-b border-[#efefef]">
+          {/* Tabs Navigation */}
+          <div className="flex gap-8 border-b border-gray-200 mb-8">
             {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === tab
-                    ? "border-[#2b97cf] text-[#2b97cf]"
-                    : "border-transparent text-[#767676] hover:text-[#555d6b]"
+                className={`pb-4 text-base font-medium transition-colors relative ${
+                  activeTab === tab ? "text-[#2b97cf]" : "text-gray-500 hover:text-gray-700"
                 }`}
               >
                 {tab}
+                {activeTab === tab && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2b97cf]" />}
               </button>
             ))}
           </div>
-        </div>
 
-        {/* Content */}
-        <div className="px-8 py-6">
-          {/* Template ID */}
-          <div className="mb-6">
-            <span className="text-sm text-[#767676]">Template ID: {credentialData.id}</span>
+          {/* Template ID and Action Buttons */}
+          <div className="flex items-center justify-between mb-8">
+            <p className="text-base font-semibold text-gray-900">Template ID: {credentialData.id}</p>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={handleIssueClick}
+                className="bg-[#2b97cf] hover:bg-[#2487b8] text-white px-8 h-11 text-base font-medium"
+              >
+                Issue
+              </Button>
+              <Button variant="outline" size="icon" className="border-2 border-gray-300 h-11 w-11 bg-transparent">
+                <MoreHorizontal className="w-5 h-5 text-gray-700" />
+              </Button>
+            </div>
           </div>
 
-          {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Column */}
-            <div className="space-y-6">
-              {/* Credential Image */}
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <img
-                  src={credentialData.image || "/placeholder.svg"}
-                  alt={credentialData.name}
-                  className="w-full max-w-sm mx-auto rounded-lg"
-                />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column - Badge and Attributes */}
+            <div className="lg:col-span-1 space-y-6">
+              {/* Badge Image */}
+              <div className="flex justify-center">
+                <div className="w-full max-w-[320px] aspect-square">
+                  <img
+                    src={credentialData.image || "/placeholder.svg?height=320&width=320"}
+                    alt={credentialData.name}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
               </div>
 
-              {/* Attributes */}
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between py-3 px-4 bg-[#efefef] rounded-lg">
-                    <span className="font-medium text-[#555d6b]">Attributes:</span>
-                    <span className="text-[#767676]">{credentialData.attributes.visibility}</span>
-                  </div>
-                  <div className="flex items-center justify-between py-3 px-4 bg-[#efefef] rounded-lg">
-                    <span className="font-medium text-[#555d6b]">Earn this Badge:</span>
-                    <span className="text-[#767676]">{credentialData.attributes.earnBadge}</span>
-                  </div>
-                </div>
+              {/* Attributes Section */}
+              <div className="bg-gray-100 rounded-lg p-6">
+                <p className="text-base text-gray-900">
+                  <span className="font-bold">Attributes:</span> {credentialData.attributes.visibility}
+                </p>
+              </div>
+
+              {/* Earn this Badge Section */}
+              <div className="bg-gray-100 rounded-lg p-6">
+                <p className="text-base text-gray-900">
+                  <span className="font-bold">Earn this Badge:</span>{" "}
+                  <a href="#" className="text-[#2b97cf] hover:underline">
+                    Preview
+                  </a>
+                </p>
               </div>
             </div>
 
-            {/* Right Column */}
-            <div className="space-y-6">
-              {/* Description */}
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <div className="mb-4">
-                  <span className="text-sm text-[#767676]">Issued by: {credentialData.issuer}</span>
-                </div>
-                <p className="text-[#555d6b] leading-relaxed mb-4">{credentialData.description}</p>
-                <a href="#" className="text-[#2b97cf] hover:underline">
+            {/* Right Column - Details */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Issued By and Description */}
+              <div>
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Issued by: {credentialData.issuer}</h2>
+                <p className="text-base text-gray-700 leading-relaxed mb-4">{credentialData.description}</p>
+                <a href="#" className="text-[#2b97cf] hover:underline text-base font-medium">
                   Learn more
                 </a>
               </div>
 
-              {/* Badges */}
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <div className="flex flex-wrap gap-3">
-                  {credentialData.badges.map((badge, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="bg-[#efefef] text-[#555d6b] hover:bg-[#d9d9d9] flex items-center gap-2"
-                    >
-                      <span>{badge.icon}</span>
-                      {badge.label}
-                    </Badge>
-                  ))}
-                </div>
+              {/* Badge Tags */}
+              <div className="flex flex-wrap gap-3">
+                {credentialData.badges.map((badge, index) => {
+                  const Icon = badge.icon
+                  return (
+                    <div key={index} className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full">
+                      <Icon className="w-4 h-4 text-gray-600" />
+                      <span className="text-sm font-medium text-gray-700">{badge.label}</span>
+                    </div>
+                  )
+                })}
               </div>
 
-              {/* Skills */}
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-[#555d6b] mb-4">Skills</h3>
+              {/* Skills Section */}
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Skills</h3>
                 <div className="flex flex-wrap gap-3">
                   {credentialData.skills.map((skill, index) => (
-                    <Badge key={index} className="bg-[#2b97cf] hover:bg-[#2b97cf]/90 text-white">
+                    <div key={index} className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-base font-medium">
                       {skill}
-                    </Badge>
+                    </div>
                   ))}
                 </div>
               </div>
 
-              {/* Criteria */}
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-[#555d6b] mb-4">Criteria</h3>
-                <p className="text-[#555d6b] leading-relaxed">{credentialData.criteria}</p>
+              {/* Criteria Section */}
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Criteria</h3>
+                <p className="text-base text-gray-700 leading-relaxed">{credentialData.criteria}</p>
               </div>
             </div>
           </div>

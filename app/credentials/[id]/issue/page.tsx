@@ -1,13 +1,35 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronRight, User, Clock, FileText, Settings, Calendar } from "lucide-react"
+import {
+  ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  User,
+  Clock,
+  FileText,
+  Mail,
+  LinkIcon,
+  Type,
+  CreditCard,
+  UploadIcon,
+  MoreHorizontal,
+  Calendar,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { MainLayout } from "@/components/layout/main-layout"
 import Link from "next/link"
 
@@ -26,9 +48,17 @@ const credentialsData = {
 export default function IssueCredentialPage({ params }: { params: { id: string } }) {
   const [earnerInfoOpen, setEarnerInfoOpen] = useState(true)
   const [expirationOpen, setExpirationOpen] = useState(true)
-  const [evidenceOpen, setEvidenceOpen] = useState(false)
-  const [advancedOpen, setAdvancedOpen] = useState(false)
+  const [evidenceOpen, setEvidenceOpen] = useState(true)
+  const [notificationsOpen, setNotificationsOpen] = useState(true)
   const [expirationType, setExpirationType] = useState("default")
+  const [sendNotifications, setSendNotifications] = useState("yes")
+
+  // Dialog states for evidence types
+  const [urlDialogOpen, setUrlDialogOpen] = useState(false)
+  const [textDialogOpen, setTextDialogOpen] = useState(false)
+  const [idDialogOpen, setIdDialogOpen] = useState(false)
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
+  const [customDialogOpen, setCustomDialogOpen] = useState(false)
 
   const credentialData = credentialsData[params.id as keyof typeof credentialsData]
 
@@ -74,7 +104,11 @@ export default function IssueCredentialPage({ params }: { params: { id: string }
             {/* Earner Information */}
             <Collapsible open={earnerInfoOpen} onOpenChange={setEarnerInfoOpen}>
               <CollapsibleTrigger className="w-full">
-                <div className="bg-white rounded-lg shadow-sm border border-[rgb(208,224,255)] p-6 hover:bg-gray-50 transition-colors">
+                <div
+                  className={`bg-white shadow-sm border border-[rgb(208,224,255)] p-6 hover:bg-gray-50 transition-colors ${
+                    earnerInfoOpen ? "rounded-t-lg" : "rounded-lg"
+                  }`}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 bg-[#f8f9fa] rounded-full flex items-center justify-center">
@@ -87,14 +121,16 @@ export default function IssueCredentialPage({ params }: { params: { id: string }
                         </p>
                       </div>
                     </div>
-                    <ChevronRight
-                      className={`w-5 h-5 text-[#767676] transition-transform ${earnerInfoOpen ? "rotate-90" : ""}`}
-                    />
+                    {earnerInfoOpen ? (
+                      <ChevronUp className="w-5 h-5 text-[#767676]" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-[#767676]" />
+                    )}
                   </div>
                 </div>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <div className="bg-white rounded-lg shadow-sm border border-[rgb(208,224,255)] p-6 mt-4">
+                <div className="bg-white rounded-b-lg shadow-sm border border-t-0 border-[rgb(208,224,255)] p-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="firstName" className="text-sm font-medium text-[#555d6b]">
@@ -163,7 +199,11 @@ export default function IssueCredentialPage({ params }: { params: { id: string }
             {/* Expiration */}
             <Collapsible open={expirationOpen} onOpenChange={setExpirationOpen}>
               <CollapsibleTrigger className="w-full">
-                <div className="bg-white rounded-lg shadow-sm border border-[rgb(208,224,255)] p-6 hover:bg-gray-50 transition-colors">
+                <div
+                  className={`bg-white shadow-sm border border-[rgb(208,224,255)] p-6 hover:bg-gray-50 transition-colors ${
+                    expirationOpen ? "rounded-t-lg" : "rounded-lg"
+                  }`}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 bg-[#f8f9fa] rounded-full flex items-center justify-center">
@@ -176,14 +216,16 @@ export default function IssueCredentialPage({ params }: { params: { id: string }
                         </p>
                       </div>
                     </div>
-                    <ChevronRight
-                      className={`w-5 h-5 text-[#767676] transition-transform ${expirationOpen ? "rotate-90" : ""}`}
-                    />
+                    {expirationOpen ? (
+                      <ChevronUp className="w-5 h-5 text-[#767676]" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-[#767676]" />
+                    )}
                   </div>
                 </div>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <div className="bg-white rounded-lg shadow-sm border border-[rgb(208,224,255)] p-6 mt-4">
+                <div className="bg-white rounded-b-lg shadow-sm border border-t-0 border-[rgb(208,224,255)] p-6">
                   <RadioGroup value={expirationType} onValueChange={setExpirationType} className="space-y-4">
                     <div className="flex items-center space-x-3">
                       <RadioGroupItem value="default" id="default" className="border-[#2b97cf] text-[#2b97cf]" />
@@ -212,10 +254,13 @@ export default function IssueCredentialPage({ params }: { params: { id: string }
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Evidence */}
             <Collapsible open={evidenceOpen} onOpenChange={setEvidenceOpen}>
               <CollapsibleTrigger className="w-full">
-                <div className="bg-white rounded-lg shadow-sm border border-[rgb(208,224,255)] p-6 hover:bg-gray-50 transition-colors">
+                <div
+                  className={`bg-white shadow-sm border border-[rgb(208,224,255)] p-6 hover:bg-gray-50 transition-colors ${
+                    evidenceOpen ? "rounded-t-lg" : "rounded-lg"
+                  }`}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 bg-[#f8f9fa] rounded-full flex items-center justify-center">
@@ -228,65 +273,117 @@ export default function IssueCredentialPage({ params }: { params: { id: string }
                         </p>
                       </div>
                     </div>
-                    <ChevronRight
-                      className={`w-5 h-5 text-[#767676] transition-transform ${evidenceOpen ? "rotate-90" : ""}`}
-                    />
+                    {evidenceOpen ? (
+                      <ChevronUp className="w-5 h-5 text-[#767676]" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-[#767676]" />
+                    )}
                   </div>
                 </div>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <div className="bg-white rounded-lg shadow-sm border border-[rgb(208,224,255)] p-6 mt-4">
-                  <p className="text-sm text-[#767676] mb-4">
-                    Add evidence or documentation that supports this badge issuance.
-                  </p>
-                  <div className="space-y-4">
-                    <Input
-                      placeholder="Evidence title"
-                      className="border-[#d9d9d9] focus:border-[#2b97cf] focus:ring-[#2b97cf]"
-                    />
-                    <textarea
-                      placeholder="Evidence description"
-                      rows={4}
-                      className="w-full px-3 py-2 border border-[#d9d9d9] rounded-md focus:border-[#2b97cf] focus:ring-[#2b97cf] focus:outline-none resize-none"
-                    />
+                <div className="bg-white rounded-b-lg shadow-sm border border-t-0 border-[rgb(208,224,255)] p-6">
+                  <div className="flex items-center justify-start gap-8 py-4 px-4">
+                    <button
+                      onClick={() => setUrlDialogOpen(true)}
+                      className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity"
+                    >
+                      <LinkIcon className="w-6 h-6 text-[#2b97cf]" />
+                      <span className="text-sm text-[#2b97cf] font-medium">URL</span>
+                    </button>
+                    <button
+                      onClick={() => setTextDialogOpen(true)}
+                      className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity"
+                    >
+                      <Type className="w-6 h-6 text-[#2b97cf]" />
+                      <span className="text-sm text-[#2b97cf] font-medium">Text</span>
+                    </button>
+                    <button
+                      onClick={() => setIdDialogOpen(true)}
+                      className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity"
+                    >
+                      <CreditCard className="w-6 h-6 text-[#2b97cf]" />
+                      <span className="text-sm text-[#2b97cf] font-medium">ID</span>
+                    </button>
+                    <button
+                      onClick={() => setUploadDialogOpen(true)}
+                      className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity"
+                    >
+                      <UploadIcon className="w-6 h-6 text-[#2b97cf]" />
+                      <span className="text-sm text-[#2b97cf] font-medium">Upload</span>
+                    </button>
+                    <button
+                      onClick={() => setCustomDialogOpen(true)}
+                      className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity"
+                    >
+                      <MoreHorizontal className="w-6 h-6 text-[#2b97cf]" />
+                      <span className="text-sm text-[#2b97cf] font-medium">Custom</span>
+                    </button>
                   </div>
                 </div>
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Advanced Options */}
-            <Collapsible open={advancedOpen} onOpenChange={setAdvancedOpen}>
+            <Collapsible open={notificationsOpen} onOpenChange={setNotificationsOpen}>
               <CollapsibleTrigger className="w-full">
-                <div className="bg-white rounded-lg shadow-sm border border-[rgb(208,224,255)] p-6 hover:bg-gray-50 transition-colors">
+                <div
+                  className={`bg-white shadow-sm border border-[rgb(208,224,255)] p-6 hover:bg-gray-50 transition-colors ${
+                    notificationsOpen ? "rounded-t-lg" : "rounded-lg"
+                  }`}
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 bg-[#f8f9fa] rounded-full flex items-center justify-center">
-                        <Settings className="w-5 h-5 text-[#555d6b]" />
+                        <Mail className="w-5 h-5 text-[#555d6b]" />
                       </div>
                       <div className="text-left">
-                        <h3 className="text-lg font-semibold text-[#555d6b]">Advanced options</h3>
-                        <p className="text-sm text-[#767676]">Edit the advanced options for this badge.</p>
+                        <h3 className="text-lg font-semibold text-[#555d6b]">Notifications</h3>
+                        <p className="text-sm text-[#767676]">Send messages to your earners about this credential.</p>
                       </div>
                     </div>
-                    <ChevronRight
-                      className={`w-5 h-5 text-[#767676] transition-transform ${advancedOpen ? "rotate-90" : ""}`}
-                    />
+                    {notificationsOpen ? (
+                      <ChevronUp className="w-5 h-5 text-[#767676]" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-[#767676]" />
+                    )}
                   </div>
                 </div>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <div className="bg-white rounded-lg shadow-sm border border-[rgb(208,224,255)] p-6 mt-4">
-                  <p className="text-sm text-[#767676] mb-4">Configure additional settings for this badge issuance.</p>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-sm font-medium text-[#555d6b]">Send notification email</Label>
-                      <input type="checkbox" defaultChecked className="rounded border-[#d9d9d9]" />
+                <div className="bg-white rounded-b-lg shadow-sm border border-t-0 border-[rgb(208,224,255)] p-6">
+                  <RadioGroup value={sendNotifications} onValueChange={setSendNotifications} className="space-y-4 mb-6">
+                    <div className="flex items-center space-x-3">
+                      <RadioGroupItem value="yes" id="notify-yes" className="border-[#2b97cf] text-[#2b97cf]" />
+                      <Label htmlFor="notify-yes" className="text-sm font-medium text-[#555d6b] cursor-pointer">
+                        Yes
+                      </Label>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <Label className="text-sm font-medium text-[#555d6b]">Make badge public</Label>
-                      <input type="checkbox" defaultChecked className="rounded border-[#d9d9d9]" />
+                    <div className="flex items-center space-x-3">
+                      <RadioGroupItem value="no" id="notify-no" className="border-[#2b97cf] text-[#2b97cf]" />
+                      <Label htmlFor="notify-no" className="text-sm font-medium text-[#555d6b] cursor-pointer">
+                        No
+                      </Label>
                     </div>
-                  </div>
+                  </RadioGroup>
+
+                  {sendNotifications === "yes" && (
+                    <div className="space-y-2">
+                      <Label htmlFor="emailLanguage" className="text-sm font-medium text-[#555d6b]">
+                        Email language *
+                      </Label>
+                      <Select defaultValue="english">
+                        <SelectTrigger className="border-[#d9d9d9] focus:border-[#2b97cf] focus:ring-[#2b97cf]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="english">English</SelectItem>
+                          <SelectItem value="spanish">Spanish</SelectItem>
+                          <SelectItem value="french">French</SelectItem>
+                          <SelectItem value="german">German</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
                 </div>
               </CollapsibleContent>
             </Collapsible>
@@ -312,6 +409,198 @@ export default function IssueCredentialPage({ params }: { params: { id: string }
           </div>
         </div>
       </div>
+
+      {/* URL Dialog */}
+      <Dialog open={urlDialogOpen} onOpenChange={setUrlDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add URL Evidence</DialogTitle>
+            <DialogDescription>Provide a URL that serves as evidence for earning this badge.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="url-title">Title *</Label>
+              <Input id="url-title" placeholder="Enter evidence title" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="url-link">URL *</Label>
+              <Input id="url-link" type="url" placeholder="https://example.com" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="url-description">Description</Label>
+              <textarea
+                id="url-description"
+                placeholder="Enter description (optional)"
+                rows={3}
+                className="w-full px-3 py-2 border border-[#d9d9d9] rounded-md focus:border-[#2b97cf] focus:ring-[#2b97cf] focus:outline-none resize-none"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUrlDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90" onClick={() => setUrlDialogOpen(false)}>
+              Add Evidence
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Text Dialog */}
+      <Dialog open={textDialogOpen} onOpenChange={setTextDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add Text Evidence</DialogTitle>
+            <DialogDescription>Provide text-based evidence for earning this badge.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="text-title">Title *</Label>
+              <Input id="text-title" placeholder="Enter evidence title" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="text-content">Content *</Label>
+              <textarea
+                id="text-content"
+                placeholder="Enter text evidence"
+                rows={5}
+                className="w-full px-3 py-2 border border-[#d9d9d9] rounded-md focus:border-[#2b97cf] focus:ring-[#2b97cf] focus:outline-none resize-none"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setTextDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90" onClick={() => setTextDialogOpen(false)}>
+              Add Evidence
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ID Dialog */}
+      <Dialog open={idDialogOpen} onOpenChange={setIdDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add ID Evidence</DialogTitle>
+            <DialogDescription>Provide an identification number or code as evidence.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="id-title">Title *</Label>
+              <Input id="id-title" placeholder="Enter evidence title" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="id-number">ID Number *</Label>
+              <Input id="id-number" placeholder="Enter ID or reference number" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="id-description">Description</Label>
+              <textarea
+                id="id-description"
+                placeholder="Enter description (optional)"
+                rows={3}
+                className="w-full px-3 py-2 border border-[#d9d9d9] rounded-md focus:border-[#2b97cf] focus:ring-[#2b97cf] focus:outline-none resize-none"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIdDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90" onClick={() => setIdDialogOpen(false)}>
+              Add Evidence
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Upload Dialog */}
+      <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Upload Evidence</DialogTitle>
+            <DialogDescription>Upload a file as evidence for earning this badge.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="upload-title">Title *</Label>
+              <Input id="upload-title" placeholder="Enter evidence title" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="upload-file">File *</Label>
+              <Input id="upload-file" type="file" className="cursor-pointer" />
+              <p className="text-xs text-[#767676]">Supported formats: PDF, JPG, PNG (Max 10MB)</p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="upload-description">Description</Label>
+              <textarea
+                id="upload-description"
+                placeholder="Enter description (optional)"
+                rows={3}
+                className="w-full px-3 py-2 border border-[#d9d9d9] rounded-md focus:border-[#2b97cf] focus:ring-[#2b97cf] focus:outline-none resize-none"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUploadDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90" onClick={() => setUploadDialogOpen(false)}>
+              Upload Evidence
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Custom Dialog */}
+      <Dialog open={customDialogOpen} onOpenChange={setCustomDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add Custom Evidence</DialogTitle>
+            <DialogDescription>Create a custom evidence entry with your own fields.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="custom-title">Title *</Label>
+              <Input id="custom-title" placeholder="Enter evidence title" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="custom-type">Evidence Type *</Label>
+              <Select defaultValue="other">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="certificate">Certificate</SelectItem>
+                  <SelectItem value="transcript">Transcript</SelectItem>
+                  <SelectItem value="project">Project</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="custom-content">Content *</Label>
+              <textarea
+                id="custom-content"
+                placeholder="Enter custom evidence details"
+                rows={4}
+                className="w-full px-3 py-2 border border-[#d9d9d9] rounded-md focus:border-[#2b97cf] focus:ring-[#2b97cf] focus:outline-none resize-none"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCustomDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90" onClick={() => setCustomDialogOpen(false)}>
+              Add Evidence
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </MainLayout>
   )
 }

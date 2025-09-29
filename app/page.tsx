@@ -10,6 +10,7 @@ import { CollectionsTable } from "@/components/credentials/collections-table"
 import { RecommendationsTable } from "@/components/credentials/recommendations-table"
 import { IssueTab } from "@/components/credentials/issue-tab"
 import { AnalyticsDashboard } from "@/components/analytics/analytics-dashboard"
+import { DevelopersPage } from "@/components/developers/developers-page"
 import { useNavigation } from "@/hooks/use-navigation"
 
 export default function HomePage() {
@@ -38,6 +39,8 @@ export default function HomePage() {
     switch (activeNavItem) {
       case "analytics":
         return <AnalyticsDashboard />
+      case "developers":
+        return <DevelopersPage />
       case "credentials":
       default:
         return (

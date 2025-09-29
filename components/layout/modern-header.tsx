@@ -105,7 +105,7 @@ export function Header() {
               <button className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <div className="w-8 h-8 rounded-full overflow-hidden">
                   <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/design-mode-images/profile_image%281%29%281%29%281%29%281%29-zQUVyE2gEwYBBuR2dLlrhg1GouWmKI.png"
+                    src="/images/design-mode/profile_image%281%29%281%29%281%29%281%29(1).png"
                     alt="Profile"
                     width={32}
                     height={32}
