@@ -16,7 +16,7 @@ export function CredentialsHeader() {
   return (
     <div className="bg-white">
       <div className="px-8 py-6">
-        <h1 className="text-3xl font-semibold text-gray-700 mb-8">Credentials</h1>
+        <h1 className="text-3xl font-serif font-normal text-gray-700 mb-8">Credentials</h1>
 
         {/* Tab Navigation */}
         <div className="flex items-center gap-8 border-b border-[#efefef]">

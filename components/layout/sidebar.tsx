@@ -1,18 +1,19 @@
 "use client"
 import { CreditCard, BarChart3, Code, User, GraduationCap, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useNavigation } from "@/hooks/use-navigation"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
 import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 const navigationItems = [
-  { id: "credentials", label: "Credentials", icon: CreditCard },
-  { id: "analytics", label: "Analytics", icon: BarChart3 },
-  { id: "developers", label: "Developers", icon: Code },
-  { id: "account", label: "Account", icon: User },
-  { id: "academy", label: "Academy", icon: GraduationCap },
-  { id: "support", label: "Support", icon: HelpCircle },
+  { id: "credentials", label: "Credentials", icon: CreditCard, href: "/" },
+  { id: "analytics", label: "Analytics", icon: BarChart3, href: "/analytics" },
+  { id: "developers", label: "Developers", icon: Code, href: "/developers" },
+  { id: "account", label: "Account", icon: User, href: "/account" },
+  { id: "academy", label: "Academy", icon: GraduationCap, href: "/academy" },
+  { id: "support", label: "Support", icon: HelpCircle, href: "/support" },
 ]
 
 interface SidebarProps {
@@ -21,9 +22,14 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps) {
-  const { activeNavItem, setActiveNavItem } = useNavigation()
+  const pathname = usePathname()
 
-  console.log("[v0] Sidebar rendered, isCollapsed:", isCollapsed)
+  const getActiveItem = () => {
+    const item = navigationItems.find((item) => item.href === pathname)
+    return item?.id || "credentials"
+  }
+
+  const activeNavItem = getActiveItem()
 
   return (
     <TooltipProvider>
@@ -89,19 +95,17 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps)
                 return (
                   <Tooltip key={item.id} delayDuration={300}>
                     <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        className={cn(
-                          "w-full gap-2 text-gray-700 hover:bg-[#faf9f9] justify-center px-2",
-                          isActive && "bg-[#2b97cf]/10 text-[#2b97cf] font-medium",
-                        )}
-                        onClick={() => {
-                          console.log("[v0] Navigation item clicked:", item.id)
-                          setActiveNavItem(item.id)
-                        }}
-                      >
-                        <Icon className="w-4 h-4 flex-shrink-0" />
-                      </Button>
+                      <Link href={item.href} className="block">
+                        <Button
+                          variant="ghost"
+                          className={cn(
+                            "w-full gap-2 text-gray-700 hover:bg-[#faf9f9] justify-center px-2",
+                            isActive && "bg-[#2b97cf]/10 text-[#2b97cf] font-medium",
+                          )}
+                        >
+                          <Icon className="w-4 h-4 flex-shrink-0" />
+                        </Button>
+                      </Link>
                     </TooltipTrigger>
                     <TooltipContent
                       side="right"
@@ -115,21 +119,18 @@ export function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps)
               }
 
               return (
-                <Button
-                  key={item.id}
-                  variant="ghost"
-                  className={cn(
-                    "w-full gap-2 text-gray-700 hover:bg-[#faf9f9] justify-start",
-                    isActive && "bg-[#2b97cf]/10 text-[#2b97cf] font-medium",
-                  )}
-                  onClick={() => {
-                    console.log("[v0] Navigation item clicked:", item.id)
-                    setActiveNavItem(item.id)
-                  }}
-                >
-                  <Icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="flex-1 text-left">{item.label}</span>
-                </Button>
+                <Link key={item.id} href={item.href} className="block">
+                  <Button
+                    variant="ghost"
+                    className={cn(
+                      "w-full gap-2 text-gray-700 hover:bg-[#faf9f9] justify-start",
+                      isActive && "bg-[#2b97cf]/10 text-[#2b97cf] font-medium",
+                    )}
+                  >
+                    <Icon className="w-4 h-4 flex-shrink-0" />
+                    <span className="flex-1 text-left">{item.label}</span>
+                  </Button>
+                </Link>
               )
             })}
           </nav>

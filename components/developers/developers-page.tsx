@@ -1,190 +1,105 @@
 "use client"
 
-import { ArrowRight, FileText, Building2, CreditCard, Award } from "lucide-react"
+import { Code, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { useState } from "react"
+
+const tabs = [
+  { id: "template-ids", label: "Template IDs" },
+  { id: "authorization-tokens", label: "Authorization Tokens" },
+  { id: "webhooks", label: "Webhooks" },
+  { id: "api-documentation", label: "API Documentation", hasExternalIcon: true },
+  { id: "integrations", label: "Integrations" },
+]
+
+const templateData = [
+  { id: "c2c80b33-580c", name: "Advanced Ruby on Rails" },
+  { id: "a96d5ceade", name: "Analyze Data with Python (es-US)" },
+  { id: "53860daf-ef1d-4070", name: "Credly Essentials" },
+  { id: "373d-ef82be85498c", name: "Full Stack Coding Bootcamp" },
+  { id: "b4f2c8a1-9d3e", name: "Introduction to Machine Learning" },
+  { id: "7e5a9c2d-4f1b", name: "Cloud Architecture Fundamentals" },
+  { id: "d8b3e6f4-2a7c", name: "Cybersecurity Basics" },
+  { id: "9f1c5d8e-3b6a", name: "Data Science with R" },
+  { id: "a2e7f9b3-5c8d", name: "DevOps Engineering" },
+  { id: "c5d8e2f6-9a3b", name: "Frontend Development Mastery" },
+  { id: "e8f3a6c9-2d5b", name: "Backend API Development" },
+  { id: "f9a4b7d2-6e8c", name: "Mobile App Development" },
+  { id: "b6c9d3e7-1f4a", name: "UI/UX Design Principles" },
+  { id: "d3e6f9a2-5b8c", name: "Agile Project Management" },
+  { id: "e7f2a5c8-9d3b", name: "Database Design and SQL" },
+  { id: "f4a7b9d3-2e6c", name: "Blockchain Fundamentals" },
+  { id: "a8c2e5f9-6b3d", name: "Artificial Intelligence Basics" },
+  { id: "c9d4e7f2-3a6b", name: "Software Testing and QA" },
+  { id: "e2f5a8c3-9d6b", name: "Network Security" },
+]
 
 export function DevelopersPage() {
+  const [activeTab, setActiveTab] = useState("template-ids")
+
   return (
-    <div className="min-h-screen bg-[#fefefe] p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="flex items-start justify-between mb-8">
-          <div className="flex-1">
-            <h1 className="text-3xl font-semibold text-gray-900 mb-4">Developer API</h1>
-            <p className="text-gray-600 max-w-2xl leading-relaxed">
-              Start with the basics by reading about how the Credly API works or jump right into writing code on our
-              badge platform. The Credly Rest API allows users to manage badges they have been issued and issue badges
-              on behalf of organizations.
-            </p>
-          </div>
+    <div className="min-h-screen bg-[#fefefe] p-8">
+      <div className="max-w-[1400px] mx-auto">
+        {/* Header */}
+        <h1 className="text-[40px] font-serif font-normal text-[#2d2d2d] mb-8">Developers</h1>
 
-          {/* Badge Icon */}
-          <div className="ml-8 flex-shrink-0">
-            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-              <Award className="w-16 h-16 text-white" />
-            </div>
-          </div>
+        {/* Tabs Navigation */}
+        <div className="flex items-center gap-8 mb-8 border-b border-[#e5e5e5]">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`pb-4 text-[15px] font-normal relative flex items-center gap-1.5 transition-colors ${
+                activeTab === tab.id
+                  ? "text-[#2b97cf] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#2b97cf]"
+                  : "text-[#8a8a8a] hover:text-[#2b97cf]"
+              }`}
+            >
+              {tab.label}
+              {tab.hasExternalIcon && <ExternalLink className="w-3.5 h-3.5" />}
+            </button>
+          ))}
         </div>
 
-        {/* Process Flow */}
-        <div className="mb-12">
-          <div className="flex items-center justify-center mb-8">
-            <div className="flex items-center bg-gradient-to-r from-blue-500 to-teal-400 rounded-full px-8 py-4 shadow-lg">
-              {/* ISSUE */}
-              <div className="flex flex-col items-center text-white">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-2">
-                  <Building2 className="w-6 h-6" />
-                </div>
-                <span className="text-sm font-medium">ISSUE</span>
-              </div>
-
-              <ArrowRight className="w-6 h-6 text-white mx-6" />
-
-              {/* EARN */}
-              <div className="flex flex-col items-center text-white">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-2">
-                  <CreditCard className="w-6 h-6" />
-                </div>
-                <span className="text-sm font-medium">EARN</span>
-              </div>
-
-              <ArrowRight className="w-6 h-6 text-white mx-6" />
-
-              {/* BROADCAST */}
-              <div className="flex flex-col items-center text-white">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-2">
-                  <Award className="w-6 h-6" />
-                </div>
-                <span className="text-sm font-medium">BROADCAST</span>
-              </div>
-            </div>
+        {/* Organization ID Card */}
+        <div className="bg-[#f5f5f5] rounded-lg p-5 mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Code className="w-5 h-5 text-[#2b97cf]" />
+            <span className="text-[15px] text-[#2d2d2d]">
+              Organization ID: <span className="font-mono">975e39b7-000b-4378-a08</span>
+              <span className="ml-8 font-mono">75e5</span>
+            </span>
           </div>
-
-          {/* Process Descriptions */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <p className="text-sm text-gray-600">Organizations ISSUE badges for things they teach or facilitate.</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Users EARN badges when they showcase their professional skills.</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">
-                Users can share the badges they earn to BROADCAST their potential.
-              </p>
-            </div>
-          </div>
+          <Button variant="link" className="text-[#2b97cf] hover:text-[#2b97cf]/80 p-0 h-auto text-[15px] font-normal">
+            View Documentation
+          </Button>
         </div>
 
-        {/* Getting Started Section */}
-        <div className="mb-8">
-          <Card className="border border-gray-200 hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-medium text-blue-600 mb-2">Getting Started with Credly</h3>
-                  <p className="text-gray-600 text-sm">
-                    Get a basic walk-through on how Credly works and how you will integrate your users and achievements.
-                    You will also get an overview of how to use the web service API and all available features.
-                  </p>
-                </div>
-                <Button variant="outline" size="sm" className="ml-4 flex-shrink-0 bg-transparent">
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Results Counter */}
+        <div className="text-[14px] text-[#6b7280] mb-6">Showing 1-19 of 19</div>
 
-        {/* API Sections Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Web Service API */}
-          <Card className="border border-gray-200">
-            <CardContent className="p-6">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <FileText className="w-4 h-4 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-2">Web Service API</h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Whether you're an expert developer or a beginner, integrating with the badges platform is easy. We
-                    offer a Rest API that will allow you to quickly get started issuing badges from your organization.
-                  </p>
-                  <Button variant="link" className="text-blue-600 p-0 h-auto font-normal">
-                    Documentation
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Table */}
+        <div className="bg-white rounded-lg border border-[#e5e5e5]">
+          {/* Table Header */}
+          <div className="grid grid-cols-2 gap-8 px-6 py-4 border-b border-[#e5e5e5] bg-[#fafafa]">
+            <div className="text-[14px] font-medium text-[#6b7280]">Template ID</div>
+            <div className="text-[14px] font-medium text-[#6b7280]">Template Name</div>
+          </div>
 
-          {/* Organizations */}
-          <Card className="border border-gray-200">
-            <CardContent className="p-6">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Building2 className="w-4 h-4 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-2">Organizations</h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    An organization is the entity associated with a user that is authorized to issue badges via Credly.
-                    Once an organization has been created it may start creating badge templates and issuing badges to
-                    users.
-                  </p>
-                  <Button variant="link" className="text-blue-600 p-0 h-auto font-normal">
-                    Documentation
-                  </Button>
-                </div>
+          {/* Table Rows */}
+          <div>
+            {templateData.map((template, index) => (
+              <div
+                key={template.id}
+                className={`grid grid-cols-2 gap-8 px-6 py-4 hover:bg-[#fafafa] transition-colors ${
+                  index !== templateData.length - 1 ? "border-b border-[#e5e5e5]" : ""
+                }`}
+              >
+                <div className="text-[14px] text-[#6b7280] font-mono">{template.id}</div>
+                <div className="text-[14px] text-[#2d2d2d]">{template.name}</div>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Credentials Templates */}
-          <Card className="border border-gray-200">
-            <CardContent className="p-6">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <CreditCard className="w-4 h-4 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-2">Credentials Templates</h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    A template for a badge that can be issued to a user. Each badge template contains a unique visual
-                    image and includes important data that links back to the issuer, as well as associated criteria and
-                    standards.
-                  </p>
-                  <Button variant="link" className="text-blue-600 p-0 h-auto font-normal">
-                    Documentation
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Issued Credentials */}
-          <Card className="border border-gray-200">
-            <CardContent className="p-6">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Award className="w-4 h-4 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900 mb-2">Issued Credentials</h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Issued badges may come from multiple sources and may be displayed on a single profile. Issued badges
-                    may contain an expiration date, and may be revoked by the issuing organization. Issued badges may
-                    also be shared outside the Credly system.
-                  </p>
-                  <Button variant="link" className="text-blue-600 p-0 h-auto font-normal">
-                    Documentation
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            ))}
+          </div>
         </div>
       </div>
     </div>
