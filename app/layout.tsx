@@ -9,7 +9,7 @@ import { Inter, JetBrains_Mono, Source_Serif_4, Source_Serif_4 as V0_Font_Source
 // Initialize fonts
 
 const _sourceSerif_4 = V0_Font_Source_Serif_4({ subsets: ['latin'], weight: ["200","300","400","500","600","700","800","900"], variable: '--v0-font-source-serif-4' })
-const _v0_fontVariables = `${_geistMono.variable} ${_sourceSerif_4.variable}`
+// const _v0_fontVariables = `${_geistMono.variable} ${_sourceSerif_4.variable}`
 
 const geistSans = Inter({
   subsets: ["latin"],
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${sourceSerif.variable}`}>
-      <body className={`font-sans antialiased ${_v0_fontVariables}`}>
+      <body className={`font-sans antialiased`}>
         <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
         <Analytics />
       </body>
