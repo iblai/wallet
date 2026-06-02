@@ -24,8 +24,10 @@
 
 /* Scan SDK compiled JS so Tailwind generates classes used inside SDK components.
  * lib/iblai/sdk is a symlink to node_modules/@iblai/iblai-js/dist (created by
- * iblai add auth or iblai startapp). */
+ * iblai add auth or iblai startapp). Both source and source/next are required;
+ * the credit balance widget pulls icon/layout utilities from the next bundle. */
 @source "../lib/iblai/sdk/web-containers/source";
+@source "../lib/iblai/sdk/web-containers/source/next";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -163,6 +165,103 @@
 
 .ibl-tooltip-content {
   @apply rounded-lg bg-gray-700 px-3 py-2 text-sm font-medium whitespace-nowrap text-white shadow-sm transition-opacity duration-300;
+}
+
+/* SDK Account/Profile sidebar: the role badge (Admin/Student) and the
+ * tenant-name badge sit in a single `flex justify-center space-x-3` row.
+ * Without flex-wrap, a long tenant name overflows. Match the row by its
+ * direct child structure (only this combination has the blue role pill
+ * adjacent to siblings) and let it wrap to multiple lines. */
+.flex.justify-center.space-x-3:has(> .bg-blue-100.text-blue-700) {
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
+}
+
+/* /account renders the SDK <Account> component, but we only want the
+ * Management tab content visible — no avatar, no role badge, no
+ * left-rail tabs, no per-tab header bar.
+ *
+ * Desktop: the rail is a `<div style="width: 320px; height: 100%">`
+ * holding the avatar + role/tenant badges + Profile tabs nav.
+ * Mobile (<lg): the SDK renders a `<div class="lg:hidden">` "Profile"
+ * header at the top, a `<nav class="lg:hidden">` tab list below it,
+ * and a `<div class="lg:hidden mb-6">` per-tab title block inside the
+ * tabpanel. Hide every `lg:hidden` descendant — they're all chrome we
+ * don't want in the single-tab view, on either breakpoint. */
+.account-management-only [style*="320px"] {
+  display: none !important;
+}
+.account-management-only .lg\:hidden {
+  display: none !important;
+}
+.account-management-only nav[aria-label="Profile tabs"] {
+  display: none !important;
+}
+
+/* Hide the Account component's per-tab title + subtitle header.
+ *  - Desktop: `<div class="hidden lg:block flex-shrink-0 ... border-b">`
+ *    above the tabpanel, rendering `{activeTab}` (the word "Management")
+ *    and the subtitle "Manage users and their permissions in the system."
+ *  - Mobile: the `lg:hidden mb-6` block inside the tabpanel rendering
+ *    the same h3+p pair. */
+.account-management-only .hidden.lg\:block.flex-shrink-0.border-b,
+.account-management-only [role="tabpanel"] > .lg\:hidden.mb-6 {
+  display: none !important;
+}
+
+/* Force the entire chain — wrapper → Account outer → right-side
+ * panel → tabpanel — to fill the page width. The page wrapper is a
+ * flex container, so without explicit `flex: 1 + width: 100%` the
+ * Account child sizes to its intrinsic content width, especially on
+ * mobile where the SDK's `flex-col` layout collapses everything to
+ * the widest single child. */
+.account-management-only,
+.account-management-only > *,
+.account-management-only > * > *,
+.account-management-only .flex-1.flex.flex-col.overflow-hidden,
+.account-management-only [role="tabpanel"] {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  flex-basis: auto !important;
+}
+
+/* Promote each chain link to a flex item that grows. */
+.account-management-only > *,
+.account-management-only > * > * {
+  flex: 1 1 100% !important;
+}
+
+/* Strip max-width from EVERY tabpanel descendant. The SDK occasionally
+ * uses `max-w-2xl` / `max-w-md` on form sections, which then show as
+ * a narrow column on a wide page once the left rail is gone. */
+.account-management-only [role="tabpanel"] * {
+  max-width: none !important;
+}
+
+
+/* Strip card-style borders + rounded corners on wrapper divs inside
+ * the Account/Developers content. The SDK's Admin/Integrations tabs
+ * both wrap their content in `<div class="border border-gray-200
+ * rounded-lg p-6">`, plus the inner sections may add their own card
+ * borders. Match anything with both `border` and `rounded-lg` so the
+ * fix catches the outer card and any nested card-like wrappers,
+ * without nuking input/table/divider borders. */
+.account-management-only [role="tabpanel"] > div,
+.account-management-only div.border.rounded-lg,
+.account-management-only div.border.border-gray-200,
+.account-management-only div.rounded-lg.border {
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* The SDK's tabpanel + inner card both ship `p-6` (24px each side =
+ * 48px combined horizontal padding). On a narrow mobile screen that
+ * eats most of the width. Override the class directly inside the
+ * Account/Developers wrapper so the content reaches the screen edges. */
+.account-management-only .p-6 {
+  padding-left: 0.2rem !important;
+  padding-right: 0.2rem !important;
 }
 
 /* Custom styles for SDK components */

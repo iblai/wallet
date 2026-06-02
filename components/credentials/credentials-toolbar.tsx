@@ -64,27 +64,9 @@ export function CredentialsToolbar() {
           </div>
         )}
 
-        {activeTab === "pathways" && (
-          <div className="flex items-center gap-3">
-            <Link href="/create-pathway">
-              <Button className="bg-[#2b97cf] hover:bg-[#2b97cf]/90 text-white shadow-sm">
-                <Plus className="w-4 h-4 mr-2" />
-                Create Pathway
-              </Button>
-            </Link>
-            <Button
-              variant="outline"
-              size="icon"
-              className="border-[#2b97cf] text-[#2b97cf] hover:bg-[#2b97cf]/10 transition-colors bg-transparent"
-            >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="12" cy="5" r="2" />
-                <circle cx="12" cy="12" r="2" />
-                <circle cx="12" cy="19" r="2" />
-              </svg>
-            </Button>
-          </div>
-        )}
+        {/* Pathways "Create Pathway" button removed — `/create-pathway`
+         *  doesn't exist as a route. The PathwaysTable's "New Pathway"
+         *  button (with modal) is the working entry point. */}
 
         {activeTab === "collections" && (
           <div className="flex items-center gap-3">

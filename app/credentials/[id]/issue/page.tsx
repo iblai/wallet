@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { use, useState } from "react"
 import {
   ChevronRight,
   ChevronDown,
@@ -45,7 +45,8 @@ const credentialsData = {
   },
 }
 
-export default function IssueCredentialPage({ params }: { params: { id: string } }) {
+export default function IssueCredentialPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const [earnerInfoOpen, setEarnerInfoOpen] = useState(true)
   const [expirationOpen, setExpirationOpen] = useState(true)
   const [evidenceOpen, setEvidenceOpen] = useState(true)
@@ -60,7 +61,7 @@ export default function IssueCredentialPage({ params }: { params: { id: string }
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
   const [customDialogOpen, setCustomDialogOpen] = useState(false)
 
-  const credentialData = credentialsData[params.id as keyof typeof credentialsData]
+  const credentialData = credentialsData[id as keyof typeof credentialsData]
 
   if (!credentialData) {
     return (

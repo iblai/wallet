@@ -48,6 +48,12 @@ const config = {
     return `https://learn.${domain()}`;
   },
 
+  // LMS browser host — direct user-facing URL (`learn.<domain>`). Use for
+  // new-tab opens, asset URLs (the LMS only serves `/asset-v1:...` from its
+  // own host; the API gateway proxy returns 500), and links. Distinct from
+  // `lmsUrl()` which may be the API-proxied path for programmatic access.
+  lmsBrowserUrl: () => `https://learn.${domain()}`,
+
   dmUrl: () => {
     const apiBase = getEnv("NEXT_PUBLIC_API_BASE_URL");
     if (apiBase) return `${apiBase}/dm`;

@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnalyticsOverview } from "@iblai/iblai-js/web-containers";
+import { AnalyticsPrograms } from "@iblai/iblai-js/web-containers";
 
 import { resolveAppTenant } from "@/lib/iblai/tenant";
 
-export default function AnalyticsOverviewPage() {
+export default function AnalyticsProgramsPage() {
   const [tenantKey, setTenantKey] = useState("");
   useEffect(() => {
     setTenantKey(resolveAppTenant());
   }, []);
   if (!tenantKey) return null;
-  return <AnalyticsOverview tenantKey={tenantKey} mentorId="" />;
+  return <AnalyticsPrograms tenantKey={tenantKey} mentorId="" basePath="/analytics" />;
 }

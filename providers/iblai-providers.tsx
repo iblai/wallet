@@ -25,7 +25,7 @@ import { AuthProvider, TenantProvider } from "@iblai/iblai-js/web-utils";
 import { iblaiStore } from "@/store/iblai-store";
 import { LocalStorageService } from "@/lib/iblai/storage-service";
 import config from "@/lib/iblai/config";
-import { resolveAppTenant, checkTenantMismatch } from "@/lib/iblai/tenant";
+import { resolveAppTenant } from "@/lib/iblai/tenant";
 import {
   redirectToAuthSpa,
   hasNonExpiredAuthToken,
@@ -75,7 +75,7 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
     return "";
   }, [isInitialized]);
 
-  // Tenant resolution: .env -> app_tenant -> localStorage tenant
+  // Tenant resolution: SDK `tenant` localStorage entry
   const tenantKey = useMemo(() => resolveAppTenant(), [isInitialized]);
 
   const isSsoRoute = pathname?.startsWith("/sso-login") ?? false;
@@ -109,10 +109,6 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
             const key = typeof t === "string" ? t : t?.key ?? String(t);
             localStorage.setItem("current_tenant", key);
             localStorage.setItem("tenant", key);
-
-            // If the SDK resolved a different tenant than what the app
-            // expects, redirect to re-login for the correct tenant.
-            checkTenantMismatch();
           }}
           saveUserTenants={(t: unknown) =>
             localStorage.setItem("tenants", JSON.stringify(t))
