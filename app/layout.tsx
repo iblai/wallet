@@ -1,8 +1,10 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import "./globals.css"
+
+import { IblaiProviders } from "@/providers/iblai-providers"
 
 import { Inter, JetBrains_Mono, Source_Serif_4, Source_Serif_4 as V0_Font_Source_Serif_4 } from 'next/font/google'
 
@@ -33,11 +35,25 @@ export const metadata: Metadata = {
   generator: "v0.app",
 }
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+}
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${sourceSerif.variable}`}>
       <body className={`font-sans antialiased`}>
-        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        {/*
+          IblaiProviders (Redux > Auth > Tenant) is the outermost app
+          provider — unauthenticated users are redirected to the ibl.ai
+          Auth SPA. It internally `skip`s the `/sso-login*` callback route,
+          so the SSO callback can store tokens without a redirect loop.
+        */}
+        <IblaiProviders>
+          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        </IblaiProviders>
         <Analytics />
       </body>
     </html>

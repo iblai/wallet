@@ -10,9 +10,44 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { handleLogout } from "@/lib/iblai/auth-utils"
+
+/** Authenticated user, read from the session `userData` the SDK stores. */
+interface SessionUser {
+  name: string
+  email: string
+  avatar?: string
+}
+
+function readSessionUser(): SessionUser | null {
+  if (typeof window === "undefined") return null
+  try {
+    const raw = localStorage.getItem("userData")
+    if (!raw) return null
+    const d = JSON.parse(raw) as Record<string, string>
+    const name = d.user_nicename || d.username || d.user_email || d.email || ""
+    const email = d.email || d.user_email || ""
+    const avatar = d.profile_image || d.avatar || d.image || undefined
+    return { name, email, avatar }
+  } catch {
+    return null
+  }
+}
 
 export function Navbar() {
+  const router = useRouter()
+  const [user, setUser] = useState<SessionUser | null>(null)
+
+  // `userData` is populated by the SSO callback before the app mounts; read
+  // it on the client to avoid an SSR/hydration mismatch.
+  useEffect(() => {
+    setUser(readSessionUser())
+  }, [])
+
+  const initial = (user?.name || "U").charAt(0).toUpperCase()
+
   const [notifications] = useState([
     { id: 1, message: "New credential template available", time: "2 hours ago", read: false },
     { id: 2, message: "Analytics report ready for review", time: "Yesterday", read: false },
@@ -70,18 +105,27 @@ export function Navbar() {
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <Avatar className="w-8 h-8">
-                  <AvatarImage src="/images/profile.png" />
-                  <AvatarFallback className="bg-[#d9d9d9] text-gray-700">U</AvatarFallback>
+                  {user?.avatar ? <AvatarImage src={user.avatar} alt={user.name} /> : null}
+                  <AvatarFallback className="bg-[#d9d9d9] text-gray-700">{initial}</AvatarFallback>
                 </Avatar>
                 <ChevronDown className="w-4 h-4 text-[#767676]" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-60">
-              <DropdownMenuItem className="cursor-pointer py-4">
+              {user && (
+                <>
+                  <div className="px-3 py-3">
+                    <p className="truncate text-sm font-semibold text-gray-700">{user.name || "Account"}</p>
+                    {user.email && <p className="truncate text-xs text-[#767676]">{user.email}</p>}
+                  </div>
+                  <DropdownMenuSeparator />
+                </>
+              )}
+              <DropdownMenuItem className="cursor-pointer py-4" onClick={() => router.push("/account")}>
                 <User className="mr-3 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer py-4">
+              <DropdownMenuItem className="cursor-pointer py-4" onClick={() => handleLogout()}>
                 <LogOut className="mr-3 h-4 w-4" />
                 <span>Logout</span>
               </DropdownMenuItem>
