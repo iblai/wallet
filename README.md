@@ -1,30 +1,31 @@
-# CredentialsAI project
+<div align="center">
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+<a href="https://ibl.ai"><img src="https://ibl.ai/images/iblai-logo.png" alt="ibl.ai" width="300"></a>
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/iblai/v0-credentials-ai-project)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/L3Zrn7F62Ev)
+# Wallet
 
-## Overview
+Digital credentials wallet for the [ibl.ai](https://ibl.ai) platform — collect, store, and share verifiable skills credentials, badges, and certifications.
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+[![Next.js](https://img.shields.io/badge/Next.js-000000?logo=nextdotjs&logoColor=white)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](#license)
 
-## Deployment
+</div>
 
-Your project is live at:
+---
 
-**[https://vercel.com/iblai/v0-credentials-ai-project](https://vercel.com/iblai/v0-credentials-ai-project)**
+## What is Wallet
 
-## Build your app
+Wallet is a digital credentials app on the [ibl.ai](https://ibl.ai) platform. Learners collect the skills credentials, badges, and certifications they earn across ibl.ai courses and programs, keep them in one verifiable wallet, and share them with employers and institutions.
 
-Continue building your app on:
+## Features
 
-**[https://v0.app/chat/projects/L3Zrn7F62Ev](https://v0.app/chat/projects/L3Zrn7F62Ev)**
+- **Credential collection** — gather badges, certificates, and micro-credentials earned across the ibl.ai platform in one place
+- **Verifiable records** — each credential carries its issuer, issue date, and verification metadata
+- **Shareable** — generate links or exports to present credentials to employers and institutions
+- **Skills profile** — a consolidated view of demonstrated competencies and achievements
 
-## How It Works
+## License
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+Released under the [MIT License](LICENSE).
