@@ -5,7 +5,7 @@ import { UserProfileDropdown } from "@iblai/iblai-js/web-containers/next";
 import type { Tenant } from "@iblai/iblai-js/web-utils";
 
 import config from "@/lib/iblai/config";
-import { handleLogout } from "@/lib/iblai/auth-utils";
+import { handleLogout, redirectToAuthSpa } from "@/lib/iblai/auth-utils";
 import { resolveAppTenant } from "@/lib/iblai/tenant";
 
 interface SessionData {
@@ -61,6 +61,7 @@ export function IblaiProfileDropdown() {
   return (
     <UserProfileDropdown
       email={session.email}
+      authURL={config.authUrl()}
       mainPlatformKey={config.mainTenantKey()}
       username={session.username}
       tenantKey={tenantKey}
@@ -71,6 +72,13 @@ export function IblaiProfileDropdown() {
       showTenantSwitcher
       showLogoutButton
       onLogout={() => handleLogout()}
+      onTenantUpdate={(tenant) => {
+        // Mirror the TenantProvider's saveCurrentTenant + handleTenantSwitch:
+        // persist the selected tenant and re-auth against it.
+        localStorage.setItem("current_tenant", tenant.key);
+        localStorage.setItem("tenant", tenant.key);
+        redirectToAuthSpa(undefined, tenant.key, false, true);
+      }}
     />
   );
 }

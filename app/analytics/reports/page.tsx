@@ -11,5 +11,5 @@ export default function AnalyticsReportsPage() {
     setTenantKey(resolveAppTenant());
   }, []);
   if (!tenantKey) return null;
-  return <AnalyticsReports tenantKey={tenantKey} mentorId="" />;
+  return <AnalyticsReports tenantKey={tenantKey} selectedMentorId="" />;
 }
