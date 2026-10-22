@@ -1,0 +1,905 @@
+{
+  "version": 1,
+  "skills": {
+    "iblai-api-agent-access": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-access/SKILL.md",
+      "computedHash": "2b7ae46d42e9ba62745f58ed10d761af01d63cb97d3b8640af4e2acaade903bc"
+    },
+    "iblai-api-agent-audit": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-audit/SKILL.md",
+      "computedHash": "013ca8699ea8acf221f2bb0b5f9d76aadfdcefa49fcf3ca598cbecbf96cf9c84"
+    },
+    "iblai-api-agent-chat": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-chat/SKILL.md",
+      "computedHash": "a080ef97d17d9b6bf14aaa192d4ce7378a9d48b0e24a1d090c5b58410f92793b"
+    },
+    "iblai-api-agent-create": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-create/SKILL.md",
+      "computedHash": "d5e18f02a10e3c219f2c47f88290ddeaa03811a4a9047db4c2a244a8a551f16d"
+    },
+    "iblai-api-agent-dataset": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-dataset/SKILL.md",
+      "computedHash": "51827735134f8761aa63b5a4e45bf05f9471d76ed186d7a75c87bc713c095f71"
+    },
+    "iblai-api-agent-disclaimer": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-disclaimer/SKILL.md",
+      "computedHash": "20e4fd3dadc2f235e74ad127c73831042d36c42e54d3bb3e010d7c69d78616d0"
+    },
+    "iblai-api-agent-embed": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-embed/SKILL.md",
+      "computedHash": "bfb4959f5f3b224001e22eb216b4ee00e8e498e01989315a8484203607a63722"
+    },
+    "iblai-api-agent-eval": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-eval/SKILL.md",
+      "computedHash": "6155e5d9631fdb16c537c457e6f63c3084e3a94becf2bfda0d6e3bf329116f27"
+    },
+    "iblai-api-agent-history": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-history/SKILL.md",
+      "computedHash": "8bd1173244075ec564b54a98412e14c921b7284cc03acbf65f71cb33e380c9f9"
+    },
+    "iblai-api-agent-llm": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-llm/SKILL.md",
+      "computedHash": "a117645fde48cf071c064b7cc150bc0e601f446b81bcdf3d2bf5f62f935349c6"
+    },
+    "iblai-api-agent-mcp": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-mcp/SKILL.md",
+      "computedHash": "65bd6fe3cae31754b638d1815862ae76cf23b3216713419906bf93cff87ccedf"
+    },
+    "iblai-api-agent-memory": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-memory/SKILL.md",
+      "computedHash": "4e1076acad687c25b240a595155b1db4292a607c4323a7ae24cb603e3c5bcec2"
+    },
+    "iblai-api-agent-privacy": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-privacy/SKILL.md",
+      "computedHash": "e510dac2c47f38e530a6ea902bab51babdb9b2c0902faf8d1c732e4f91a55ea6"
+    },
+    "iblai-api-agent-prompt": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-prompt/SKILL.md",
+      "computedHash": "5f3f7a2c9e5296c941d34bf1e2062fe7dae9d0a3e187b8396901d96d4e71c413"
+    },
+    "iblai-api-agent-safety": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-safety/SKILL.md",
+      "computedHash": "533e02d22fa3df382e407a870334d2d988650bb88e8fa20d27aaf014f913de36"
+    },
+    "iblai-api-agent-sandbox": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-sandbox/SKILL.md",
+      "computedHash": "b0b5116b6ef33f0b1ff3728ed9fbd540a2bebf7e36b1df6c4137bc84a80c3059"
+    },
+    "iblai-api-agent-session": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-session/SKILL.md",
+      "computedHash": "be81fca17348389296d055625c5b84f66362616e04c95dddb7cd5981a37c7c2b"
+    },
+    "iblai-api-agent-setting": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-setting/SKILL.md",
+      "computedHash": "f98a20c69d3d0c224946c799227aca52073eeac2d7d4426a4dfe5099dbaa38df"
+    },
+    "iblai-api-agent-skill": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-skill/SKILL.md",
+      "computedHash": "8a5920d474521a21987171136df646863640c73faa18be32631eddc02e95bef3"
+    },
+    "iblai-api-agent-support": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-support/SKILL.md",
+      "computedHash": "2218baef1d9c81695ab27b6a413c4414dfbc0fbf017135bb233c374b94ff0221"
+    },
+    "iblai-api-agent-tool": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-agent-tool/SKILL.md",
+      "computedHash": "c4bc3b9e6da267e358feb9c3b97a2d5b1d7b3e6a190c8ab551b3ba47066f0ad5"
+    },
+    "iblai-api-analytics": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/analytics/iblai-api-analytics/SKILL.md",
+      "computedHash": "b7a1ab4a73a94595154afdc481c970eb4e1a1dafea0379b556903bcad0307976"
+    },
+    "iblai-api-apply": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-apply/SKILL.md",
+      "computedHash": "1f4b0a83fa10cb1ce47fb81d2407523f02b9f454bce9206cf406170832acd34d"
+    },
+    "iblai-api-canvas-course-builder": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-canvas-course-builder/SKILL.md",
+      "computedHash": "8fea5789adc5a314d9fcbb1cb37199a4d3d6b4b7c0c9db2e4b6ee26c315c45f0"
+    },
+    "iblai-api-catalog": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-catalog/SKILL.md",
+      "computedHash": "00039c89a325556971175323ae0827861f055985ac2d49dd576ce74eb3e0ffe0"
+    },
+    "iblai-api-catalog-invitation": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-catalog-invitation/SKILL.md",
+      "computedHash": "61ca5e250a9aa716747450f9920c0b0f26adc1adf3283ad857cb7af3d638ad84"
+    },
+    "iblai-api-catalog-media": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-catalog-media/SKILL.md",
+      "computedHash": "bb52d8f25fcaa91eb5b4d097c13855178b4cb5485bcbcb200c8a9011199e5b4e"
+    },
+    "iblai-api-credential": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-credential/SKILL.md",
+      "computedHash": "de1950f1f8dcce24979b6445dc9bb7ed5c09debb231e9e708613e0b6e4396e74"
+    },
+    "iblai-api-crm": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/organizations/iblai-api-crm/SKILL.md",
+      "computedHash": "2ce6781f45b658802cd23136cbb3a3884fdf92d63b3c8e8458d55a7670320bb5"
+    },
+    "iblai-api-external-service-proxy": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/organizations/iblai-api-external-service-proxy/SKILL.md",
+      "computedHash": "71855af98f6440bdacae1a475103aa88afd8acdef5ec0e7346e3f3bb288843bb"
+    },
+    "iblai-api-feature": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-api-feature/SKILL.md",
+      "computedHash": "547f638998bcfe863ed1eaf9df359fae5fe3814257466cfb6ba61bde850c2d5c"
+    },
+    "iblai-api-heygen": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-heygen/SKILL.md",
+      "computedHash": "d9a99120009d4c0927c35c797e7cca8a671465096853107951d79f1bef36f953"
+    },
+    "iblai-api-hosting": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-api-hosting/SKILL.md",
+      "computedHash": "5486cabe9baa002d44bf67162bd9891d4f7da7b86cbc73d3985448df6bb092a1"
+    },
+    "iblai-api-inference": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-inference/SKILL.md",
+      "computedHash": "32b45c42cd794e16b834cd47ebcb089e34d01be82948271b4829e63e928e908a"
+    },
+    "iblai-api-infrastructure": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-api-infrastructure/SKILL.md",
+      "computedHash": "17732622302a64b7d2d7a60e4d050a29490418ebd384d0a0db51fd6d6489e613"
+    },
+    "iblai-api-integration": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/organizations/iblai-api-integration/SKILL.md",
+      "computedHash": "3a98bef24688b2f1038beac6aa9230c0f60067a992f075758c62845af3537037"
+    },
+    "iblai-api-invite": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-api-invite/SKILL.md",
+      "computedHash": "bb2b9d948d7eaaa3f1bf23363476d6d879f9822dacc770a7c71454f4ce19b123"
+    },
+    "iblai-api-login": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-api-login/SKILL.md",
+      "computedHash": "5aee9135c8c1745e9e3f22f31cdd77ca3a2729c45b024a14ec3488e63001ba47"
+    },
+    "iblai-api-milestone": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-milestone/SKILL.md",
+      "computedHash": "29fbde4338ed288987595ce793f67e38d5f1fc10136451a9e11804ea26761a80"
+    },
+    "iblai-api-notification": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-api-notification/SKILL.md",
+      "computedHash": "49af51398fa3095cd21e1eaaa39148ecc09684a32f50203e22177e37a77bfa9d"
+    },
+    "iblai-api-org": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/organizations/iblai-api-org/SKILL.md",
+      "computedHash": "ef9826df3c43ac302f231324a1cab138c23308ecbbff6a70b431637e4c157b7c"
+    },
+    "iblai-api-profile": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-api-profile/SKILL.md",
+      "computedHash": "a6660d5a0d81b689a4c1dc5bff93ba299e959c02e407a82916bf9096f0c456d0"
+    },
+    "iblai-api-profile-metadata": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-api-profile-metadata/SKILL.md",
+      "computedHash": "5f6103cdb624bf7f005b11ee03501c9c3975d8cc8358022e96df90d67d332e03"
+    },
+    "iblai-api-rbac": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-api-rbac/SKILL.md",
+      "computedHash": "802c961e6aae689ae7fb70f3de5c94f92d3a0d72acf36be81f20bbac54b9f23b"
+    },
+    "iblai-api-search": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-api-search/SKILL.md",
+      "computedHash": "8be7b3b74614d9458133b781196ed12f46c6689f0e090ab7db9c346a252e7cb1"
+    },
+    "iblai-api-spend-caps": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-api-spend-caps/SKILL.md",
+      "computedHash": "9ba93b829f1bdbc1fc3d4e92ad5868e962b70250b2867648836c91be5e09b7c5"
+    },
+    "iblai-api-studio": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio/SKILL.md",
+      "computedHash": "919a3a0e65095c3d1397e255e7057e49d0f73924c37c2a240cdbfad59c18898f"
+    },
+    "iblai-api-studio-auth": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-auth/SKILL.md",
+      "computedHash": "b472941209f94c2b0eb5c892cba26204d058d3cb829e1c33dbba31bb3d41850a"
+    },
+    "iblai-api-studio-course-create": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-course-create/SKILL.md",
+      "computedHash": "1a85cb7fd11e1f2f0145a7b6ccc3073aa8c659e3256fc3605767b37b944b3a7d"
+    },
+    "iblai-api-studio-grading": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-grading/SKILL.md",
+      "computedHash": "f1e8f6f6b3f8eed0a8659b5dd0b6e60dfe49123278702a067b3c1baeed354a92"
+    },
+    "iblai-api-studio-html": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-html/SKILL.md",
+      "computedHash": "6e50538c91b4018d634dd6cd5df76367fd2fd34b696e446861ea2e00e9fd06c9"
+    },
+    "iblai-api-studio-outline": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-outline/SKILL.md",
+      "computedHash": "ec8caa78daa0265f03014fed3cbb11286fde79636fe7654c8ec475aea6d8c9ba"
+    },
+    "iblai-api-studio-pdf": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-pdf/SKILL.md",
+      "computedHash": "bf22715933b16e121597764a711886d18cea18101b342f53be8b9f96e0dd052b"
+    },
+    "iblai-api-studio-problem": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-problem/SKILL.md",
+      "computedHash": "4874d0633d7bf2eac9afe7a5d07957c831ab3f718a4697429107752906fc6bc7"
+    },
+    "iblai-api-studio-publish": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-publish/SKILL.md",
+      "computedHash": "79d446687de4cc15d535a76d55226fc510cbc322df979085f756996b5e93ab6d"
+    },
+    "iblai-api-studio-section": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-section/SKILL.md",
+      "computedHash": "61bca2dbbbcb48ab33b32d85625798adf138192208a4b161e882dacffddbabd3"
+    },
+    "iblai-api-studio-settings": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-settings/SKILL.md",
+      "computedHash": "a379c1bfb4b46aec421f93a6fa4511c79b50abecf83089b2705a25fa065fedd6"
+    },
+    "iblai-api-studio-subsection": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-subsection/SKILL.md",
+      "computedHash": "f464f540a4bc949b6694e8d63dc2227d0bc2af5bb1bfd52ff8e07133cbe7143b"
+    },
+    "iblai-api-studio-team": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-team/SKILL.md",
+      "computedHash": "99c8c25e8b24b44c7be4ccc11dea8ad28cdd90b70aad5808e3680620643f97b8"
+    },
+    "iblai-api-studio-unit": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-api-studio-unit/SKILL.md",
+      "computedHash": "d49a506a3cee3ba7ea5cf6a5e068d880f9844d1050c81295ff7d582e497de5e4"
+    },
+    "iblai-api-token": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/organizations/iblai-api-token/SKILL.md",
+      "computedHash": "37020e1f5d4d7fd128b7a36f4a13e920cdc680842b0f363cf577adb9fb8097d7"
+    },
+    "iblai-vibe": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-vibe/SKILL.md",
+      "computedHash": "75b9f3c71fafd10bb09c47c1da6e232f80b9268ba291a81b48cc3af8e16cc8ae"
+    },
+    "iblai-vibe-account": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/organizations/iblai-vibe-account/SKILL.md",
+      "computedHash": "505f712a0c638b59218d3a888f0f1c80f51c0f41b3a176d3f3027a5d7fb610f9"
+    },
+    "iblai-vibe-admin": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-vibe-admin/SKILL.md",
+      "computedHash": "16ff000cc3386ae2c828b9a0d755ab53db1304475161785db2285ac50274fe15"
+    },
+    "iblai-vibe-agent": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent/SKILL.md",
+      "computedHash": "5510b246c9ddde25ffe02b8f00391e0949f7a6a7b12aef2d9c64c4b76757b314"
+    },
+    "iblai-vibe-agent-access": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-access/SKILL.md",
+      "computedHash": "48590bd0f54c4aedc7ccdac315ef240d1fda27311022f3fe9e63c94fd088a518"
+    },
+    "iblai-vibe-agent-api": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-api/SKILL.md",
+      "computedHash": "a36bbd8ef32a280bf4338b10079d2b9efc9496b52bef2e2c68ce0b24eb70bc00"
+    },
+    "iblai-vibe-agent-audit": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-audit/SKILL.md",
+      "computedHash": "19aa7cba38c8a8874f1b420506dad09729a4d113f7e036d9f418cb447e44f6cc"
+    },
+    "iblai-vibe-agent-billing": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-billing/SKILL.md",
+      "computedHash": "c23f7c36fc33ff556d6bd9dd55d550390d9f8725d42d4ba2df8a082f20e50b73"
+    },
+    "iblai-vibe-agent-chat": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-chat/SKILL.md",
+      "computedHash": "93b6dea5d63ba1642b2ce9da4871e4ce7cffb19322e36743bded61f80d26704b"
+    },
+    "iblai-vibe-agent-chat-sidebar": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-chat-sidebar/SKILL.md",
+      "computedHash": "9a6f3e90e2195fe842d20a9251c4abe23b74b1a37abef6b8a34d29ecde23bfa9"
+    },
+    "iblai-vibe-agent-create": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-create/SKILL.md",
+      "computedHash": "c21485241f9a8d2b2fbe607168a745bca8aa80aadd1e2ecc344e1534c4b8a2e4"
+    },
+    "iblai-vibe-agent-dataset": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-dataset/SKILL.md",
+      "computedHash": "54929005bf9acdb23314ded9f288969329324f2246c155ccef6e0a42aaf3f2bb"
+    },
+    "iblai-vibe-agent-disclaimer": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-disclaimer/SKILL.md",
+      "computedHash": "9e69cd6e562ccdd54c3bdbb80d66ef69e922abdc760312980c5a7b8267a33755"
+    },
+    "iblai-vibe-agent-embed": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-embed/SKILL.md",
+      "computedHash": "b3692176b92e0abc2a9d0677703560a356f71f84b02f331d1e9830d758ddcca2"
+    },
+    "iblai-vibe-agent-evals": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-evals/SKILL.md",
+      "computedHash": "66435172a65d95588037b966a87d30de92966e4f68cfb541966c69f05211d184"
+    },
+    "iblai-vibe-agent-grader": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-grader/SKILL.md",
+      "computedHash": "7dfbc4eefca00ff0a4704562bdbb58437cbffa934384dccfd458d049647da7b5"
+    },
+    "iblai-vibe-agent-history": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-history/SKILL.md",
+      "computedHash": "b4cbfc942c8f4976034d51f4ad3a79e35e1413728c6fd491a6ddbecea3f752eb"
+    },
+    "iblai-vibe-agent-llm": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-llm/SKILL.md",
+      "computedHash": "8e4e4084db37802ba5c2cf725627dd9d646bde0c8f4c81a8dbc2ee1ce43c28ab"
+    },
+    "iblai-vibe-agent-lti": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-lti/SKILL.md",
+      "computedHash": "4d61bd120ef3bed677a4022a9b8a31d2f0ba26ea02c6509b2e3f4e4f7591912d"
+    },
+    "iblai-vibe-agent-mcp": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-mcp/SKILL.md",
+      "computedHash": "2c27fcff818ab21f3295c64a5ea61c69abe991eb4b5c794ebac99f9266eaafee"
+    },
+    "iblai-vibe-agent-memory": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-memory/SKILL.md",
+      "computedHash": "ee97d8f545857421ea025863ae496dfc5d9b579babaf65fe68829ce99808da3c"
+    },
+    "iblai-vibe-agent-privacy": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-privacy/SKILL.md",
+      "computedHash": "536ed0c982c608da0dbfcb74880d71d61e9173464d04d15cf09ef8c6da36bbd2"
+    },
+    "iblai-vibe-agent-prompt": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-prompt/SKILL.md",
+      "computedHash": "e0e49d7e1f70f4711379bb7cdb26a6417ebf25288e304e3cf56bd9340454e717"
+    },
+    "iblai-vibe-agent-safety": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-safety/SKILL.md",
+      "computedHash": "4d48d895a388d0b3d574a0a37aa0076bbd9143c933d33faa843749cea86aa4ba"
+    },
+    "iblai-vibe-agent-sandbox": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-sandbox/SKILL.md",
+      "computedHash": "1d734d2916a3ec8b2654fb09abb2742ec28ac3e200a92bb644dc2aa1847243a7"
+    },
+    "iblai-vibe-agent-search": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-search/SKILL.md",
+      "computedHash": "676f50dc85b48d8d26b48a89b260691f9127e3d9e67e049da63cb7eb18457295"
+    },
+    "iblai-vibe-agent-setting": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-setting/SKILL.md",
+      "computedHash": "f65c9c2186cd4ccd332a589754f7f00401332fa7154ab58fd029c954bbf0b7d8"
+    },
+    "iblai-vibe-agent-skills": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-skills/SKILL.md",
+      "computedHash": "8d09b89c3663f27712a269c6fa245b666268e45127e3283c4e72d9768efe325e"
+    },
+    "iblai-vibe-agent-support": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-support/SKILL.md",
+      "computedHash": "9ee3c4db16159f75b06aec67cef02ae44cda36da0b95499b06c6555e35a0ef70"
+    },
+    "iblai-vibe-agent-task": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-task/SKILL.md",
+      "computedHash": "73d6d0e502b65afd3f387b5be2138a872e824feeb5aee087fadfeae8757766f3"
+    },
+    "iblai-vibe-agent-tool": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-tool/SKILL.md",
+      "computedHash": "1e0f67c35f47041d8ee558cc4a5ab10f3f130964d9f2dfabaede843de0fb1e3c"
+    },
+    "iblai-vibe-agent-virtual-machine": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-virtual-machine/SKILL.md",
+      "computedHash": "1ce687bab2c1fc6f9856c7cb730c6093dca8acc6248f663ee9de910a39ac9bdd"
+    },
+    "iblai-vibe-agent-voice": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-agent-voice/SKILL.md",
+      "computedHash": "a0a892f391de635998f5f88b13e16fcdcda449fe7628785dde9c990467adc2ed"
+    },
+    "iblai-vibe-analytics": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/analytics/iblai-vibe-analytics/SKILL.md",
+      "computedHash": "6d26ec5c029bae1bea32d6011d46c310b444d1e6a1968f2cc8d54b5c6b247afd"
+    },
+    "iblai-vibe-api": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-vibe-api/SKILL.md",
+      "computedHash": "5974b927cfc675001c6da9ba99911cdb7996251b7c542380bea9586b92969493"
+    },
+    "iblai-vibe-application": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-vibe-application/SKILL.md",
+      "computedHash": "c01be003e728ee551a072d657b709b800fed4e176e7cb5ded5f04916806c3ddb"
+    },
+    "iblai-vibe-auth": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-vibe-auth/SKILL.md",
+      "computedHash": "a41cf939b2e7f18b8505d672d29625b75f26faba670b9968a3900c46f032cd88"
+    },
+    "iblai-vibe-billing": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-vibe-billing/SKILL.md",
+      "computedHash": "ce09230b23fd49129f75a9dc6946135aadfe9eae0bde619b76bee1ffb355cd1a"
+    },
+    "iblai-vibe-component": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-vibe-component/SKILL.md",
+      "computedHash": "990ff7c62bfe4428eb0f38fa74fbedc54ca9c42f28120a6f72e8418e95082fe7"
+    },
+    "iblai-vibe-connect": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-vibe-connect/SKILL.md",
+      "computedHash": "423742f2bed025760203136ae7d9a7f37494cb4fb8fcb9c0d788398245e68031"
+    },
+    "iblai-vibe-course-access": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/content/iblai-vibe-course-access/SKILL.md",
+      "computedHash": "ea41de7ae5e675825856181e5086136e5de196f4553d81bddd4ad1b87020dcc0"
+    },
+    "iblai-vibe-credential": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/organizations/iblai-vibe-credential/SKILL.md",
+      "computedHash": "44ac44a68529f0a1d76a7b04d3839923253d5ea1e1223adf0940815d8469b44d"
+    },
+    "iblai-vibe-credit": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-vibe-credit/SKILL.md",
+      "computedHash": "908e9ad2203cbea36b3e99722dae40b6df30ee89efe5b805077c3e6de6b5d17f"
+    },
+    "iblai-vibe-design": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-vibe-design/SKILL.md",
+      "computedHash": "79c11aeedd12662add8aa006b3a3034615aaf88f767d86d36c0b0075e4a0ef6a"
+    },
+    "iblai-vibe-deslop": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-vibe-deslop/SKILL.md",
+      "computedHash": "32f4fbe519757bb1b217fd9fe908d0eb4dc6aae18bbe39dc056ddaf31ffb2d84"
+    },
+    "iblai-vibe-history": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-vibe-history/SKILL.md",
+      "computedHash": "89fb2b9c401f70e01ad5a6967f8536526fe5729548cbc270e6df8cd541ecf174"
+    },
+    "iblai-vibe-iconography": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-vibe-iconography/SKILL.md",
+      "computedHash": "5188a2306eb0fb1f9a98a6a5ecb33ce19d02a360d3ffd0a5fc09cbd5340c5608"
+    },
+    "iblai-vibe-incognito": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-incognito/SKILL.md",
+      "computedHash": "30cdb03a6df18940ab23fe65b021309c3f7a59365ba378b48f14e9fd9b4aed8a"
+    },
+    "iblai-vibe-invite": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-vibe-invite/SKILL.md",
+      "computedHash": "db76fd1d0d0b64c071a67d05ec2c023599931a53815bf31bcb85a59160a39a97"
+    },
+    "iblai-vibe-local-llm": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-local-llm/SKILL.md",
+      "computedHash": "43fc9f719cc30d5a5740d37afabbc2387c006400c334d71cf2fc206fd0a6e9ff"
+    },
+    "iblai-vibe-memory": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-vibe-memory/SKILL.md",
+      "computedHash": "6b92f480630174cd0d38aa274a3c6206357bd5febf148cd2bfb6e6e457aac3aa"
+    },
+    "iblai-vibe-memory-guide": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-vibe-memory-guide/SKILL.md",
+      "computedHash": "f59b3c791680028ca1bc67e6d1ebf552e1b4dddf79470cde4c09cea9b39d9512"
+    },
+    "iblai-vibe-monetization": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-vibe-monetization/SKILL.md",
+      "computedHash": "669e9b3c1a60171274a3032c5ba63c008b40acfc1a329c2e718a0a7394a4aace"
+    },
+    "iblai-vibe-monetization-analytics": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-vibe-monetization-analytics/SKILL.md",
+      "computedHash": "e86fc56a24984f6641a11097af8e7949757642168b68a10155c8d5f459fc0cf7"
+    },
+    "iblai-vibe-monetization-app-paywall": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-vibe-monetization-app-paywall/SKILL.md",
+      "computedHash": "912e046411e70526b1b7c7077644a540d0b5ee99b2987c2ddeb1cdb9afaade7c"
+    },
+    "iblai-vibe-monetization-checkout": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-vibe-monetization-checkout/SKILL.md",
+      "computedHash": "c18634305ea1d476786560f7d105f2890d7a5b871e86a0c562c8ba635a4eb84e"
+    },
+    "iblai-vibe-monetization-configure": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-vibe-monetization-configure/SKILL.md",
+      "computedHash": "6a262600a762f1546464a5022fa6531f4a5b869617728350212954222de9b79e"
+    },
+    "iblai-vibe-monetization-onboard": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-vibe-monetization-onboard/SKILL.md",
+      "computedHash": "a5740de3c4ce0c074900a3c199dbbecb9150da5b26fdc0929bfd46222c0d95e7"
+    },
+    "iblai-vibe-monetization-subscription": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-vibe-monetization-subscription/SKILL.md",
+      "computedHash": "029a8f0ba4305c599c8cbc055f1f3cf73bfb2207e1c3df70c5b2b86572eef3b7"
+    },
+    "iblai-vibe-navbar": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-vibe-navbar/SKILL.md",
+      "computedHash": "2e30fe4f1235ad146ea773202e72d968a3d4e7e24b480827dfae053e759ecf21"
+    },
+    "iblai-vibe-notification": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-vibe-notification/SKILL.md",
+      "computedHash": "519567a4e5f6346d878f0fc341319e23a25c8d4eab2d47de56e3102930a49a50"
+    },
+    "iblai-vibe-onboard": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-vibe-onboard/SKILL.md",
+      "computedHash": "67b8755f550766e1ded652f85bbeab9097c744e86e9d4fcd0c453e0e954cfc66"
+    },
+    "iblai-vibe-ops-build": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-vibe-ops-build/SKILL.md",
+      "computedHash": "59a2c6bde8076d54a206c268f1f41b6008eb2e1b907edc920cb6b74d5acb986d"
+    },
+    "iblai-vibe-ops-deploy": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-vibe-ops-deploy/SKILL.md",
+      "computedHash": "fb8480438b0292e093fb74ec9e2ecc51ba3951fa34f0b4fceb7a7a7d4336368c"
+    },
+    "iblai-vibe-ops-init": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-vibe-ops-init/SKILL.md",
+      "computedHash": "8aa5edd042c50a37de2c6aaf22d2b04572a54ba37a6f5c20c0047f62512980f9"
+    },
+    "iblai-vibe-ops-release": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-vibe-ops-release/SKILL.md",
+      "computedHash": "08cd6435dc301b47fa4f3618e822f36e32e555d6ce12c60f91757b2c3b1bd484"
+    },
+    "iblai-vibe-ops-test": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-vibe-ops-test/SKILL.md",
+      "computedHash": "ae3114da8f9641d0f41a4444955059ec6509714837e1a4450893a5a9ad8279f8"
+    },
+    "iblai-vibe-ops-upgrade": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-vibe-ops-upgrade/SKILL.md",
+      "computedHash": "1e5c54755bbec0ffa76c344f042cb1096128cf89f510b1bfdb48e6c7e0a9d6d8"
+    },
+    "iblai-vibe-org-metadata": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/organizations/iblai-vibe-org-metadata/SKILL.md",
+      "computedHash": "e614ae0e8253a4eb69ffb3818adda5c43f7e1e93a73c6463a4429f3a9015cd8f"
+    },
+    "iblai-vibe-os-agent-code-mode": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-os-agent-code-mode/SKILL.md",
+      "computedHash": "439099804522bebda034dde61d0b4a839e7446af022a96db6f58d2519237c682"
+    },
+    "iblai-vibe-pricing": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/billing/iblai-vibe-pricing/SKILL.md",
+      "computedHash": "3fbd6074898e149b492e3438622f05246a5601c16cda5b893157c74b89cb51b1"
+    },
+    "iblai-vibe-profile": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-vibe-profile/SKILL.md",
+      "computedHash": "4a29e8fc449b4f6fb9138342a587a18ba56892834c6e4e087361436f0f9335eb"
+    },
+    "iblai-vibe-project": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-project/SKILL.md",
+      "computedHash": "8205f8eb20ce6bd96305d536ebd7f9dbb43299b8902945643fa04bb55a2c47f3"
+    },
+    "iblai-vibe-rbac": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-vibe-rbac/SKILL.md",
+      "computedHash": "ca438fbebe837e8d945cd7208e21d35d73ba2c3dbb3449a9b07efa760686a8fa"
+    },
+    "iblai-vibe-readme": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-vibe-readme/SKILL.md",
+      "computedHash": "82eeff6bd8220492029ea397ffdbca7d2f2cec2915b4f0675a36d73ef3b660cf"
+    },
+    "iblai-vibe-scaffold": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-vibe-scaffold/SKILL.md",
+      "computedHash": "f15d5e3e457df0a2978bf93b572638bfcc5783edc1493779087eafc5d1dc3342"
+    },
+    "iblai-vibe-security-cloud-audit": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/security/iblai-vibe-security-cloud-audit/SKILL.md",
+      "computedHash": "1776bc13b9f7036993bc82e84321094c375e69ff6322e1ae1778e775b1fbe7ee"
+    },
+    "iblai-vibe-security-dependency-audit": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/security/iblai-vibe-security-dependency-audit/SKILL.md",
+      "computedHash": "4b37ed10322528fb8b710384bc9f459d084c4e649319781304ce83ba5e567b0b"
+    },
+    "iblai-vibe-security-disk-forensics": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/security/iblai-vibe-security-disk-forensics/SKILL.md",
+      "computedHash": "e7bf35dde05832d830633e8a9f47b2655b8223cb6685f088efc4dbcf768b9f14"
+    },
+    "iblai-vibe-security-incident-triage": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/security/iblai-vibe-security-incident-triage/SKILL.md",
+      "computedHash": "344b2620ab9f311390b0a2ce806ae9638b4c1cae09671bd845dbf8a940d2c4e5"
+    },
+    "iblai-vibe-security-osint-recon": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/security/iblai-vibe-security-osint-recon/SKILL.md",
+      "computedHash": "09d80ef010aad48b2d9cda63a3f3fcefb062887318c5c96eaa1ff497c882cdb2"
+    },
+    "iblai-vibe-security-owasp-audit": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/security/iblai-vibe-security-owasp-audit/SKILL.md",
+      "computedHash": "2bdc23629f40531e6a45d240c5f5b3978aa95ba98ef2e449df8eaa47252418ec"
+    },
+    "iblai-vibe-security-prompt-injection": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/security/iblai-vibe-security-prompt-injection/SKILL.md",
+      "computedHash": "d1c7990ad61860ed464b0faa1e79e72c095e8b75fd2b9fa1f88ab9d9e58e92b0"
+    },
+    "iblai-vibe-security-recon": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/security/iblai-vibe-security-recon/SKILL.md",
+      "computedHash": "09d747d106f48f4d73073cd6f503f672ca3955fd9b1936a49319ac0d52a7d04d"
+    },
+    "iblai-vibe-start": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/start/iblai-vibe-start/SKILL.md",
+      "computedHash": "90ae0d21b1779b1826ca39804329eec33d7d836c4723d32cd0a2d8a010b43b04"
+    },
+    "iblai-vibe-user-metadata": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/users/iblai-vibe-user-metadata/SKILL.md",
+      "computedHash": "044d66614d3d30308b626744af283ac4bac765f645f79203d2cd544f3b5f333e"
+    },
+    "iblai-vibe-virtual-machine": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/organizations/iblai-vibe-virtual-machine/SKILL.md",
+      "computedHash": "5cea240f0b35f31663074bff7961dd3e09dca4db24d44124c62ea97a172dc70e"
+    },
+    "iblai-vibe-windows-msix": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/ship/iblai-vibe-windows-msix/SKILL.md",
+      "computedHash": "b406065c38d3092f1252228d2f1976bea3f17fbf005c9f688fb4e316140e50a6"
+    },
+    "iblai-vibe-workflow": {
+      "source": "iblai/vibe",
+      "sourceType": "github",
+      "skillPath": "skills/agents/iblai-vibe-workflow/SKILL.md",
+      "computedHash": "04aba94fcdcd5dd398d4c44bc74f6fdffde3151e772673c4a2e4193166d7a175"
+    }
+  }
+}
