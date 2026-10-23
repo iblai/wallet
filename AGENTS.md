@@ -1,15 +1,5 @@
 # CLAUDE.md
 
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
-
 This project is built on the ibl.ai platform using the `@iblai/iblai-js` SDK.
 It was scaffolded from **vibe-starter** and already has: SSO sign-in, a home
 page that chats with the app's agent, an agents browser, profile with app
@@ -31,23 +21,23 @@ record the answers here:
 
 ## Start here — what the user says → what to do
 
-| The user says… | Do this |
-|---|---|
-| "who signs in", "one org or many", "make it multi-organization", "public agent" | `/iblai-vibe-start` (re-run to change the decisions above); mechanics in the vibe repo's `docs/auth-model.md` |
-| "chat", "the agent", "assistant" | Already on `/`. No agent yet? An admin runs `/setup` (pick or create). Customize with `/iblai-vibe-agent-chat`. |
-| "create an agent", "another agent" | `/iblai-vibe-agent-create` → then `/iblai-vibe-agent-setting` and the tabs in `/iblai-vibe-agent` |
-| "users", "admins", "roles", "invite", "who can" | `/iblai-vibe-admin` (User/Admin mode, `/admin/users`), `/iblai-vibe-invite`, `/iblai-vibe-rbac` |
-| "remember the user's…", "preferences", "onboarding progress", "custom user fields" | `/iblai-vibe-user-metadata` (`useUserSettings` in `lib/iblai/metadata.ts`) — never localStorage, never your own DB |
-| "organization setting", "white-label", "app-wide config" | `/iblai-vibe-org-metadata` (`useOrgSettings`, GET-merge-PUT) + `/iblai-vibe-account` |
-| "profile", "avatar", "résumé" | `/iblai-vibe-profile` (already on `/profile`) |
-| "remember", "memory", "personalize" | `/iblai-vibe-memory-guide` → `/iblai-vibe-memory`, `/iblai-vibe-agent-memory` |
-| "analytics", "usage", "costs", "transcripts", "audit" | `/iblai-vibe-analytics` (already on `/admin/analytics`), `/iblai-vibe-agent-audit` |
-| "charge", "pricing", "paywall", "credits", "spend limit" | `/iblai-vibe-pricing` → the rail it picks |
-| "notifications" | `/iblai-vibe-notification` (already on `/notifications`) |
-| "deploy", "URL", "share it" | `/iblai-vibe-ops-deploy` |
-| "iOS", "Android", "Mac", "Windows", "App Store" | `/iblai-vibe-ops-build`, `/iblai-vibe-ops-release` |
-| anything with no component | `lib/iblai/session-fetch.ts` as the signed-in user (never a server route, never an `Api-Token`), and the matching `iblai-api-*` skill for the endpoint |
-| "tests", "before you show me", "is it done?" | `/iblai-vibe-ops-test` — `pnpm build`, `pnpm test`, then its touch test: the route in a real browser, every control you added, the console, the phone width |
+| The user says…                                                                     | Do this                                                                                                                                                     |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "who signs in", "one org or many", "make it multi-organization", "public agent"    | `/iblai-vibe-start` (re-run to change the decisions above); mechanics in the vibe repo's `docs/auth-model.md`                                               |
+| "chat", "the agent", "assistant"                                                   | Already on `/`. No agent yet? An admin runs `/setup` (pick or create). Customize with `/iblai-vibe-agent-chat`.                                             |
+| "create an agent", "another agent"                                                 | `/iblai-vibe-agent-create` → then `/iblai-vibe-agent-setting` and the tabs in `/iblai-vibe-agent`                                                           |
+| "users", "admins", "roles", "invite", "who can"                                    | `/iblai-vibe-admin` (User/Admin mode, `/admin/users`), `/iblai-vibe-invite`, `/iblai-vibe-rbac`                                                             |
+| "remember the user's…", "preferences", "onboarding progress", "custom user fields" | `/iblai-vibe-user-metadata` (`useUserSettings` in `lib/iblai/metadata.ts`) — never localStorage, never your own DB                                          |
+| "organization setting", "white-label", "app-wide config"                           | `/iblai-vibe-org-metadata` (`useOrgSettings`, GET-merge-PUT) + `/iblai-vibe-account`                                                                        |
+| "profile", "avatar", "résumé"                                                      | `/iblai-vibe-profile` (already on `/profile`)                                                                                                               |
+| "remember", "memory", "personalize"                                                | `/iblai-vibe-memory-guide` → `/iblai-vibe-memory`, `/iblai-vibe-agent-memory`                                                                               |
+| "analytics", "usage", "costs", "transcripts", "audit"                              | `/iblai-vibe-analytics` (already on `/admin/analytics`), `/iblai-vibe-agent-audit`                                                                          |
+| "charge", "pricing", "paywall", "credits", "spend limit"                           | `/iblai-vibe-pricing` → the rail it picks                                                                                                                   |
+| "notifications"                                                                    | `/iblai-vibe-notification` (already on `/notifications`)                                                                                                    |
+| "deploy", "URL", "share it"                                                        | `/iblai-vibe-ops-deploy`                                                                                                                                    |
+| "iOS", "Android", "Mac", "Windows", "App Store"                                    | `/iblai-vibe-ops-build`, `/iblai-vibe-ops-release`                                                                                                          |
+| anything with no component                                                         | `lib/iblai/session-fetch.ts` as the signed-in user (never a server route, never an `Api-Token`), and the matching `iblai-api-*` skill for the endpoint      |
+| "tests", "before you show me", "is it done?"                                       | `/iblai-vibe-ops-test` — `pnpm build`, `pnpm test`, then its touch test: the route in a real browser, every control you added, the console, the phone width |
 
 **Freshness rule:** the installed skills are a copy of
 [iblai/vibe](https://github.com/iblai/vibe), which changes often. If
@@ -73,7 +63,7 @@ test in a real browser (Claude in Chrome, or the `chrome-devtools` server in
 3. **Custom/third-party** — only when neither exists
 
 Do NOT build custom components when an SDK component exists. Do NOT restyle
-SDK components — wrap the *container*, never the internals. ibl.ai and
+SDK components — wrap the _container_, never the internals. ibl.ai and
 shadcn share one Tailwind theme and render in brand colors automatically.
 
 Before diverging from the ibl.ai design language — another font or weight
@@ -87,27 +77,30 @@ components), the wiring in BRAND.md.
 
 ## Map of this app
 
-| Where | What |
-|---|---|
-| `app/(app)/layout.tsx` | The OS shell from the SDK: `SidebarProvider` → `PlatformSidebar` (`components/shell/wallet-sidebar.tsx`) + `SidebarInset` with `PlatformNavbar` (`components/shell/top-bar.tsx`); footer actions open `PlatformAccountSheet` / `InviteUserDialog`; Admin mode adds the Admin menu |
-| `app/(app)/page.tsx` | Home: the wallet dashboard (health score, pending, expiring, role fit) |
-| `app/(app)/credentials/**`, `skills/`, `resume/`, `share/` | The wallet pages; all read `useWallet()` from `lib/wallet/provider.tsx` |
-| `app/(app)/coach/page.tsx` | SDK `<Chat>` with the app's agent (`components/wallet/agent-chat.tsx`, the starter's former home page) when one is set up; else the built-in Coach (`lib/wallet/coach.ts`) |
-| `app/(app)/agents/page.tsx` | SDK `AgentSearch`; clicking a card opens it on `/coach` |
-| `app/(app)/profile/page.tsx` | SDK `Profile` (Education → Credentials/Skills, Experience → Résumé) + `AppPreferences`; demo mode edits the sample records |
-| `app/(public)/**` | `/p/[username]`, `/verify/[id]` — no navbar, no session |
-| `lib/wallet/public-platform.ts` | ibl.ai's public assertion endpoint, read from the browser (public page + verify) |
-| `lib/wallet/**` | Model, Open Badges import/export, market taxonomy + gap analysis, health, résumé, coach, derive, provider |
-| `app/(app)/account/page.tsx`, `notifications/` | SDK `Account`, `NotificationDisplay` |
-| `app/(app)/admin/**` | Admin mode only: users (+ invites), analytics tabs, billing, memory, organization (+ `OrgSettingsForm`) |
-| `app/setup/` | First-run: name the app, pick/create the agent → org metadata. Admins only; no navbar. |
-| `lib/iblai/config.ts` | Env accessors (no secrets) |
-| `lib/iblai/tenant.ts` | `resolveAppTenant()`, `readTenants()`, `isTenantAdmin()` (not the SDK's `useIsAdmin`) |
-| `lib/iblai/admin-mode.tsx` | `AdminModeProvider` / `useAdminMode` — the User/Admin view |
-| `lib/iblai/metadata.ts` (+ `metadata-core.ts`) | `useUserSettings`, `useOrgSettings` — namespaced under `apps.<slug>`; org writes GET-merge-PUT |
-| `lib/iblai/session-fetch.ts` | browser `sessionFetch()`: `Authorization: Token <dm_token>` to `config.dmUrl()` |
-| `providers/iblai-providers.tsx`, `store/iblai-store.ts` | SDK providers (+ service worker, toaster, Radix guard); the store's slice keys are fixed by the SDK — keep them |
-| `e2e/` | Playwright: auth, member, admin journeys; `COVERAGE.md` + `coverage.json` |
+| Where                                                      | What                                                                                                                                                                                                                                                                              |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/(app)/layout.tsx`                                     | The OS shell from the SDK: `SidebarProvider` → `PlatformSidebar` (`components/shell/wallet-sidebar.tsx`) + `SidebarInset` with `PlatformNavbar` (`components/shell/top-bar.tsx`); footer actions open `PlatformAccountSheet` / `InviteUserDialog`; Admin mode adds the Admin menu |
+| `app/(app)/page.tsx`                                       | Home: the wallet dashboard (health score, pending, expiring, role fit)                                                                                                                                                                                                            |
+| `app/(app)/credentials/**`, `skills/`, `resume/`, `share/` | The wallet pages; all read `useWallet()` from `lib/wallet/provider.tsx`                                                                                                                                                                                                           |
+| `app/(app)/coach/page.tsx`                                 | SDK `<Chat>` with the app's agent (`components/wallet/agent-chat.tsx`, the starter's former home page) when one is set up; else the built-in Coach (`lib/wallet/coach.ts`)                                                                                                        |
+| `app/(app)/agents/page.tsx`                                | SDK `AgentSearch`; clicking a card opens it on `/coach`                                                                                                                                                                                                                           |
+| `app/(app)/profile/page.tsx`                               | SDK `Profile` (Education → Credentials/Skills, Experience → Résumé) + `AppPreferences`; demo mode edits the sample records                                                                                                                                                        |
+| `app/(public)/**`                                          | `/p/[username]`, `/verify/[id]` — no navbar, no session                                                                                                                                                                                                                           |
+| `lib/wallet/public-platform.ts`                            | ibl.ai's public assertion endpoint, read from the browser (public page + verify)                                                                                                                                                                                                  |
+| `lib/wallet/**`                                            | Model, Open Badges import/export, market taxonomy + gap analysis, health, résumé, coach, derive, provider                                                                                                                                                                         |
+| `app/(app)/account/page.tsx`, `notifications/`             | SDK `Account`, `NotificationDisplay`                                                                                                                                                                                                                                              |
+| `app/(app)/admin/**`                                       | Admin mode only: users (+ invites), analytics tabs, billing, memory, organization (+ `OrgSettingsForm`)                                                                                                                                                                           |
+| `app/setup/`                                               | First-run: name the app, pick/create the agent → org metadata. Admins only; no navbar.                                                                                                                                                                                            |
+| `lib/iblai/config.ts`                                      | Env accessors (no secrets)                                                                                                                                                                                                                                                        |
+| `lib/iblai/tenant.ts`                                      | `resolveAppTenant()`, `readTenants()`, `isTenantAdmin()` (not the SDK's `useIsAdmin`)                                                                                                                                                                                             |
+| `lib/iblai/admin-mode.tsx`                                 | `AdminModeProvider` / `useAdminMode` — the User/Admin view                                                                                                                                                                                                                        |
+| `lib/iblai/metadata.ts` (+ `metadata-core.ts`)             | `useUserSettings`, `useOrgSettings` — namespaced under `apps.<slug>`; org writes GET-merge-PUT                                                                                                                                                                                    |
+| `lib/iblai/session-fetch.ts`                               | browser `sessionFetch()`: `Authorization: Token <dm_token>` to `config.dmUrl()`                                                                                                                                                                                                   |
+| `lib/iblai/sso-redirect.ts`                                | `resolveSsoRedirectPath()`: the post-SSO landing path, plain same-origin or `/`                                                                                                                                                                                                   |
+| `proxy.ts`                                                 | The nonce-based CSP (`applyCsp`, `frame-ancestors 'none'`) and the `x-pathname` header                                                                                                                                                                                            |
+| `app/manifest.ts`                                          | PWA manifest; icons in `public/icon-{256,1024}.png`                                                                                                                                                                                                                               |
+| `providers/iblai-providers.tsx`, `store/iblai-store.ts`    | SDK providers (+ service worker, toaster, Radix guard); the store's slice keys are fixed by the SDK — keep them                                                                                                                                                                   |
+| `e2e/`                                                     | Playwright: auth, member, admin journeys; `COVERAGE.md` + `coverage.json`                                                                                                                                                                                                         |
 
 ## Invariants (and why)
 
@@ -119,8 +112,8 @@ components), the wiring in BRAND.md.
   `false` (SDK voice bug). Keep `public/sw.js` — `ServiceWorkerProvider` registers it.
 - Org metadata is a public read and PUT replaces it: write only through
   `useOrgSettings` / `mergeAppNamespace`; never a secret.
-- Admin UI gates on `useAdminMode().adminMode`; admin *writes* gate on the platform.
-- `output: 'export'` would now be possible; the CSP middleware is the only server piece left.
+- Admin UI gates on `useAdminMode().adminMode`; admin _writes_ gate on the platform.
+- The CSP proxy (`proxy.ts`, `frame-ancestors 'none'`) is the only server piece left; the other security headers live in `next.config.ts`.
 
 ## SDK Imports
 
@@ -128,7 +121,13 @@ components), the wiring in BRAND.md.
 import { initializeDataLayer, mentorReducer } from "@iblai/iblai-js/data-layer";
 import { AuthProvider, TenantProvider, useChatV2 } from "@iblai/iblai-js/web-utils";
 import { Profile, AnalyticsLayout, NotificationDropdown } from "@iblai/iblai-js/web-containers";
-import { SsoLogin, UserProfileDropdown, Account, Chat, AgentSearch } from "@iblai/iblai-js/web-containers/next";
+import {
+  SsoLogin,
+  UserProfileDropdown,
+  Account,
+  Chat,
+  AgentSearch,
+} from "@iblai/iblai-js/web-containers/next";
 ```
 
 ## Environment
@@ -149,12 +148,11 @@ must be in the org's allowed redirect origins or sign-in never returns.
 
 - **Primary** `#0058cc`, **Gradient** `linear-gradient(135deg, #00b0ef, #0058cc)`, button `bg-gradient-to-r from-[#2563EB] to-[#93C5FD] text-white`
 - shadcn/ui base-nova (Base UI: `render` prop, not `asChild`), Lucide icons; SDK components ship their own styles — do NOT override them
-- **Typography follows os.ibl.ai as it renders** (the user's call, 2026-10-20): the system sans stack (`ui-sans-serif, system-ui`) with standard weights — not Open Sans and not the one-step-lighter weight remap vibe-starter ships. Top bar is `h-16 border-b border-[#D0E0FF]`, title `text-sm font-medium text-[#646464]`, User/Admin labels `text-sm` (active `font-semibold`).
+- **Typography is the house style** (the CRM/SIS pass, applied 2026-10-23, replacing the 2026-10-20 system-stack call): Open Sans via `next/font` on `<html>`, `--font-sans` plus the one-step-lighter remap (`font-semibold` → 500, `font-bold` → 600) in `@theme inline`, no `body { font-family … !important }` anywhere, Lucide at 1.75 through one CSS rule, and `ibl-dialog-title` / `text-gray-700` / the uppercase table head in the primitives, never at call sites. Top bar keeps the system font (`font-[ui-sans-serif,system-ui,sans-serif]`), `h-16 border-b border-[#D0E0FF]`, title `text-sm font-medium text-[#646464]`, User/Admin labels `text-sm` (active `font-semibold`).
 
 ## Layout Patterns
 
-- Shell: the SDK `PlatformSidebar` + `PlatformNavbar` (never a local sidebar/navbar); pages are `PageHeader` + `Page` (`components/wallet/section.tsx`, `max-w-6xl` inside the inset). Page background `var(--sidebar-bg, #fafbfc)`; SDK components wrapped in `bg-white rounded-lg border border-[var(--border-color)] overflow-hidden`.
-- Admin pages host SDK panels the OS way: full width, `flex-1 min-h-0`, the component's own background.
+- Shell: the SDK `PlatformSidebar` + `PlatformNavbar` (never a local sidebar/navbar); pages are `PageHeader` + `Page` (`components/wallet/section.tsx`, `max-w-6xl` inside the inset). Page background `var(--sidebar-bg, #fafbfc)`; SDK panels host the OS way on every page: full width, `flex-1 min-h-0`, the component's own background — never a card.
 - Mobile safe area: `globals.css` `env(safe-area-inset-*)` on body; `viewport-fit=cover` in `app/layout.tsx`.
 
 ## Commands
@@ -163,6 +161,10 @@ must be in the org's allowed redirect origins or sign-in never returns.
 pnpm dev             # Dev server (localhost:3000)
 pnpm build           # Production build
 pnpm typecheck       # Type-check
+pnpm lint            # oxlint, zero warnings
+pnpm format          # oxfmt (format:check is the CI gate)
 pnpm test            # Vitest
+pnpm test:coverage   # Vitest with the coverage thresholds (CI)
 pnpm test:e2e        # Playwright (needs e2e/.env.development)
+pnpm release         # release-it (CI runs it on every push to main)
 ```

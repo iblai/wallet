@@ -32,18 +32,16 @@ export default function AgentsPage() {
   if (!tenantKey) return null;
 
   return (
-    <div className="mx-auto w-full max-w-6xl flex-1 overflow-auto px-4 py-5 md:px-6">
-      <div className="rounded-lg border border-[var(--border-color)] bg-white overflow-hidden">
-        <AgentSearch
-          tenantKey={tenantKey}
-          username={username}
-          mainTenantKey={config.mainTenantKey()}
-          onAgentClick={(agent) =>
-            router.push(`/coach?agent=${encodeURIComponent(agent.unique_id)}&new=${Date.now()}`)
-          }
-          onCreateAgent={adminMode ? () => router.push("/setup?step=agent") : undefined}
-        />
-      </div>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <AgentSearch
+        tenantKey={tenantKey}
+        username={username}
+        mainTenantKey={config.mainTenantKey()}
+        onAgentClick={(agent) =>
+          router.push(`/coach?agent=${encodeURIComponent(agent.unique_id)}&new=${Date.now()}`)
+        }
+        onCreateAgent={adminMode ? () => router.push("/setup?step=agent") : undefined}
+      />
     </div>
   );
 }

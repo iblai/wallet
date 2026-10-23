@@ -15,14 +15,22 @@ export type PublicCheck =
 
 export async function checkPublicAssertion(entityId: string): Promise<PublicCheck> {
   try {
-    const res = await fetch(`${config.dmUrl()}/api/credentials/public/assertions/${encodeURIComponent(entityId)}/`, {
-      headers: { Accept: "application/json" },
-      cache: "no-store",
-    });
-    const body = (await res.json().catch(() => null)) as { result?: Record<string, unknown>; status?: { description?: string } } | null;
+    const res = await fetch(
+      `${config.dmUrl()}/api/credentials/public/assertions/${encodeURIComponent(entityId)}/`,
+      {
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+      },
+    );
+    const body = (await res.json().catch(() => null)) as {
+      result?: Record<string, unknown>;
+      status?: { description?: string };
+    } | null;
     if (res.ok && body?.result) {
       const c = fromAssertion(body.result as Parameters<typeof fromAssertion>[0]);
-      return c.revoked ? { status: "revoked", reason: c.revocationReason } : { status: "verified", credential: c };
+      return c.revoked
+        ? { status: "revoked", reason: c.revocationReason }
+        : { status: "verified", credential: c };
     }
     if (res.status === 404) {
       const d = body?.status?.description ?? "";

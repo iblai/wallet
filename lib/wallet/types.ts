@@ -166,7 +166,10 @@ export interface WalletSettings {
   selfSkills?: { name: string; level: number }[];
   desiredSkills?: string[];
   /** Overrides for platform credentials (acceptance / visibility / collections) keyed by id. */
-  overrides?: Record<string, Partial<Pick<WalletCredential, "acceptance" | "visibility" | "collections">>>;
+  overrides?: Record<
+    string,
+    Partial<Pick<WalletCredential, "acceptance" | "visibility" | "collections">>
+  >;
   /** Résumé builder choices. */
   resume?: ResumePreferences;
   /** Demo-only education/experience edits (signed-in users edit via the SDK Profile). */

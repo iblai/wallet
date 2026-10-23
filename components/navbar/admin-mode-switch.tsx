@@ -12,7 +12,7 @@ export function AdminModeSwitch({ className }: { className?: string }) {
   if (!isAdmin) return null;
   return (
     <div className={`flex items-center gap-2 text-sm ${className ?? ""}`}>
-      <span className={adminMode ? "text-gray-500" : "font-semibold text-foreground"}>User</span>
+      <span className={adminMode ? "text-gray-500" : "text-foreground font-semibold"}>User</span>
       <Switch
         id="admin-mode"
         checked={adminMode}
@@ -23,7 +23,7 @@ export function AdminModeSwitch({ className }: { className?: string }) {
         }}
         aria-label="Admin mode"
       />
-      <span className={adminMode ? "font-semibold text-foreground" : "text-gray-500"}>Admin</span>
+      <span className={adminMode ? "text-foreground font-semibold" : "text-gray-500"}>Admin</span>
     </div>
   );
 }

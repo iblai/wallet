@@ -1,4 +1,3 @@
-
 import { describe, it, expect } from "vitest";
 import { readFileSync, existsSync, readdirSync } from "fs";
 import { resolve, dirname, join } from "path";
@@ -31,8 +30,7 @@ describe.skipIf(!nodeModulesExist)("@source paths", () => {
   }
 
   // Extract @source directives
-  const sourceDirectives: { file: string; path: string; resolved: string }[] =
-    [];
+  const sourceDirectives: { file: string; path: string; resolved: string }[] = [];
   for (const cssFile of cssFiles) {
     const content = readFileSync(cssFile, "utf-8");
     const regex = /@source\s+["']([^"']+)["']/g;
@@ -53,12 +51,8 @@ describe.skipIf(!nodeModulesExist)("@source paths", () => {
   for (const { file, path: srcPath, resolved } of sourceDirectives) {
     const relFile = file.split(/[/\\]app[/\\]/).pop() ?? file;
     it(`@source "${srcPath}" in ${relFile} should resolve to an existing path`, () => {
-      expect(
-        existsSync(resolved),
-        `Path does not exist: ${resolved}\n` +
-          `Referenced in: ${file}\n` +
-          `Hint: run pnpm install to populate node_modules`,
-      ).toBe(true);
+      // A miss usually means node_modules is not populated: run pnpm install.
+      expect(existsSync(resolved)).toBe(true);
     });
   }
 });

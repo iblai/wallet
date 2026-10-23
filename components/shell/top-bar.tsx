@@ -61,11 +61,14 @@ export function TopBar({
 }) {
   const pathname = usePathname() ?? "/";
   const router = useRouter();
-  const onViewNotifications = useCallback((id?: string) => router.push(`/notifications/${id ?? ""}`), [router]);
+  const onViewNotifications = useCallback(
+    (id?: string) => router.push(`/notifications/${id ?? ""}`),
+    [router],
+  );
 
   return (
     <PlatformNavbar
-      className="h-16 border-b border-[#D0E0FF] bg-white"
+      className="sticky top-0 h-16 border-b border-[#D0E0FF] bg-white font-[ui-sans-serif,system-ui,sans-serif] md:static"
       left={
         <div className="flex items-center gap-2 pl-4">
           <SidebarTrigger className="md:hidden" />
@@ -74,8 +77,16 @@ export function TopBar({
       }
       modeSwitcher={<AdminModeSwitch />}
       // The Incognito toggle belongs to chat pages only, as in the OS.
-      privacyToggle={!demo && tenantKey && username && pathname.startsWith("/coach") ? { org: tenantKey, userId: username } : null}
-      notifications={!demo && tenantKey && username ? { org: tenantKey, userId: username, isAdmin, onViewNotifications } : null}
+      privacyToggle={
+        !demo && tenantKey && username && pathname.startsWith("/coach")
+          ? { org: tenantKey, userId: username }
+          : null
+      }
+      notifications={
+        !demo && tenantKey && username
+          ? { org: tenantKey, userId: username, isAdmin, onViewNotifications }
+          : null
+      }
       creditBalance={
         !demo && tenantKey && username
           ? {

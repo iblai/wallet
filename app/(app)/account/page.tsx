@@ -50,25 +50,23 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl flex-1 overflow-auto px-4 py-5 md:px-6">
-      <div className="rounded-lg border border-[var(--border-color)] bg-white overflow-hidden">
-        <Account
-          tenant={tenantKey}
-          tenants={tenants}
-          username={username}
-          email={email}
-          mainPlatformKey={config.mainTenantKey()}
-          isAdmin={isAdmin}
-          authURL={config.authUrl()}
-          currentPlatformBaseDomain={config.platformBaseDomain()}
-          currentSPA="agent"
-          onInviteClick={() => {}}
-          onClose={() => router.push("/")}
-          targetTab="organization"
-          showPlatformName={true}
-          useGravatarPicFallback={true}
-        />
-      </div>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <Account
+        tenant={tenantKey}
+        tenants={tenants}
+        username={username}
+        email={email}
+        mainPlatformKey={config.mainTenantKey()}
+        isAdmin={isAdmin}
+        authURL={config.authUrl()}
+        currentPlatformBaseDomain={config.platformBaseDomain()}
+        currentSPA="agent"
+        onInviteClick={() => {}}
+        onClose={() => router.push("/")}
+        targetTab="organization"
+        showPlatformName={true}
+        useGravatarPicFallback={true}
+      />
     </div>
   );
 }

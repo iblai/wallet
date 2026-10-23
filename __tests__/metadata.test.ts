@@ -22,7 +22,9 @@ describe("readAppNamespace", () => {
     expect(readAppNamespace({})).toEqual({});
     expect(readAppNamespace({ apps: { other: { x: 1 } } })).toEqual({});
     expect(readAppNamespace({ apps: { "vibe-starter": "nope" } })).toEqual({});
-    expect(readAppNamespace({ apps: { "vibe-starter": { theme: "dark" } } })).toEqual({ theme: "dark" });
+    expect(readAppNamespace({ apps: { "vibe-starter": { theme: "dark" } } })).toEqual({
+      theme: "dark",
+    });
   });
 });
 
@@ -31,7 +33,10 @@ describe("mergeAppNamespace", () => {
     overall_default_mentor: "abc",
     help_center_url: "https://docs.ibl.ai",
     auth_web_mentorai: { title: "Acme" },
-    apps: { "vibe-agent": { access: "monthly" }, "vibe-starter": { theme: "light", onboardingStep: 2 } },
+    apps: {
+      "vibe-agent": { access: "monthly" },
+      "vibe-starter": { theme: "light", onboardingStep: 2 },
+    },
   };
 
   it("merges the patch into this app's namespace only", () => {

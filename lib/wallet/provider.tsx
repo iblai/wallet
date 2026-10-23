@@ -14,7 +14,15 @@
  * Both hand `deriveState` the same inputs, so pages never know which one
  * they are on.
  */
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import config from "@/lib/iblai/config";
 import { useUserSettings } from "@/lib/iblai/metadata";
 import { resolveAppTenant } from "@/lib/iblai/tenant";
@@ -101,7 +109,17 @@ function useActions(store: Store, platformIds: Set<string>, reset: () => void): 
         // Live platform credential: only the wallet-side fields are ours to change.
         const { acceptance, visibility, collections } = patch;
         const prev = settings.overrides?.[id] ?? {};
-        await update({ overrides: { ...settings.overrides, [id]: { ...prev, ...(acceptance && { acceptance }), ...(visibility && { visibility }), ...(collections && { collections }) } } });
+        await update({
+          overrides: {
+            ...settings.overrides,
+            [id]: {
+              ...prev,
+              ...(acceptance && { acceptance }),
+              ...(visibility && { visibility }),
+              ...(collections && { collections }),
+            },
+          },
+        });
         return;
       }
       await update({ credentials: creds().map((c) => (c.id === id ? { ...c, ...patch } : c)) });
@@ -111,7 +129,8 @@ function useActions(store: Store, platformIds: Set<string>, reset: () => void): 
 
   return {
     isSaving: store.isSaving,
-    addCredential: async (c) => update({ credentials: [...creds().filter((x) => x.id !== c.id), c] }),
+    addCredential: async (c) =>
+      update({ credentials: [...creds().filter((x) => x.id !== c.id), c] }),
     updateCredential,
     removeCredential: async (id) => update({ credentials: creds().filter((c) => c.id !== id) }),
     addCollection: async (name, description) => {
@@ -119,25 +138,65 @@ function useActions(store: Store, platformIds: Set<string>, reset: () => void): 
       await update({ collections: [...(settings.collections ?? []), col] });
       return col;
     },
-    updateCollection: async (id, patch) => update({ collections: (settings.collections ?? []).map((c) => (c.id === id ? { ...c, ...patch } : c)) }),
+    updateCollection: async (id, patch) =>
+      update({
+        collections: (settings.collections ?? []).map((c) =>
+          c.id === id ? { ...c, ...patch } : c,
+        ),
+      }),
     removeCollection: async (id) =>
       update({
         collections: (settings.collections ?? []).filter((c) => c.id !== id),
-        credentials: creds().map((c) => ({ ...c, collections: c.collections.filter((x) => x !== id) })),
+        credentials: creds().map((c) => ({
+          ...c,
+          collections: c.collections.filter((x) => x !== id),
+        })),
       }),
     setTargetRole: async (roleId) => update({ targetRoleId: roleId }),
     addSelfSkill: async (name, level = 3) =>
-      update({ selfSkills: [...(settings.selfSkills ?? []).filter((s) => s.name.toLowerCase() !== name.toLowerCase()), { name, level }] }),
-    removeSelfSkill: async (name) => update({ selfSkills: (settings.selfSkills ?? []).filter((s) => s.name.toLowerCase() !== name.toLowerCase()) }),
-    addDesiredSkill: async (name) => update({ desiredSkills: [...new Set([...(settings.desiredSkills ?? []), name])] }),
-    removeDesiredSkill: async (name) => update({ desiredSkills: (settings.desiredSkills ?? []).filter((s) => s.toLowerCase() !== name.toLowerCase()) }),
+      update({
+        selfSkills: [
+          ...(settings.selfSkills ?? []).filter((s) => s.name.toLowerCase() !== name.toLowerCase()),
+          { name, level },
+        ],
+      }),
+    removeSelfSkill: async (name) =>
+      update({
+        selfSkills: (settings.selfSkills ?? []).filter(
+          (s) => s.name.toLowerCase() !== name.toLowerCase(),
+        ),
+      }),
+    addDesiredSkill: async (name) =>
+      update({ desiredSkills: [...new Set([...(settings.desiredSkills ?? []), name])] }),
+    removeDesiredSkill: async (name) =>
+      update({
+        desiredSkills: (settings.desiredSkills ?? []).filter(
+          (s) => s.toLowerCase() !== name.toLowerCase(),
+        ),
+      }),
     setResumePrefs: async (patch) => update({ resume: { ...settings.resume, ...patch } }),
-    setPublicPage: async ({ handle, enabled }) => update({ ...(handle !== undefined && { handle }), ...(enabled !== undefined && { publicPageEnabled: enabled }) }),
+    setPublicPage: async ({ handle, enabled }) =>
+      update({
+        ...(handle !== undefined && { handle }),
+        ...(enabled !== undefined && { publicPageEnabled: enabled }),
+      }),
     updateProfile: async (patch) => update({ profile: { ...settings.profile, ...patch } }),
-    saveEducation: async (e) => update({ education: [...(settings.education ?? []).filter((x) => x.id !== e.id), e].sort((a, b) => (b.startDate ?? "").localeCompare(a.startDate ?? "")) }),
-    removeEducation: async (id) => update({ education: (settings.education ?? []).filter((x) => x.id !== id) }),
-    saveExperience: async (e) => update({ experience: [...(settings.experience ?? []).filter((x) => x.id !== e.id), e].sort((a, b) => (b.startDate ?? "").localeCompare(a.startDate ?? "")) }),
-    removeExperience: async (id) => update({ experience: (settings.experience ?? []).filter((x) => x.id !== id) }),
+    saveEducation: async (e) =>
+      update({
+        education: [...(settings.education ?? []).filter((x) => x.id !== e.id), e].sort((a, b) =>
+          (b.startDate ?? "").localeCompare(a.startDate ?? ""),
+        ),
+      }),
+    removeEducation: async (id) =>
+      update({ education: (settings.education ?? []).filter((x) => x.id !== id) }),
+    saveExperience: async (e) =>
+      update({
+        experience: [...(settings.experience ?? []).filter((x) => x.id !== e.id), e].sort((a, b) =>
+          (b.startDate ?? "").localeCompare(a.startDate ?? ""),
+        ),
+      }),
+    removeExperience: async (id) =>
+      update({ experience: (settings.experience ?? []).filter((x) => x.id !== id) }),
     setOnboardingDone: async (done) => update({ onboardingDone: done }),
     resetDemo: reset,
   };
@@ -196,7 +255,11 @@ function DemoSource({ children }: { children: ReactNode }) {
     setSettings(demoSeed());
   }, []);
 
-  const actions = useActions({ settings, update, isSaving: false }, useMemo(() => new Set<string>(), []), reset);
+  const actions = useActions(
+    { settings, update, isSaving: false },
+    useMemo(() => new Set<string>(), []),
+    reset,
+  );
   const state = useMemo(
     () =>
       deriveState({
@@ -205,7 +268,12 @@ function DemoSource({ children }: { children: ReactNode }) {
         platformCredentials: [],
         platformEducation: [],
         platformExperience: [],
-        platformEarnedSkills: [{ name: "SQL", points: 620 }, { name: "Data Analysis", points: 540 }, { name: "Python", points: 410 }, { name: "Machine Learning", points: 270 }],
+        platformEarnedSkills: [
+          { name: "SQL", points: 620 },
+          { name: "Data Analysis", points: 540 },
+          { name: "Python", points: 410 },
+          { name: "Machine Learning", points: 270 },
+        ],
         skillPoints: DEMO_SKILL_POINTS,
         isLoading: !hydrated,
         isDemo: true,
@@ -218,16 +286,18 @@ function DemoSource({ children }: { children: ReactNode }) {
 
 // ---------- platform source ----------
 
-function PlatformSource({ children }: { children: ReactNode }) {
-  // Loaded lazily so the demo build never evaluates the SDK data hooks.
-  const Impl = useMemo(() => platformImpl(), []);
-  return <Impl>{children}</Impl>;
-}
+// Created once at module scope; its SDK data hooks run only when it renders, never in the demo build.
+const PlatformSource = platformImpl();
 
 // The SDK hooks are imported statically (tree-shaken into the client bundle
 // either way); the indirection keeps PlatformSource and DemoSource symmetric.
 import { useProfileSkills, useUserMetadata } from "@iblai/iblai-js/web-containers";
-import { useGetUserCredentialsQuery, useGetUserEducationQuery, useGetUserExperienceQuery, useGetUserResumeQuery } from "@iblai/iblai-js/data-layer";
+import {
+  useGetUserCredentialsQuery,
+  useGetUserEducationQuery,
+  useGetUserExperienceQuery,
+  useGetUserResumeQuery,
+} from "@iblai/iblai-js/data-layer";
 
 function platformImpl() {
   return function PlatformImpl({ children }: { children: ReactNode }) {
@@ -247,12 +317,26 @@ function platformImpl() {
     // /iblai-api-credential); the SDK's `useProfileCredentials` forgets to
     // pass it, hence the direct query.
     const creds = useGetUserCredentialsQuery(
-      { platformKey: org, userId: username, includeExpired: true, includeRevoked: true, pageSize: 100 } as unknown as { platformKey: string },
+      {
+        platformKey: org,
+        userId: username,
+        includeExpired: true,
+        includeRevoked: true,
+        pageSize: 100,
+      } as unknown as { platformKey: string },
       { skip: !org || !username },
     );
     const fetchedCredentials = useMemo(() => {
-      const r = creds.data as { result?: { results?: unknown[]; data?: unknown[] }; results?: unknown[]; data?: unknown[] } | undefined;
-      return (r?.result?.results ?? r?.result?.data ?? r?.results ?? r?.data ?? []) as Parameters<typeof fromAssertion>[0][];
+      const r = creds.data as
+        | {
+            result?: { results?: unknown[]; data?: unknown[] };
+            results?: unknown[];
+            data?: unknown[];
+          }
+        | undefined;
+      return (r?.result?.results ?? r?.result?.data ?? r?.results ?? r?.data ?? []) as Parameters<
+        typeof fromAssertion
+      >[0][];
     }, [creds.data]);
     const credsLoading = creds.isLoading;
     const { earnedSkills } = useProfileSkills(false);
@@ -265,8 +349,14 @@ function platformImpl() {
     // skills instead (sum of resource points) until the platform settles.
     const pts = { data: undefined as { total_points: number; percentile?: number } | undefined };
 
-    const platformCredentials = useMemo(() => (fetchedCredentials ?? []).map(fromAssertion), [fetchedCredentials]);
-    const platformIds = useMemo(() => new Set(platformCredentials.map((c) => c.id)), [platformCredentials]);
+    const platformCredentials = useMemo(
+      () => (fetchedCredentials ?? []).map(fromAssertion),
+      [fetchedCredentials],
+    );
+    const platformIds = useMemo(
+      () => new Set(platformCredentials.map((c) => c.id)),
+      [platformCredentials],
+    );
     const baseActions = useActions(
       { settings: store.settings, update: (p) => store.update(p), isSaving: store.isSaving },
       platformIds,
@@ -293,12 +383,22 @@ function platformImpl() {
         store.update({
           ...(handle !== undefined && { handle }),
           ...(enabled !== undefined && { publicPageEnabled: enabled }),
-          profile: { ...store.settings.profile, name: profile.name, headline: profile.headline, about: profile.about, image: profile.image },
+          profile: {
+            ...store.settings.profile,
+            name: profile.name,
+            headline: profile.headline,
+            about: profile.about,
+            image: profile.image,
+          },
         }),
     };
 
-    const resumeFiles = (resume.data as { files?: { type?: string; file?: string; url?: string }[] } | undefined)?.files ?? [];
-    const resumeFileUrl = resumeFiles.find((f) => f.type === "resume")?.file ?? resumeFiles.find((f) => f.type === "resume")?.url;
+    const resumeFiles =
+      (resume.data as { files?: { type?: string; file?: string; url?: string }[] } | undefined)
+        ?.files ?? [];
+    const resumeFileUrl =
+      resumeFiles.find((f) => f.type === "resume")?.file ??
+      resumeFiles.find((f) => f.type === "resume")?.url;
 
     const state = useMemo(
       () =>
@@ -327,14 +427,33 @@ function platformImpl() {
             current: !!e.is_current,
             description: e.description ?? undefined,
           })),
-          platformEarnedSkills: (earnedSkills?.resources ?? []).map((r) => ({ name: (r as { name?: string }).name ?? "", points: (r as { points?: number }).points })).filter((s) => s.name),
-          skillPoints: pts.data ? { total: pts.data.total_points, percentile: pts.data.percentile } : undefined,
+          platformEarnedSkills: (earnedSkills?.resources ?? [])
+            .map((r) => ({
+              name: (r as { name?: string }).name ?? "",
+              points: (r as { points?: number }).points,
+            }))
+            .filter((s) => s.name),
+          skillPoints: pts.data
+            ? { total: pts.data.total_points, percentile: pts.data.percentile }
+            : undefined,
           resumeFileUrl,
           isLoading: store.isLoading || credsLoading,
           isDemo: false,
         }),
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [store.settings, store.isLoading, platformCredentials, edu.data, exp.data, earnedSkills, pts.data, resumeFileUrl, credsLoading, username, userMetaData],
+      [
+        store.settings,
+        store.isLoading,
+        platformCredentials,
+        edu.data,
+        exp.data,
+        earnedSkills,
+        pts.data,
+        resumeFileUrl,
+        credsLoading,
+        username,
+        userMetaData,
+      ],
     );
 
     return <WalletContext.Provider value={{ state, actions }}>{children}</WalletContext.Provider>;
@@ -344,5 +463,9 @@ function platformImpl() {
 // ---------- entry ----------
 
 export function WalletProvider({ children }: { children: ReactNode }) {
-  return config.demoMode() ? <DemoSource>{children}</DemoSource> : <PlatformSource>{children}</PlatformSource>;
+  return config.demoMode() ? (
+    <DemoSource>{children}</DemoSource>
+  ) : (
+    <PlatformSource>{children}</PlatformSource>
+  );
 }

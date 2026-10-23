@@ -65,7 +65,7 @@ function PlatformProfile() {
 
   return (
     <div className="mx-auto w-full max-w-6xl flex-1 overflow-auto px-4 py-5 md:px-6">
-      <div className="min-h-[640px] overflow-hidden rounded-lg border border-[var(--border-color)] bg-white">
+      <div className="min-h-[640px]">
         <Profile
           tenant={tenantKey}
           tenants={tenants}
@@ -83,16 +83,29 @@ function PlatformProfile() {
   );
 }
 
-const fmt = (d?: string) => (d ? new Date(d).toLocaleDateString(undefined, { year: "numeric", month: "short" }) : "");
+const fmt = (d?: string) =>
+  d ? new Date(d).toLocaleDateString(undefined, { year: "numeric", month: "short" }) : "";
 
 function DemoProfile() {
   const { state, actions } = useWallet();
   const p = state.profile;
-  const [form, setForm] = useState({ name: p.name, headline: p.headline ?? "", location: p.location ?? "", email: p.email ?? "", about: p.about ?? "" });
+  const [form, setForm] = useState({
+    name: p.name,
+    headline: p.headline ?? "",
+    location: p.location ?? "",
+    email: p.email ?? "",
+    about: p.about ?? "",
+  });
   const [edu, setEdu] = useState<WalletEducation | null>(null);
   const [exp, setExp] = useState<WalletExperience | null>(null);
   useEffect(() => {
-    setForm({ name: p.name, headline: p.headline ?? "", location: p.location ?? "", email: p.email ?? "", about: p.about ?? "" });
+    setForm({
+      name: p.name,
+      headline: p.headline ?? "",
+      location: p.location ?? "",
+      email: p.email ?? "",
+      about: p.about ?? "",
+    });
   }, [p.name, p.headline, p.location, p.email, p.about]);
 
   if (state.isLoading) return <LoadingScreen />;
@@ -108,7 +121,11 @@ function DemoProfile() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <PageHeader icon={<UserRound />} title="Profile" description="Who the wallet belongs to, and the education and experience that sit beside the credentials." />
+      <PageHeader
+        icon={<UserRound />}
+        title="Profile"
+        description="Who the wallet belongs to, and the education and experience that sit beside the credentials."
+      />
       <Page>
         <div className="grid gap-5 lg:grid-cols-3">
           <div className="space-y-5 lg:col-span-2">
@@ -121,19 +138,38 @@ function DemoProfile() {
                 }}
               >
                 <Field label="Full name">
-                  <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+                  <Input
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    required
+                  />
                 </Field>
                 <Field label="Email">
-                  <Input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} type="email" />
+                  <Input
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    type="email"
+                  />
                 </Field>
                 <Field label="Headline">
-                  <Input value={form.headline} onChange={(e) => setForm({ ...form, headline: e.target.value })} placeholder="Data analyst moving toward data science" />
+                  <Input
+                    value={form.headline}
+                    onChange={(e) => setForm({ ...form, headline: e.target.value })}
+                    placeholder="Data analyst moving toward data science"
+                  />
                 </Field>
                 <Field label="Location">
-                  <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+                  <Input
+                    value={form.location}
+                    onChange={(e) => setForm({ ...form, location: e.target.value })}
+                  />
                 </Field>
                 <Field label="About" className="sm:col-span-2">
-                  <Textarea value={form.about} onChange={(e) => setForm({ ...form, about: e.target.value })} rows={3} />
+                  <Textarea
+                    value={form.about}
+                    onChange={(e) => setForm({ ...form, about: e.target.value })}
+                    rows={3}
+                  />
                 </Field>
                 <div className="sm:col-span-2">
                   <Button type="submit" className="ibl-button-primary">
@@ -150,13 +186,24 @@ function DemoProfile() {
                 </span>
               }
               actions={
-                <Button variant="outline" size="sm" onClick={() => setEdu({ id: newId("edu"), institution: "" })}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setEdu({ id: newId("edu"), institution: "" })}
+                >
                   <Plus /> Add
                 </Button>
               }
             >
               <RecordList
-                rows={state.education.map((e) => ({ id: e.id, title: [e.degree, e.fieldOfStudy].filter(Boolean).join(", ") || e.institution, subtitle: e.degree || e.fieldOfStudy ? e.institution : "", meta: [fmt(e.startDate), e.current ? "Present" : fmt(e.endDate)].filter(Boolean).join(" – ") }))}
+                rows={state.education.map((e) => ({
+                  id: e.id,
+                  title: [e.degree, e.fieldOfStudy].filter(Boolean).join(", ") || e.institution,
+                  subtitle: e.degree || e.fieldOfStudy ? e.institution : "",
+                  meta: [fmt(e.startDate), e.current ? "Present" : fmt(e.endDate)]
+                    .filter(Boolean)
+                    .join(" – "),
+                }))}
                 onEdit={(id) => setEdu(state.education.find((e) => e.id === id) ?? null)}
                 onRemove={(id) => void save(() => actions.removeEducation(id), "Removed")}
                 empty="No education on record."
@@ -170,13 +217,24 @@ function DemoProfile() {
                 </span>
               }
               actions={
-                <Button variant="outline" size="sm" onClick={() => setExp({ id: newId("exp"), company: "", title: "" })}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setExp({ id: newId("exp"), company: "", title: "" })}
+                >
                   <Plus /> Add
                 </Button>
               }
             >
               <RecordList
-                rows={state.experience.map((e) => ({ id: e.id, title: e.title, subtitle: [e.company, e.location].filter(Boolean).join(" · "), meta: [fmt(e.startDate), e.current ? "Present" : fmt(e.endDate)].filter(Boolean).join(" – ") }))}
+                rows={state.experience.map((e) => ({
+                  id: e.id,
+                  title: e.title,
+                  subtitle: [e.company, e.location].filter(Boolean).join(" · "),
+                  meta: [fmt(e.startDate), e.current ? "Present" : fmt(e.endDate)]
+                    .filter(Boolean)
+                    .join(" – "),
+                }))}
                 onEdit={(id) => setExp(state.experience.find((e) => e.id === id) ?? null)}
                 onRemove={(id) => void save(() => actions.removeExperience(id), "Removed")}
                 empty="No experience on record."
@@ -196,15 +254,42 @@ function DemoProfile() {
             >
               <ol className="list-decimal space-y-2 pl-4 text-sm break-words text-gray-700 [&_code]:break-all">
                 <li>
-                  Org key from <a className="text-[#0058cc] underline" href="https://login.iblai.app/me" target="_blank" rel="noreferrer">login.iblai.app/me</a> (new: <a className="text-[#0058cc] underline" href="https://ibl.ai/join" target="_blank" rel="noreferrer">ibl.ai/join</a>).
+                  Org key from{" "}
+                  <a
+                    className="text-[#0058cc] underline"
+                    href="https://login.iblai.app/me"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    login.iblai.app/me
+                  </a>{" "}
+                  (new:{" "}
+                  <a
+                    className="text-[#0058cc] underline"
+                    href="https://ibl.ai/join"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    ibl.ai/join
+                  </a>
+                  ).
                 </li>
                 <li>A Platform API Token (OS → Admin → Integrations → APIs).</li>
                 <li>
-                  In <code className="rounded bg-gray-100 px-1">.env.local</code>: <code className="rounded bg-gray-100 px-1">NEXT_PUBLIC_WALLET_DEMO=false</code>, <code className="rounded bg-gray-100 px-1">NEXT_PUBLIC_MAIN_TENANT_KEY</code>, <code className="rounded bg-gray-100 px-1">IBLAI_API_KEY</code>; restart.
+                  In <code className="rounded bg-gray-100 px-1">.env.local</code>:{" "}
+                  <code className="rounded bg-gray-100 px-1">NEXT_PUBLIC_WALLET_DEMO=false</code>,{" "}
+                  <code className="rounded bg-gray-100 px-1">NEXT_PUBLIC_MAIN_TENANT_KEY</code>,{" "}
+                  <code className="rounded bg-gray-100 px-1">IBLAI_API_KEY</code>; restart.
                 </li>
-                <li>Allow <code className="rounded bg-gray-100 px-1">http://localhost:3000</code> in the org's redirect origins.</li>
+                <li>
+                  Allow <code className="rounded bg-gray-100 px-1">http://localhost:3000</code> in
+                  the org's redirect origins.
+                </li>
               </ol>
-              <p className="mt-3 text-xs text-muted-foreground">Signed in, this page becomes the full ibl.ai profile: education, experience, résumé upload, memory, history, privacy and security.</p>
+              <p className="text-muted-foreground mt-3 text-xs">
+                Signed in, this page becomes the full ibl.ai profile: education, experience, résumé
+                upload, memory, history, privacy and security.
+              </p>
             </Section>
             <Section title="Sample data">
               <p className="text-sm text-gray-700">Edits on this demo stay in this browser.</p>
@@ -230,26 +315,54 @@ function DemoProfile() {
               }}
             >
               <Field label="Institution *" className="sm:col-span-2">
-                <Input value={edu.institution} onChange={(e) => setEdu({ ...edu, institution: e.target.value })} required />
+                <Input
+                  value={edu.institution}
+                  onChange={(e) => setEdu({ ...edu, institution: e.target.value })}
+                  required
+                />
               </Field>
               <Field label="Degree">
-                <Input value={edu.degree ?? ""} onChange={(e) => setEdu({ ...edu, degree: e.target.value })} placeholder="B.S." />
+                <Input
+                  value={edu.degree ?? ""}
+                  onChange={(e) => setEdu({ ...edu, degree: e.target.value })}
+                  placeholder="B.S."
+                />
               </Field>
               <Field label="Field of study">
-                <Input value={edu.fieldOfStudy ?? ""} onChange={(e) => setEdu({ ...edu, fieldOfStudy: e.target.value })} />
+                <Input
+                  value={edu.fieldOfStudy ?? ""}
+                  onChange={(e) => setEdu({ ...edu, fieldOfStudy: e.target.value })}
+                />
               </Field>
               <Field label="Start">
-                <Input type="date" value={edu.startDate ?? ""} onChange={(e) => setEdu({ ...edu, startDate: e.target.value })} />
+                <Input
+                  type="date"
+                  value={edu.startDate ?? ""}
+                  onChange={(e) => setEdu({ ...edu, startDate: e.target.value })}
+                />
               </Field>
               <Field label="End">
-                <Input type="date" value={edu.endDate ?? ""} onChange={(e) => setEdu({ ...edu, endDate: e.target.value })} disabled={!!edu.current} />
+                <Input
+                  type="date"
+                  value={edu.endDate ?? ""}
+                  onChange={(e) => setEdu({ ...edu, endDate: e.target.value })}
+                  disabled={!!edu.current}
+                />
               </Field>
               <div className="flex items-center gap-2 text-sm sm:col-span-2">
-                <Switch id="edu-current" checked={!!edu.current} onCheckedChange={(on: boolean) => setEdu({ ...edu, current: on })} />
+                <Switch
+                  id="edu-current"
+                  checked={!!edu.current}
+                  onCheckedChange={(on: boolean) => setEdu({ ...edu, current: on })}
+                />
                 <Label htmlFor="edu-current">Currently enrolled</Label>
               </div>
               <Field label="Notes" className="sm:col-span-2">
-                <Textarea value={edu.description ?? ""} onChange={(e) => setEdu({ ...edu, description: e.target.value })} rows={2} />
+                <Textarea
+                  value={edu.description ?? ""}
+                  onChange={(e) => setEdu({ ...edu, description: e.target.value })}
+                  rows={2}
+                />
               </Field>
               <div className="flex justify-end gap-2 sm:col-span-2">
                 <Button type="button" variant="outline" onClick={() => setEdu(null)}>
@@ -278,29 +391,61 @@ function DemoProfile() {
               }}
             >
               <Field label="Title *">
-                <Input value={exp.title} onChange={(e) => setExp({ ...exp, title: e.target.value })} required />
+                <Input
+                  value={exp.title}
+                  onChange={(e) => setExp({ ...exp, title: e.target.value })}
+                  required
+                />
               </Field>
               <Field label="Company *">
-                <Input value={exp.company} onChange={(e) => setExp({ ...exp, company: e.target.value })} required />
+                <Input
+                  value={exp.company}
+                  onChange={(e) => setExp({ ...exp, company: e.target.value })}
+                  required
+                />
               </Field>
               <Field label="Location">
-                <Input value={exp.location ?? ""} onChange={(e) => setExp({ ...exp, location: e.target.value })} />
+                <Input
+                  value={exp.location ?? ""}
+                  onChange={(e) => setExp({ ...exp, location: e.target.value })}
+                />
               </Field>
               <Field label="Employment type">
-                <Input value={exp.employmentType ?? ""} onChange={(e) => setExp({ ...exp, employmentType: e.target.value })} placeholder="Full-time" />
+                <Input
+                  value={exp.employmentType ?? ""}
+                  onChange={(e) => setExp({ ...exp, employmentType: e.target.value })}
+                  placeholder="Full-time"
+                />
               </Field>
               <Field label="Start">
-                <Input type="date" value={exp.startDate ?? ""} onChange={(e) => setExp({ ...exp, startDate: e.target.value })} />
+                <Input
+                  type="date"
+                  value={exp.startDate ?? ""}
+                  onChange={(e) => setExp({ ...exp, startDate: e.target.value })}
+                />
               </Field>
               <Field label="End">
-                <Input type="date" value={exp.endDate ?? ""} onChange={(e) => setExp({ ...exp, endDate: e.target.value })} disabled={!!exp.current} />
+                <Input
+                  type="date"
+                  value={exp.endDate ?? ""}
+                  onChange={(e) => setExp({ ...exp, endDate: e.target.value })}
+                  disabled={!!exp.current}
+                />
               </Field>
               <div className="flex items-center gap-2 text-sm sm:col-span-2">
-                <Switch id="exp-current" checked={!!exp.current} onCheckedChange={(on: boolean) => setExp({ ...exp, current: on })} />
+                <Switch
+                  id="exp-current"
+                  checked={!!exp.current}
+                  onCheckedChange={(on: boolean) => setExp({ ...exp, current: on })}
+                />
                 <Label htmlFor="exp-current">I work here now</Label>
               </div>
               <Field label="What you did (one bullet per line)" className="sm:col-span-2">
-                <Textarea value={exp.description ?? ""} onChange={(e) => setExp({ ...exp, description: e.target.value })} rows={4} />
+                <Textarea
+                  value={exp.description ?? ""}
+                  onChange={(e) => setExp({ ...exp, description: e.target.value })}
+                  rows={4}
+                />
               </Field>
               <div className="flex justify-end gap-2 sm:col-span-2">
                 <Button type="button" variant="outline" onClick={() => setExp(null)}>
@@ -318,17 +463,35 @@ function DemoProfile() {
   );
 }
 
-function Field({ label, children, className }: { label: string; children: React.ReactNode; className?: string }) {
+function Field({
+  label,
+  children,
+  className,
+}: {
+  label: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <div className={className}>
-      <Label className="text-gray-700">{label}</Label>
+      <Label>{label}</Label>
       <div className="mt-1">{children}</div>
     </div>
   );
 }
 
-function RecordList({ rows, onEdit, onRemove, empty }: { rows: { id: string; title: string; subtitle?: string; meta?: string }[]; onEdit: (id: string) => void; onRemove: (id: string) => void; empty: string }) {
-  if (!rows.length) return <p className="text-sm text-muted-foreground">{empty}</p>;
+function RecordList({
+  rows,
+  onEdit,
+  onRemove,
+  empty,
+}: {
+  rows: { id: string; title: string; subtitle?: string; meta?: string }[];
+  onEdit: (id: string) => void;
+  onRemove: (id: string) => void;
+  empty: string;
+}) {
+  if (!rows.length) return <p className="text-muted-foreground text-sm">{empty}</p>;
   return (
     <ul className="divide-y divide-gray-100">
       {rows.map((r) => (
@@ -336,13 +499,18 @@ function RecordList({ rows, onEdit, onRemove, empty }: { rows: { id: string; tit
           <div className="min-w-0">
             <p className="text-sm font-medium text-gray-900">{r.title}</p>
             {r.subtitle ? <p className="text-xs text-gray-600">{r.subtitle}</p> : null}
-            {r.meta ? <p className="text-xs text-muted-foreground">{r.meta}</p> : null}
+            {r.meta ? <p className="text-muted-foreground text-xs">{r.meta}</p> : null}
           </div>
           <div className="flex shrink-0 gap-1">
             <Button variant="ghost" size="icon-sm" aria-label="Edit" onClick={() => onEdit(r.id)}>
               <Pencil />
             </Button>
-            <Button variant="ghost" size="icon-sm" aria-label="Remove" onClick={() => onRemove(r.id)}>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="Remove"
+              onClick={() => onRemove(r.id)}
+            >
               <Trash2 />
             </Button>
           </div>

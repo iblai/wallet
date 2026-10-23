@@ -1,12 +1,12 @@
-import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
-import path from 'path';
+import { defineConfig, devices } from "@playwright/test";
+import dotenv from "dotenv";
+import path from "path";
 
 dotenv.config({
-  path: path.resolve(__dirname, '.env.development'),
+  path: path.resolve(__dirname, ".env.development"),
 });
 
-const APP_HOST = process.env.APP_HOST || 'http://localhost:3000';
+const APP_HOST = process.env.APP_HOST || "http://localhost:3000";
 
 /**
  * Playwright configuration.
@@ -22,41 +22,50 @@ const APP_HOST = process.env.APP_HOST || 'http://localhost:3000';
  * Edit e2e/.env.development to configure APP_HOST and credentials.
  */
 export default defineConfig({
-  testDir: '.',
+  testDir: ".",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 2 : 1,
-  reporter: [['list']],
+  reporter: [["list"]],
   use: {
     baseURL: APP_HOST,
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    trace: "on-first-retry",
+    screenshot: "only-on-failure",
   },
   projects: [
     // Auth setup — one per browser, runs once and saves storage state
-    { name: 'setup-chromium', testMatch: /auth\.setup\.ts/, use: { ...devices['Desktop Chrome'] } },
-    { name: 'setup-firefox', testMatch: /auth\.setup\.ts/, use: { ...devices['Desktop Firefox'] } },
-    { name: 'setup-webkit', testMatch: /auth\.setup\.ts/, use: { ...devices['Desktop Safari'] } },
+    { name: "setup-chromium", testMatch: /auth\.setup\.ts/, use: { ...devices["Desktop Chrome"] } },
+    { name: "setup-firefox", testMatch: /auth\.setup\.ts/, use: { ...devices["Desktop Firefox"] } },
+    { name: "setup-webkit", testMatch: /auth\.setup\.ts/, use: { ...devices["Desktop Safari"] } },
 
     // Journey tests — run with pre-authenticated storage state
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user-setup-chromium.json' },
-      dependencies: ['setup-chromium'],
-      testMatch: ['journeys/**/*.spec.ts'],
+      name: "chromium",
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "playwright/.auth/user-setup-chromium.json",
+      },
+      dependencies: ["setup-chromium"],
+      testMatch: ["journeys/**/*.spec.ts"],
     },
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'], storageState: 'playwright/.auth/user-setup-firefox.json' },
-      dependencies: ['setup-firefox'],
-      testMatch: ['journeys/**/*.spec.ts'],
+      name: "firefox",
+      use: {
+        ...devices["Desktop Firefox"],
+        storageState: "playwright/.auth/user-setup-firefox.json",
+      },
+      dependencies: ["setup-firefox"],
+      testMatch: ["journeys/**/*.spec.ts"],
     },
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'], storageState: 'playwright/.auth/user-setup-webkit.json' },
-      dependencies: ['setup-webkit'],
-      testMatch: ['journeys/**/*.spec.ts'],
+      name: "webkit",
+      use: {
+        ...devices["Desktop Safari"],
+        storageState: "playwright/.auth/user-setup-webkit.json",
+      },
+      dependencies: ["setup-webkit"],
+      testMatch: ["journeys/**/*.spec.ts"],
     },
   ],
 });

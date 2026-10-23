@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { UserProfileDropdown } from '@iblai/iblai-js/web-containers/next';
+import { UserProfileDropdown } from "@iblai/iblai-js/web-containers/next";
 
 interface UserProfileButtonProps {
   username?: string;

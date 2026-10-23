@@ -47,7 +47,8 @@ export const ROLES: Role[] = [
     id: "data-analyst",
     title: "Data Analyst",
     family: "Data & Analytics",
-    summary: "Turns raw data into decisions: queries, dashboards, and clear explanations of what changed and why.",
+    summary:
+      "Turns raw data into decisions: queries, dashboards, and clear explanations of what changed and why.",
     skills: [
       { name: "SQL", weight: 3 },
       { name: "Data Analysis", weight: 3 },
@@ -60,7 +61,17 @@ export const ROLES: Role[] = [
       { name: "Business Intelligence", weight: 1 },
       { name: "Data Cleaning", weight: 1 },
     ],
-    market: { medianSalaryUsd: 84000, salaryRangeUsd: [58000, 125000], growthPct: 23, demand: "very high", typicalCredentials: ["Google Data Analytics Professional Certificate", "Microsoft Power BI Data Analyst", "Tableau Desktop Specialist"] },
+    market: {
+      medianSalaryUsd: 84000,
+      salaryRangeUsd: [58000, 125000],
+      growthPct: 23,
+      demand: "very high",
+      typicalCredentials: [
+        "Google Data Analytics Professional Certificate",
+        "Microsoft Power BI Data Analyst",
+        "Tableau Desktop Specialist",
+      ],
+    },
   },
   {
     id: "data-scientist",
@@ -78,7 +89,17 @@ export const ROLES: Role[] = [
       { name: "Cloud Computing", weight: 1 },
       { name: "Communication", weight: 2 },
     ],
-    market: { medianSalaryUsd: 112000, salaryRangeUsd: [78000, 170000], growthPct: 36, demand: "very high", typicalCredentials: ["IBM Data Science Professional Certificate", "AWS Certified Machine Learning", "M.S. Data Science"] },
+    market: {
+      medianSalaryUsd: 112000,
+      salaryRangeUsd: [78000, 170000],
+      growthPct: 36,
+      demand: "very high",
+      typicalCredentials: [
+        "IBM Data Science Professional Certificate",
+        "AWS Certified Machine Learning",
+        "M.S. Data Science",
+      ],
+    },
   },
   {
     id: "software-engineer",
@@ -98,7 +119,17 @@ export const ROLES: Role[] = [
       { name: "Agile", weight: 1 },
       { name: "Communication", weight: 2 },
     ],
-    market: { medianSalaryUsd: 130000, salaryRangeUsd: [80000, 190000], growthPct: 17, demand: "high", typicalCredentials: ["B.S. Computer Science / Software Engineering", "AWS Certified Developer", "Meta Front-End Developer Certificate"] },
+    market: {
+      medianSalaryUsd: 130000,
+      salaryRangeUsd: [80000, 190000],
+      growthPct: 17,
+      demand: "high",
+      typicalCredentials: [
+        "B.S. Computer Science / Software Engineering",
+        "AWS Certified Developer",
+        "Meta Front-End Developer Certificate",
+      ],
+    },
   },
   {
     id: "cloud-engineer",
@@ -116,7 +147,17 @@ export const ROLES: Role[] = [
       { name: "Security", weight: 2 },
       { name: "CI/CD", weight: 1 },
     ],
-    market: { medianSalaryUsd: 125000, salaryRangeUsd: [85000, 175000], growthPct: 21, demand: "very high", typicalCredentials: ["AWS Certified Solutions Architect", "Google Cloud Associate Engineer", "CompTIA Cloud+"] },
+    market: {
+      medianSalaryUsd: 125000,
+      salaryRangeUsd: [85000, 175000],
+      growthPct: 21,
+      demand: "very high",
+      typicalCredentials: [
+        "AWS Certified Solutions Architect",
+        "Google Cloud Associate Engineer",
+        "CompTIA Cloud+",
+      ],
+    },
   },
   {
     id: "cybersecurity-analyst",
@@ -134,7 +175,18 @@ export const ROLES: Role[] = [
       { name: "Cloud Computing", weight: 1 },
       { name: "Communication", weight: 1 },
     ],
-    market: { medianSalaryUsd: 120000, salaryRangeUsd: [75000, 165000], growthPct: 33, demand: "very high", typicalCredentials: ["CompTIA Security+", "CISSP", "Google Cybersecurity Professional Certificate", "B.S. Cybersecurity and Information Assurance"] },
+    market: {
+      medianSalaryUsd: 120000,
+      salaryRangeUsd: [75000, 165000],
+      growthPct: 33,
+      demand: "very high",
+      typicalCredentials: [
+        "CompTIA Security+",
+        "CISSP",
+        "Google Cybersecurity Professional Certificate",
+        "B.S. Cybersecurity and Information Assurance",
+      ],
+    },
   },
   {
     id: "project-manager",
@@ -152,7 +204,18 @@ export const ROLES: Role[] = [
       { name: "Scrum", weight: 1 },
       { name: "Excel", weight: 1 },
     ],
-    market: { medianSalaryUsd: 98000, salaryRangeUsd: [65000, 145000], growthPct: 6, demand: "steady", typicalCredentials: ["PMP", "CAPM", "Google Project Management Certificate", "Certified ScrumMaster"] },
+    market: {
+      medianSalaryUsd: 98000,
+      salaryRangeUsd: [65000, 145000],
+      growthPct: 6,
+      demand: "steady",
+      typicalCredentials: [
+        "PMP",
+        "CAPM",
+        "Google Project Management Certificate",
+        "Certified ScrumMaster",
+      ],
+    },
   },
   {
     id: "product-manager",
@@ -170,7 +233,13 @@ export const ROLES: Role[] = [
       { name: "Leadership", weight: 2 },
       { name: "UX Design", weight: 1 },
     ],
-    market: { medianSalaryUsd: 135000, salaryRangeUsd: [90000, 195000], growthPct: 10, demand: "high", typicalCredentials: ["Pragmatic Institute PMC", "Product School PMC", "MBA"] },
+    market: {
+      medianSalaryUsd: 135000,
+      salaryRangeUsd: [90000, 195000],
+      growthPct: 10,
+      demand: "high",
+      typicalCredentials: ["Pragmatic Institute PMC", "Product School PMC", "MBA"],
+    },
   },
   {
     id: "ux-designer",
@@ -187,7 +256,16 @@ export const ROLES: Role[] = [
       { name: "Communication", weight: 2 },
       { name: "HTML/CSS", weight: 1 },
     ],
-    market: { medianSalaryUsd: 100000, salaryRangeUsd: [65000, 145000], growthPct: 16, demand: "high", typicalCredentials: ["Google UX Design Professional Certificate", "Nielsen Norman Group UX Certification"] },
+    market: {
+      medianSalaryUsd: 100000,
+      salaryRangeUsd: [65000, 145000],
+      growthPct: 16,
+      demand: "high",
+      typicalCredentials: [
+        "Google UX Design Professional Certificate",
+        "Nielsen Norman Group UX Certification",
+      ],
+    },
   },
   {
     id: "registered-nurse",
@@ -204,7 +282,13 @@ export const ROLES: Role[] = [
       { name: "Critical Thinking", weight: 2 },
       { name: "Leadership", weight: 1 },
     ],
-    market: { medianSalaryUsd: 86000, salaryRangeUsd: [62000, 130000], growthPct: 6, demand: "high", typicalCredentials: ["RN License (NCLEX-RN)", "BSN", "BLS/ACLS"] },
+    market: {
+      medianSalaryUsd: 86000,
+      salaryRangeUsd: [62000, 130000],
+      growthPct: 6,
+      demand: "high",
+      typicalCredentials: ["RN License (NCLEX-RN)", "BSN", "BLS/ACLS"],
+    },
   },
   {
     id: "k12-teacher",
@@ -220,7 +304,17 @@ export const ROLES: Role[] = [
       { name: "Differentiated Instruction", weight: 2 },
       { name: "Special Education", weight: 1 },
     ],
-    market: { medianSalaryUsd: 63000, salaryRangeUsd: [45000, 95000], growthPct: 1, demand: "steady", typicalCredentials: ["State Teaching License", "B.A. Elementary / Secondary Education", "M.Ed."] },
+    market: {
+      medianSalaryUsd: 63000,
+      salaryRangeUsd: [45000, 95000],
+      growthPct: 1,
+      demand: "steady",
+      typicalCredentials: [
+        "State Teaching License",
+        "B.A. Elementary / Secondary Education",
+        "M.Ed.",
+      ],
+    },
   },
   {
     id: "instructional-designer",
@@ -238,13 +332,24 @@ export const ROLES: Role[] = [
       { name: "Video Production", weight: 1 },
       { name: "Generative AI", weight: 1 },
     ],
-    market: { medianSalaryUsd: 78000, salaryRangeUsd: [55000, 115000], growthPct: 7, demand: "steady", typicalCredentials: ["M.S. Learning Experience Design", "ATD Instructional Design Certificate", "Articulate Storyline"] },
+    market: {
+      medianSalaryUsd: 78000,
+      salaryRangeUsd: [55000, 115000],
+      growthPct: 7,
+      demand: "steady",
+      typicalCredentials: [
+        "M.S. Learning Experience Design",
+        "ATD Instructional Design Certificate",
+        "Articulate Storyline",
+      ],
+    },
   },
   {
     id: "ai-engineer",
     title: "AI Engineer",
     family: "Software",
-    summary: "Ships LLM- and ML-powered features: retrieval, evaluation, agents, and the plumbing around them.",
+    summary:
+      "Ships LLM- and ML-powered features: retrieval, evaluation, agents, and the plumbing around them.",
     skills: [
       { name: "Python", weight: 3 },
       { name: "Generative AI", weight: 3 },
@@ -256,7 +361,17 @@ export const ROLES: Role[] = [
       { name: "Evaluation", weight: 2 },
       { name: "TypeScript", weight: 1 },
     ],
-    market: { medianSalaryUsd: 150000, salaryRangeUsd: [100000, 220000], growthPct: 40, demand: "very high", typicalCredentials: ["AWS Certified AI Practitioner", "Google Professional ML Engineer", "DeepLearning.AI specializations"] },
+    market: {
+      medianSalaryUsd: 150000,
+      salaryRangeUsd: [100000, 220000],
+      growthPct: 40,
+      demand: "very high",
+      typicalCredentials: [
+        "AWS Certified AI Practitioner",
+        "Google Professional ML Engineer",
+        "DeepLearning.AI specializations",
+      ],
+    },
   },
 ];
 
@@ -308,7 +423,7 @@ export const SKILL_ALIASES: Record<string, string> = {
   llms: "Generative AI",
   "large language models": "Generative AI",
   "generative ai": "Generative AI",
-  "ai": "Generative AI",
+  ai: "Generative AI",
   "artificial intelligence": "Machine Learning",
   "prompt design": "Prompt Engineering",
   scrum: "Scrum",
@@ -321,7 +436,7 @@ export const SKILL_ALIASES: Record<string, string> = {
   presentation: "Communication",
   "team leadership": "Leadership",
   management: "Leadership",
-  "ux": "UX Design",
+  ux: "UX Design",
   "user experience": "UX Design",
   "user experience design": "UX Design",
   "ui design": "UX Design",
@@ -332,12 +447,12 @@ export const SKILL_ALIASES: Record<string, string> = {
   "curriculum development": "Instructional Design",
   "course design": "Instructional Design",
   edtech: "Educational Technology",
-  "lms": "Educational Technology",
+  lms: "Educational Technology",
   "learning management systems": "Educational Technology",
-  "wcag": "Accessibility",
-  "a11y": "Accessibility",
-  "html": "HTML/CSS",
-  "css": "HTML/CSS",
+  wcag: "Accessibility",
+  a11y: "Accessibility",
+  html: "HTML/CSS",
+  css: "HTML/CSS",
   "unit testing": "Testing",
   "test automation": "Testing",
   qa: "Testing",
@@ -396,7 +511,8 @@ export interface GapAnalysis {
 
 export function gapAnalysis(role: Role, skills: WalletSkill[]): GapAnalysis {
   const have = new Map<string, WalletSkill>();
-  for (const s of skills) if (s.origin !== "desired") have.set(canonicalSkill(s.name).toLowerCase(), s);
+  for (const s of skills)
+    if (s.origin !== "desired") have.set(canonicalSkill(s.name).toLowerCase(), s);
 
   const items: GapItem[] = role.skills.map((rs) => {
     const w = have.get(rs.name.toLowerCase());
@@ -415,7 +531,14 @@ export function gapAnalysis(role: Role, skills: WalletSkill[]): GapAnalysis {
   const roleSet = new Set(role.skills.map((s) => s.name.toLowerCase()));
   const extras = [...have.keys()].filter((k) => !roleSet.has(k)).map((k) => have.get(k)!.name);
   const nextCredentials = [...new Set(gaps.flatMap((g) => g.suggestions))].slice(0, 5);
-  return { role, coverage: total ? Math.round((got / total) * 100) : 0, matched, gaps, extras, nextCredentials };
+  return {
+    role,
+    coverage: total ? Math.round((got / total) * 100) : 0,
+    matched,
+    gaps,
+    extras,
+    nextCredentials,
+  };
 }
 
 /** Which of the role's typical credentials cover a skill — a light heuristic keyed on skill words. */

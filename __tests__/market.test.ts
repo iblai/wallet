@@ -1,8 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { canonicalSkill, gapAnalysis, rankRoles, roleById, searchSkills } from "../lib/wallet/market";
+import {
+  canonicalSkill,
+  gapAnalysis,
+  rankRoles,
+  roleById,
+  searchSkills,
+} from "../lib/wallet/market";
 import type { WalletSkill } from "../lib/wallet/types";
 
-const sk = (name: string, origin: WalletSkill["origin"] = "credential"): WalletSkill => ({ name, origin, evidence: ["x"] });
+const sk = (name: string, origin: WalletSkill["origin"] = "credential"): WalletSkill => ({
+  name,
+  origin,
+  evidence: ["x"],
+});
 
 describe("skill taxonomy", () => {
   it("canonicalizes aliases and casing", () => {

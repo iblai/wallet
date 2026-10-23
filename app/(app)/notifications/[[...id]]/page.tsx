@@ -48,15 +48,14 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl flex-1 overflow-auto px-4 py-5 md:px-6">
-      <div className="rounded-lg border border-[var(--border-color)] bg-white overflow-hidden">
-        <NotificationDisplay
-          org={tenantKey}
-          userId={username}
-          isAdmin={isAdmin}
-          selectedNotificationId={notificationId}
-        />
-      </div>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <NotificationDisplay
+        org={tenantKey}
+        userId={username}
+        isAdmin={isAdmin}
+        selectedNotificationId={notificationId}
+        className="min-h-0 flex-1"
+      />
     </div>
   );
 }

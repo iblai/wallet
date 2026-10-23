@@ -50,7 +50,8 @@ function PlatformCoach() {
       <BuiltInCoach
         notice={
           <p className="mb-4 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-900">
-            No agent is set up for this app yet, so the built-in Coach is answering from your wallet.{" "}
+            No agent is set up for this app yet, so the built-in Coach is answering from your
+            wallet.{" "}
             {isAdmin ? (
               <Link href="/setup" className="underline">
                 Pick or create an agent
@@ -63,7 +64,7 @@ function PlatformCoach() {
       />
     );
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div className="flex h-[calc(100dvh-5rem)] flex-col md:h-auto md:min-h-0 md:flex-1">
       <AgentChat mentorId={mentorId} />
     </div>
   );
@@ -89,7 +90,11 @@ function BuiltInCoach({ notice }: { notice?: React.ReactNode }) {
   const ask = (promptId: string, label: string) => {
     const org = config.demoMode() ? "demo-wallet" : resolveAppTenant();
     const verifyQuery = `?org=${encodeURIComponent(org)}&u=${encodeURIComponent(state.profile.username)}`;
-    setTurns((t) => [...t, { role: "user", text: label }, { role: "coach", text: coachAnswer(promptId, state, origin, verifyQuery), promptId }]);
+    setTurns((t) => [
+      ...t,
+      { role: "user", text: label },
+      { role: "coach", text: coachAnswer(promptId, state, origin, verifyQuery), promptId },
+    ]);
   };
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,8 +112,12 @@ function BuiltInCoach({ notice }: { notice?: React.ReactNode }) {
   };
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <PageHeader icon={<Sparkles />} title="Coach" description="Answers written from your wallet — résumé lines, gaps, what to send, what to say." />
+    <div className="flex h-[calc(100dvh-5rem)] flex-col md:h-auto md:min-h-0 md:flex-1">
+      <PageHeader
+        icon={<Sparkles />}
+        title="Coach"
+        description="Answers written from your wallet — résumé lines, gaps, what to send, what to say."
+      />
       <div className="flex min-h-0 flex-1 flex-col">
         <div className="min-h-0 flex-1 overflow-y-auto">
           <Page>
@@ -120,15 +129,25 @@ function BuiltInCoach({ notice }: { notice?: React.ReactNode }) {
                     <Bot className="size-5" />
                   </span>
                   <div className="text-sm text-gray-700">
-                    <p className="font-medium text-gray-900">Hi {state.profile.name.split(" ")[0]}. I read your wallet, not the internet.</p>
-                    <p className="mt-1">Everything I say comes from your credentials, skills, education and experience, plus the role library. Pick a prompt or type a question.</p>
+                    <p className="font-medium text-gray-900">
+                      Hi {state.profile.name.split(" ")[0]}. I read your wallet, not the internet.
+                    </p>
+                    <p className="mt-1">
+                      Everything I say comes from your credentials, skills, education and
+                      experience, plus the role library. Pick a prompt or type a question.
+                    </p>
                   </div>
                 </div>
                 <div className="grid gap-2 sm:grid-cols-2">
                   {COACH_PROMPTS.map((p) => (
-                    <button key={p.id} type="button" onClick={() => ask(p.id, p.label)} className="rounded-lg border border-gray-200 bg-white p-3 text-left hover:border-[#0058cc]/50">
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => ask(p.id, p.label)}
+                      className="rounded-lg border border-gray-200 bg-white p-3 text-left hover:border-[#0058cc]/50"
+                    >
                       <span className="block text-sm font-medium text-gray-900">{p.label}</span>
-                      <span className="block text-xs text-muted-foreground">{p.hint}</span>
+                      <span className="text-muted-foreground block text-xs">{p.hint}</span>
                     </button>
                   ))}
                 </div>
@@ -136,8 +155,18 @@ function BuiltInCoach({ notice }: { notice?: React.ReactNode }) {
             ) : (
               <div className="mx-auto max-w-2xl space-y-4">
                 {turns.map((t, i) => (
-                  <div key={i} className={cn("flex", t.role === "user" ? "justify-end" : "justify-start")}>
-                    <div className={cn("max-w-[90%] rounded-2xl px-4 py-3 text-sm", t.role === "user" ? "bg-[#0058cc] text-white" : "border border-[var(--border-color,#e5e7eb)] bg-white text-gray-800")}>
+                  <div
+                    key={i}
+                    className={cn("flex", t.role === "user" ? "justify-end" : "justify-start")}
+                  >
+                    <div
+                      className={cn(
+                        "max-w-[90%] rounded-2xl px-4 py-3 text-sm",
+                        t.role === "user"
+                          ? "bg-[#0058cc] text-white"
+                          : "border border-[var(--border-color,#e5e7eb)] bg-white text-gray-800",
+                      )}
+                    >
                       {t.role === "coach" ? (
                         <div className="prose prose-sm max-w-none [&_a]:text-[#0058cc] [&_blockquote]:border-l-2 [&_blockquote]:border-[#0058cc] [&_blockquote]:pl-3 [&_li]:my-0.5 [&_p]:my-1.5 [&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pl-5">
                           <Markdown>{t.text}</Markdown>
@@ -157,7 +186,12 @@ function BuiltInCoach({ notice }: { notice?: React.ReactNode }) {
                 ))}
                 <div className="flex flex-wrap gap-1.5 pt-2">
                   {COACH_PROMPTS.map((p) => (
-                    <button key={p.id} type="button" onClick={() => ask(p.id, p.label)} className="rounded-full border border-gray-200 bg-white px-2.5 py-1 text-xs text-gray-700 hover:border-[#0058cc]/50">
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => ask(p.id, p.label)}
+                      className="rounded-full border border-gray-200 bg-white px-2.5 py-1 text-xs text-gray-700 hover:border-[#0058cc]/50"
+                    >
                       {p.label}
                     </button>
                   ))}
@@ -167,9 +201,17 @@ function BuiltInCoach({ notice }: { notice?: React.ReactNode }) {
             )}
           </Page>
         </div>
-        <form onSubmit={submit} className="shrink-0 border-t border-[var(--border-color,#e5e7eb)] bg-white px-4 py-3">
+        <form
+          onSubmit={submit}
+          className="shrink-0 border-t border-[var(--border-color,#e5e7eb)] bg-white px-4 py-3"
+        >
           <div className="mx-auto flex max-w-2xl gap-2">
-            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask about your résumé, gaps, what to send…" aria-label="Ask the Coach" />
+            <Input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Ask about your résumé, gaps, what to send…"
+              aria-label="Ask the Coach"
+            />
             <Button type="submit" className="ibl-button-primary" disabled={!q.trim()}>
               <Send /> Ask
             </Button>

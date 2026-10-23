@@ -36,7 +36,12 @@ describe("isTenantAdmin", () => {
   });
 
   it("is false for a member, for another org's admin, and when signed out", async () => {
-    stubWindow({ tenants: JSON.stringify([{ key: "acme", is_admin: false }, { key: "other", is_admin: true }]) });
+    stubWindow({
+      tenants: JSON.stringify([
+        { key: "acme", is_admin: false },
+        { key: "other", is_admin: true },
+      ]),
+    });
     let mod = await load();
     expect(mod.isTenantAdmin()).toBe(false);
 
@@ -58,7 +63,9 @@ describe("tenantKeyOf (multi-org)", () => {
   it("accepts a bare key or the JSON tenant object SsoLogin stores", async () => {
     const { tenantKeyOf } = await import("../lib/iblai/tenant");
     expect(tenantKeyOf("sfbu")).toBe("sfbu");
-    expect(tenantKeyOf(JSON.stringify({ key: "sfbu", org: "sfbu", platform_name: "SFBU" }))).toBe("sfbu");
+    expect(tenantKeyOf(JSON.stringify({ key: "sfbu", org: "sfbu", platform_name: "SFBU" }))).toBe(
+      "sfbu",
+    );
     expect(tenantKeyOf("null")).toBe("");
     expect(tenantKeyOf("{not json")).toBe("");
   });

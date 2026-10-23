@@ -8,7 +8,10 @@ const out = "docs/images";
 await mkdir(out, { recursive: true });
 
 const browser = await chromium.launch({ channel: "chrome" });
-const page = await browser.newPage({ viewport: { width: 1400, height: 880 }, deviceScaleFactor: 2 });
+const page = await browser.newPage({
+  viewport: { width: 1400, height: 880 },
+  deviceScaleFactor: 2,
+});
 const shot = async (name, path, prep) => {
   await page.goto(`${base}${path}`, { waitUntil: "networkidle" });
   await page.waitForTimeout(1200);

@@ -23,7 +23,7 @@ export default function SetupPage() {
   }
   return (
     <OnboardingShell totalSteps={1} currentStep={1}>
-      <p role="alert" className="text-sm text-destructive">
+      <p role="alert" className="text-destructive text-sm">
         Only organization admins can set up this app.
       </p>
     </OnboardingShell>

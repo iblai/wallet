@@ -8,7 +8,14 @@ import { PageHeader } from "@/components/page-header";
 import { EmptyState } from "@/components/empty-state";
 import { LoadingScreen } from "@/components/loading-screen";
 import { Section, Page } from "@/components/wallet/section";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -54,10 +61,26 @@ type Definition = {
   programs?: unknown[];
   expires?: { amount?: number; duration?: string } | null;
 };
-type Paged<T> = { count?: number; next?: string | null; previous?: string | null; results?: T[]; data?: T[] };
+type Paged<T> = {
+  count?: number;
+  next?: string | null;
+  previous?: string | null;
+  results?: T[];
+  data?: T[];
+};
 
-const issuedName = (r: Issued) => (typeof r.credential === "object" ? r.credential?.name : r.credential) ?? r.credential_name ?? r.credentialDetails?.name ?? "—";
-const issuedTo = (r: Issued) => (typeof r.user === "object" ? (r.user?.username ?? r.user?.email) : r.user) ?? r.username ?? r.email ?? r.recipient?.identity ?? r.recipient?.username ?? "—";
+const issuedName = (r: Issued) =>
+  (typeof r.credential === "object" ? r.credential?.name : r.credential) ??
+  r.credential_name ??
+  r.credentialDetails?.name ??
+  "—";
+const issuedTo = (r: Issued) =>
+  (typeof r.user === "object" ? (r.user?.username ?? r.user?.email) : r.user) ??
+  r.username ??
+  r.email ??
+  r.recipient?.identity ??
+  r.recipient?.username ??
+  "—";
 const fmt = (d?: string) => (d ? new Date(d).toLocaleDateString() : "—");
 const unwrap = <T,>(r: { result?: Paged<T> } & Paged<T>): Paged<T> => r.result ?? r;
 const rowsOf = <T,>(p: Paged<T> | null) => p?.results ?? p?.data ?? [];
@@ -68,7 +91,11 @@ function session() {
   try {
     username = JSON.parse(localStorage.getItem("userData") ?? "{}").user_nicename ?? "";
   } catch {}
-  return { org, username, base: `/api/credentials/orgs/${encodeURIComponent(org)}/users/${encodeURIComponent(username)}` };
+  return {
+    org,
+    username,
+    base: `/api/credentials/orgs/${encodeURIComponent(org)}/users/${encodeURIComponent(username)}`,
+  };
 }
 
 export default function IssuedCredentialsPage() {
@@ -87,14 +114,24 @@ export default function IssuedCredentialsPage() {
     setLoading(true);
     setError("");
     setHint("");
-    const q = new URLSearchParams({ page: String(page), page_size: "25", ...(query && { search: query }) });
-    const defs = sessionFetch<{ result?: Paged<Definition> } & Paged<Definition>>(`${base}/?${q}`).then(unwrap);
-    const assigned = sessionFetch<{ result?: Paged<Issued> } & Paged<Issued>>(`${base}/assignments/users/?${q}`).then(unwrap);
+    const q = new URLSearchParams({
+      page: String(page),
+      page_size: "25",
+      ...(query && { search: query }),
+    });
+    const defs = sessionFetch<{ result?: Paged<Definition> } & Paged<Definition>>(
+      `${base}/?${q}`,
+    ).then(unwrap);
+    const assigned = sessionFetch<{ result?: Paged<Issued> } & Paged<Issued>>(
+      `${base}/assignments/users/?${q}`,
+    ).then(unwrap);
     Promise.allSettled([defs, assigned]).then(([d, a]) => {
       if (d.status === "fulfilled") setDefinitions(d.value);
       else {
         const e = d.reason;
-        setError(`Could not read the organization's credentials (${e instanceof SessionFetchError ? e.status : "network"}${detailOf(e)}).`);
+        setError(
+          `Could not read the organization's credentials (${e instanceof SessionFetchError ? e.status : "network"}${detailOf(e)}).`,
+        );
       }
       if (a.status === "fulfilled") setIssued(a.value);
       else {
@@ -132,7 +169,13 @@ export default function IssuedCredentialsPage() {
               setQuery(search.trim());
             }}
           >
-            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search credential, user, email" className="h-8 w-72" aria-label="Search credentials" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search credential, user, email"
+              className="h-8 w-72"
+              aria-label="Search credentials"
+            />
             <Button type="submit" variant="outline" size="sm">
               Search
             </Button>
@@ -143,9 +186,16 @@ export default function IssuedCredentialsPage() {
         <LoadingScreen />
       ) : (
         <Page wide>
-          {error ? <p className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-800">{error}</p> : null}
+          {error ? (
+            <p className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-800">
+              {error}
+            </p>
+          ) : null}
 
-          <Section title={`Issued (${issued?.count ?? issuedRows.length})`} description={hint || "Every assignment with a live assertion, organization-wide."}>
+          <Section
+            title={`Issued (${issued?.count ?? issuedRows.length})`}
+            description={hint || "Every assignment with a live assertion, organization-wide."}
+          >
             {issuedRows.length ? (
               <>
                 <Table>
@@ -163,29 +213,57 @@ export default function IssuedCredentialsPage() {
                       <TableRow key={r.entity_id ?? r.entityId ?? i}>
                         <TableCell className="font-medium">{issuedName(r)}</TableCell>
                         <TableCell>{issuedTo(r)}</TableCell>
-                        <TableCell>{fmt(r.assertion?.issuedOn ?? r.issuedOn ?? r.assigned_at ?? r.created_at)}</TableCell>
-                        <TableCell>{r.assertion?.expires ?? r.expires ? fmt(r.assertion?.expires ?? r.expires) : "Never"}</TableCell>
-                        <TableCell>{r.assertion?.revoked || r.revoked ? "Revoked" : (r.status ?? "Issued")}</TableCell>
+                        <TableCell>
+                          {fmt(
+                            r.assertion?.issuedOn ?? r.issuedOn ?? r.assigned_at ?? r.created_at,
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {(r.assertion?.expires ?? r.expires)
+                            ? fmt(r.assertion?.expires ?? r.expires)
+                            : "Never"}
+                        </TableCell>
+                        <TableCell>
+                          {r.assertion?.revoked || r.revoked ? "Revoked" : (r.status ?? "Issued")}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
                 <div className="flex items-center justify-between pt-3 text-sm">
-                  <Button variant="outline" size="sm" disabled={!issued?.previous} onClick={() => setPage((p) => p - 1)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={!issued?.previous}
+                    onClick={() => setPage((p) => p - 1)}
+                  >
                     Previous
                   </Button>
                   <span className="text-muted-foreground">Page {page}</span>
-                  <Button variant="outline" size="sm" disabled={!issued?.next} onClick={() => setPage((p) => p + 1)}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={!issued?.next}
+                    onClick={() => setPage((p) => p + 1)}
+                  >
                     Next
                   </Button>
                 </div>
               </>
             ) : (
-              <EmptyState icon={<BadgeCheck strokeWidth={1.75} />} title="Nothing issued yet" description="Assign one of the credentials below to users or groups in the OS, and it appears here with its recipient." />
+              <EmptyState
+                icon={<BadgeCheck />}
+                title="Nothing issued yet"
+                description="Assign one of the credentials below to users or groups in the OS, and it appears here with its recipient."
+              />
             )}
           </Section>
 
-          <Section className="mt-5" title={`Credentials this organization can issue (${definitions?.count ?? defRows.length})`} description="The public credential definitions — badges and certificates attached to courses and programs.">
+          <Section
+            className="mt-5"
+            title={`Credentials this organization can issue (${definitions?.count ?? defRows.length})`}
+            description="The public credential definitions — badges and certificates attached to courses and programs."
+          >
             {defRows.length ? (
               <Table>
                 <TableHeader>
@@ -200,19 +278,38 @@ export default function IssuedCredentialsPage() {
                 <TableBody>
                   {defRows.map((d, i) => (
                     <TableRow key={d.entityId ?? d.entity_id ?? i}>
-                      <TableCell className="font-medium">{d.name_override || d.name || "—"}</TableCell>
+                      <TableCell className="font-medium">
+                        {d.name_override || d.name || "—"}
+                      </TableCell>
                       <TableCell>{d.credentialType ?? "—"}</TableCell>
                       <TableCell>{d.issuerDetails?.name ?? "—"}</TableCell>
                       <TableCell>
-                        {[d.courses?.length ? `${d.courses.length} course${d.courses.length === 1 ? "" : "s"}` : "", d.programs?.length ? `${d.programs.length} program${d.programs.length === 1 ? "" : "s"}` : ""].filter(Boolean).join(", ") || "—"}
+                        {[
+                          d.courses?.length
+                            ? `${d.courses.length} course${d.courses.length === 1 ? "" : "s"}`
+                            : "",
+                          d.programs?.length
+                            ? `${d.programs.length} program${d.programs.length === 1 ? "" : "s"}`
+                            : "",
+                        ]
+                          .filter(Boolean)
+                          .join(", ") || "—"}
                       </TableCell>
-                      <TableCell>{d.expires?.amount ? `${d.expires.amount} ${d.expires.duration ?? "days"}` : "Never"}</TableCell>
+                      <TableCell>
+                        {d.expires?.amount
+                          ? `${d.expires.amount} ${d.expires.duration ?? "days"}`
+                          : "Never"}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             ) : (
-              <EmptyState icon={<Award strokeWidth={1.75} />} title="No credentials defined" description="Create a credential in the OS (Credentials) — name, issuer, template, the course or program it rewards." />
+              <EmptyState
+                icon={<Award />}
+                title="No credentials defined"
+                description="Create a credential in the OS (Credentials) — name, issuer, template, the course or program it rewards."
+              />
             )}
           </Section>
         </Page>

@@ -20,7 +20,11 @@ export async function sessionFetch<T = unknown>(path: string, init: RequestInit 
   const token = typeof window === "undefined" ? "" : (localStorage.getItem("dm_token") ?? "");
   const res = await fetch(`${config.dmUrl()}${path}`, {
     ...init,
-    headers: { Accept: "application/json", ...(token && { Authorization: `Token ${token}` }), ...(init.headers as Record<string, string>) },
+    headers: {
+      Accept: "application/json",
+      ...(token && { Authorization: `Token ${token}` }),
+      ...(init.headers as Record<string, string>),
+    },
   });
   const text = await res.text();
   let data: unknown = null;

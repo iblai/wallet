@@ -28,7 +28,14 @@ export function AccountPanel({
   tab,
   onInviteClick,
 }: {
-  tab: "organization" | "management" | "integrations" | "advanced" | "billing" | "memory" | "monetization";
+  tab:
+    | "organization"
+    | "management"
+    | "integrations"
+    | "advanced"
+    | "billing"
+    | "memory"
+    | "monetization";
   onInviteClick?: () => void;
 }) {
   const router = useRouter();

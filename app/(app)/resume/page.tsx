@@ -6,7 +6,14 @@ import { Copy, Download, FileText, Printer, RotateCcw, Sparkles } from "lucide-r
 import { useWallet } from "@/lib/wallet/provider";
 import { resolveAppTenant } from "@/lib/iblai/tenant";
 import config from "@/lib/iblai/config";
-import { autoSummary, buildResume, featuredCredentials, resumeToMarkdown, resumeToText, type ResumeDoc } from "@/lib/wallet/resume";
+import {
+  autoSummary,
+  buildResume,
+  featuredCredentials,
+  resumeToMarkdown,
+  resumeToText,
+  type ResumeDoc,
+} from "@/lib/wallet/resume";
 import { credentialStatus } from "@/lib/wallet/types";
 import { Page, Section } from "@/components/wallet/section";
 import { PageHeader } from "@/components/page-header";
@@ -16,7 +23,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 /**
@@ -33,7 +46,8 @@ const TEMPLATES = [
 
 export default function ResumePage() {
   const { state, actions } = useWallet();
-  const prefs = state.settings.resume ?? {};
+  // One object per settings value, so the memos below see a stable dependency.
+  const prefs = useMemo(() => state.settings.resume ?? {}, [state.settings.resume]);
   const [summary, setSummary] = useState(prefs.summary ?? "");
   const [origin, setOrigin] = useState("");
   useEffect(() => {
@@ -44,13 +58,26 @@ export default function ResumePage() {
   }, [prefs.summary]);
 
   const org = config.demoMode() ? "demo-wallet" : resolveAppTenant();
-  const doc = useMemo(() => buildResume({ ...state, settings: { ...state.settings, resume: { ...prefs, summary } } }, origin, org), [state, prefs, summary, origin, org]);
+  const doc = useMemo(
+    () =>
+      buildResume(
+        { ...state, settings: { ...state.settings, resume: { ...prefs, summary } } },
+        origin,
+        org,
+      ),
+    [state, prefs, summary, origin, org],
+  );
   const active = state.credentials.filter((c) => credentialStatus(c) === "active");
   const featured = featuredCredentials(state, prefs).map((c) => c.id);
 
   if (state.isLoading) return <LoadingScreen />;
 
-  const sections = prefs.sections ?? { skills: true, credentials: true, education: true, experience: true };
+  const sections = prefs.sections ?? {
+    skills: true,
+    credentials: true,
+    education: true,
+    experience: true,
+  };
   const save = async (patch: Parameters<typeof actions.setResumePrefs>[0], msg = "Saved") => {
     try {
       await actions.setResumePrefs(patch);
@@ -87,7 +114,11 @@ export default function ResumePage() {
             <Button variant="outline" size="sm" onClick={() => copy(resumeToText(doc))}>
               <Copy /> Copy text
             </Button>
-            <Button variant="outline" size="sm" onClick={() => download(`${slug}-resume.md`, resumeToMarkdown(doc), "text/markdown")}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => download(`${slug}-resume.md`, resumeToMarkdown(doc), "text/markdown")}
+            >
               <Download /> Markdown
             </Button>
             <Button size="sm" className="ibl-button-primary" onClick={() => window.print()}>
@@ -99,13 +130,26 @@ export default function ResumePage() {
       <Page wide>
         <div className="grid gap-5 lg:grid-cols-[320px_minmax(0,1fr)]">
           <div className="space-y-5 print:hidden">
-            <Section title="Summary" description="Two or three sentences at the top. The Coach drafts one from your record.">
-              <Textarea value={summary} onChange={(e) => setSummary(e.target.value)} rows={5} placeholder={autoSummary(state)} />
+            <Section
+              title="Summary"
+              description="Two or three sentences at the top. The Coach drafts one from your record."
+            >
+              <Textarea
+                value={summary}
+                onChange={(e) => setSummary(e.target.value)}
+                rows={5}
+                placeholder={autoSummary(state)}
+              />
               <div className="mt-2 flex flex-wrap gap-2">
                 <Button size="sm" variant="outline" onClick={() => setSummary(autoSummary(state))}>
                   <Sparkles /> Draft for me
                 </Button>
-                <Button size="sm" className="ibl-button-primary" disabled={summary === (prefs.summary ?? "")} onClick={() => save({ summary }, "Summary saved")}>
+                <Button
+                  size="sm"
+                  className="ibl-button-primary"
+                  disabled={summary === (prefs.summary ?? "")}
+                  onClick={() => save({ summary }, "Summary saved")}
+                >
                   Save
                 </Button>
                 {summary ? (
@@ -117,8 +161,14 @@ export default function ResumePage() {
             </Section>
 
             <Section title="Layout">
-              <Label className="text-gray-700">Template</Label>
-              <Select value={prefs.template ?? "classic"} onValueChange={(v) => void save({ template: (v as "classic" | "modern" | "compact") ?? "classic" })} items={TEMPLATES}>
+              <Label>Template</Label>
+              <Select
+                value={prefs.template ?? "classic"}
+                onValueChange={(v) =>
+                  void save({ template: (v as "classic" | "modern" | "compact") ?? "classic" })
+                }
+                items={TEMPLATES}
+              >
                 <SelectTrigger className="mt-1 w-full">
                   <SelectValue />
                 </SelectTrigger>
@@ -131,41 +181,64 @@ export default function ResumePage() {
               <div className="mt-4 space-y-3">
                 {(["experience", "credentials", "education", "skills"] as const).map((k) => (
                   <div key={k} className="flex items-center justify-between text-sm">
-                    <Label htmlFor={`sec-${k}`} className="capitalize text-gray-700">
+                    <Label htmlFor={`sec-${k}`} className="capitalize">
                       {k === "credentials" ? "Licenses & certifications" : k}
                     </Label>
-                    <Switch id={`sec-${k}`} checked={sections[k]} onCheckedChange={(on: boolean) => void save({ sections: { ...sections, [k]: on } })} />
+                    <Switch
+                      id={`sec-${k}`}
+                      checked={sections[k]}
+                      onCheckedChange={(on: boolean) =>
+                        void save({ sections: { ...sections, [k]: on } })
+                      }
+                    />
                   </div>
                 ))}
               </div>
             </Section>
 
-            <Section title="Featured credentials" description="Untick the ones a given application does not need. Leaving all ticked features everything active.">
+            <Section
+              title="Featured credentials"
+              description="Untick the ones a given application does not need. Leaving all ticked features everything active."
+            >
               <ul className="space-y-2">
                 {active.map((c) => (
                   <li key={c.id}>
-                    <label className="flex items-start gap-2 text-sm">
+                    <label htmlFor={`featured-${c.id}`} className="flex items-start gap-2 text-sm">
                       <Checkbox
+                        id={`featured-${c.id}`}
                         checked={featured.includes(c.id)}
                         onCheckedChange={(on) => {
-                          const next = on ? [...new Set([...featured, c.id])] : featured.filter((x) => x !== c.id);
-                          void save({ featuredCredentialIds: next.length === active.length ? [] : next });
+                          const next = on
+                            ? [...new Set([...featured, c.id])]
+                            : featured.filter((x) => x !== c.id);
+                          void save({
+                            featuredCredentialIds: next.length === active.length ? [] : next,
+                          });
                         }}
                       />
                       <span>
                         <span className="font-medium text-gray-900">{c.name}</span>
-                        <span className="block text-xs text-muted-foreground">{c.issuer.name}</span>
+                        <span className="text-muted-foreground block text-xs">{c.issuer.name}</span>
                       </span>
                     </label>
                   </li>
                 ))}
-                {!active.length ? <li className="text-sm text-muted-foreground">No active credentials to feature.</li> : null}
+                {!active.length ? (
+                  <li className="text-muted-foreground text-sm">
+                    No active credentials to feature.
+                  </li>
+                ) : null}
               </ul>
             </Section>
 
             {state.resumeFileUrl ? (
               <Section title="Uploaded résumé" description="The PDF on your ibl.ai profile.">
-                <a href={state.resumeFileUrl} target="_blank" rel="noreferrer" className="text-sm font-medium text-[#0058cc] hover:underline">
+                <a
+                  href={state.resumeFileUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm font-medium text-[#0058cc] hover:underline"
+                >
                   Open uploaded PDF
                 </a>
               </Section>
@@ -179,7 +252,13 @@ export default function ResumePage() {
   );
 }
 
-function ResumeView({ doc, template }: { doc: ResumeDoc; template: "classic" | "modern" | "compact" }) {
+function ResumeView({
+  doc,
+  template,
+}: {
+  doc: ResumeDoc;
+  template: "classic" | "modern" | "compact";
+}) {
   const compact = template === "compact";
   const modern = template === "modern";
   return (
@@ -191,13 +270,30 @@ function ResumeView({ doc, template }: { doc: ResumeDoc; template: "classic" | "
       )}
     >
       <header className={cn("border-b pb-4", modern ? "border-[#0058cc]" : "border-gray-300")}>
-        <h1 className={cn("font-semibold", compact ? "text-xl" : "text-2xl", modern ? "text-[#0058cc]" : "font-serif text-gray-900")}>{doc.name}</h1>
+        <h1
+          className={cn(
+            "font-semibold",
+            compact ? "text-xl" : "text-2xl",
+            modern ? "text-[#0058cc]" : "font-serif text-gray-900",
+          )}
+        >
+          {doc.name}
+        </h1>
         {doc.headline ? <p className="text-gray-700">{doc.headline}</p> : null}
-        {doc.contact.length ? <p className="mt-1 text-xs text-gray-500">{doc.contact.join(" · ")}</p> : null}
+        {doc.contact.length ? (
+          <p className="mt-1 text-xs text-gray-500">{doc.contact.join(" · ")}</p>
+        ) : null}
       </header>
       {doc.sections.map((s) => (
         <section key={s.id} className={compact ? "mt-3" : "mt-5"}>
-          <h2 className={cn("mb-2 text-[11px] font-semibold tracking-[0.12em] uppercase", modern ? "text-[#0058cc]" : "text-gray-500")}>{s.title}</h2>
+          <h2
+            className={cn(
+              "mb-2 text-[11px] font-semibold tracking-[0.12em] uppercase",
+              modern ? "text-[#0058cc]" : "text-gray-500",
+            )}
+          >
+            {s.title}
+          </h2>
           {s.id === "summary" ? (
             <p className="text-gray-800">{s.items[0]?.title}</p>
           ) : s.id === "skills" ? (
@@ -209,7 +305,9 @@ function ResumeView({ doc, template }: { doc: ResumeDoc; template: "classic" | "
                   <div className="flex flex-wrap items-baseline justify-between gap-x-3">
                     <span className="font-semibold text-gray-900">
                       {it.title}
-                      {it.subtitle ? <span className="font-normal text-gray-700"> — {it.subtitle}</span> : null}
+                      {it.subtitle ? (
+                        <span className="font-normal text-gray-700"> — {it.subtitle}</span>
+                      ) : null}
                     </span>
                     {it.meta ? <span className="text-xs text-gray-500">{it.meta}</span> : null}
                   </div>
@@ -220,9 +318,16 @@ function ResumeView({ doc, template }: { doc: ResumeDoc; template: "classic" | "
                       ))}
                     </ul>
                   ) : null}
-                  {it.tags?.length ? <p className="mt-0.5 text-xs text-gray-500">Skills: {it.tags.join(", ")}</p> : null}
+                  {it.tags?.length ? (
+                    <p className="mt-0.5 text-xs text-gray-500">Skills: {it.tags.join(", ")}</p>
+                  ) : null}
                   {it.href ? (
-                    <a href={it.href} className="block max-w-full truncate text-xs text-[#0058cc] underline-offset-2 hover:underline print:whitespace-normal print:break-all print:text-gray-500" target="_blank" rel="noreferrer">
+                    <a
+                      href={it.href}
+                      className="block max-w-full truncate text-xs text-[#0058cc] underline-offset-2 hover:underline print:break-all print:whitespace-normal print:text-gray-500"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       {it.href}
                     </a>
                   ) : null}
@@ -234,9 +339,19 @@ function ResumeView({ doc, template }: { doc: ResumeDoc; template: "classic" | "
       ))}
       <style jsx global>{`
         @media print {
-          body * { visibility: hidden; }
-          #resume-print, #resume-print * { visibility: visible; }
-          #resume-print { position: absolute; left: 0; top: 0; width: 100%; }
+          body * {
+            visibility: hidden;
+          }
+          #resume-print,
+          #resume-print * {
+            visibility: visible;
+          }
+          #resume-print {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+          }
         }
       `}</style>
     </article>

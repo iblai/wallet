@@ -1,4 +1,3 @@
-
 /**
  * ibl.ai runtime configuration.
  *
@@ -29,8 +28,7 @@ const env = {
   NEXT_PUBLIC_BASE_WS_URL: process.env.NEXT_PUBLIC_BASE_WS_URL,
   NEXT_PUBLIC_LEGACY_LMS_URL: process.env.NEXT_PUBLIC_LEGACY_LMS_URL,
   NEXT_PUBLIC_MFE_URL: process.env.NEXT_PUBLIC_MFE_URL,
-  NEXT_PUBLIC_PLATFORM_BASE_DOMAIN:
-    process.env.NEXT_PUBLIC_PLATFORM_BASE_DOMAIN,
+  NEXT_PUBLIC_PLATFORM_BASE_DOMAIN: process.env.NEXT_PUBLIC_PLATFORM_BASE_DOMAIN,
   NEXT_PUBLIC_MAIN_TENANT_KEY: process.env.NEXT_PUBLIC_MAIN_TENANT_KEY,
   NEXT_PUBLIC_TAURI_CUSTOM_SCHEME: process.env.NEXT_PUBLIC_TAURI_CUSTOM_SCHEME,
   NEXT_PUBLIC_DEFAULT_AGENT_ID: process.env.NEXT_PUBLIC_DEFAULT_AGENT_ID,
@@ -45,14 +43,12 @@ declare global {
   }
 }
 
-const runtimeEnv = () =>
-  typeof window !== "undefined" ? window.__ENV__ || {} : {};
+const runtimeEnv = () => (typeof window !== "undefined" ? window.__ENV__ || {} : {});
 
 const getEnv = (key: keyof typeof env, fallback = ""): string =>
   runtimeEnv()[key] ?? env[key] ?? fallback;
 
-const domain = () =>
-  getEnv("NEXT_PUBLIC_PLATFORM_BASE_DOMAIN", "iblai.app");
+const domain = () => getEnv("NEXT_PUBLIC_PLATFORM_BASE_DOMAIN", "iblai.app");
 
 // With no explicit NEXT_PUBLIC_API_BASE_URL, hosted iblai.app always routes
 // through the consolidated API — its per-service subdomains reject the
@@ -88,18 +84,14 @@ const config = {
   // Dedicated edX LMS host (learn.*): edX page routes (xblock iframes,
   // bookmarks, instructor) and the data layer's legacy-LMS endpoints live
   // here, NOT under the consolidated API base.
-  legacyLmsUrl: () =>
-    getEnv("NEXT_PUBLIC_LEGACY_LMS_URL", `https://learn.${domain()}`),
+  legacyLmsUrl: () => getEnv("NEXT_PUBLIC_LEGACY_LMS_URL", `https://learn.${domain()}`),
 
   // Learner micro-frontend (progress, dates, discussions pages).
-  mfeUrl: () =>
-    getEnv("NEXT_PUBLIC_MFE_URL", `https://apps.learn.${domain()}`),
+  mfeUrl: () => getEnv("NEXT_PUBLIC_MFE_URL", `https://apps.learn.${domain()}`),
 
-  baseWsUrl: () =>
-    getEnv("NEXT_PUBLIC_BASE_WS_URL", `wss://asgi.data.${domain()}`),
+  baseWsUrl: () => getEnv("NEXT_PUBLIC_BASE_WS_URL", `wss://asgi.data.${domain()}`),
 
-  wsUrl: () =>
-    getEnv("NEXT_PUBLIC_BASE_WS_URL", `wss://asgi.data.${domain()}`),
+  wsUrl: () => getEnv("NEXT_PUBLIC_BASE_WS_URL", `wss://asgi.data.${domain()}`),
 
   mainTenantKey: () => getEnv("NEXT_PUBLIC_MAIN_TENANT_KEY", ""),
   tauriCustomScheme: () => getEnv("NEXT_PUBLIC_TAURI_CUSTOM_SCHEME", ""),
@@ -120,7 +112,6 @@ const config = {
   // bundled sample wallet (lib/wallet/demo-data.ts) so the app can be explored
   // locally. Off (the default) as soon as a real org key is configured.
   demoMode: () => /^(1|true|yes)$/i.test(getEnv("NEXT_PUBLIC_WALLET_DEMO", "")),
-
 };
 
 export default config;

@@ -1,4 +1,3 @@
-
 /**
  * ibl.ai Redux store.
  *
@@ -13,11 +12,7 @@
  */
 
 import { configureStore } from "@reduxjs/toolkit";
-import {
-  coreApiSlice,
-  mentorReducer,
-  mentorMiddleware,
-} from "@iblai/iblai-js/data-layer";
+import { coreApiSlice, mentorReducer, mentorMiddleware } from "@iblai/iblai-js/data-layer";
 import {
   hostChatReducer,
   chatInputSliceReducer,

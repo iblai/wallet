@@ -36,7 +36,9 @@ export function resolveAppTenant(): string {
   // 2. The sign-in's answer: the user's default org, or the one re-authed into.
   //    SsoLogin stores `current_tenant` as the whole tenant object; the SDK's
   //    TenantProvider later stores just the key. Accept both.
-  const current = tenantKeyOf(localStorage.getItem("current_tenant")) || tenantKeyOf(localStorage.getItem("tenant"));
+  const current =
+    tenantKeyOf(localStorage.getItem("current_tenant")) ||
+    tenantKeyOf(localStorage.getItem("tenant"));
   if (current) return current;
 
   // 3. The community org, until someone signs in.

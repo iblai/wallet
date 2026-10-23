@@ -1,4 +1,3 @@
-
 /**
  * LocalStorageService — implements the StorageService interface required
  * by @iblai/iblai-js/data-layer's initializeDataLayer().

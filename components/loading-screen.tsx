@@ -33,7 +33,7 @@ export function LoadingScreen({
       )}
     >
       <Loader2 className="h-8 w-8 animate-spin text-[#2563EB]" />
-      {message && <p className="text-sm text-muted-foreground">{message}</p>}
+      {message && <p className="text-muted-foreground text-sm">{message}</p>}
     </output>
   );
 }

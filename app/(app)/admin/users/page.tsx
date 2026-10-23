@@ -24,7 +24,7 @@ export default function AdminUsersPage() {
             <button
               type="button"
               onClick={() => setShowPending(true)}
-              className="rounded-lg border border-border bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
+              className="border-border bg-background hover:bg-accent rounded-lg border px-3 py-1.5 text-sm font-medium"
             >
               Pending invites
             </button>

@@ -23,13 +23,13 @@ One place for everything you have earned: the badges and certificates your organ
 
 ## Why ibl.ai/wallet
 
-|                                    |                                                                                                                                                                                                                                                                                                                 |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🎓 **Learner-owned record**        | The wallet belongs to the person, not the issuer. Everything they add lives in their own ibl.ai profile and metadata and follows them across every organization they belong to — the idea behind WGU's Achievement Wallet and the Learning and Employment Record, on the ibl.ai platform.                         |
-| ✅ **Verified, not screenshotted**  | Credentials issued on ibl.ai verify live against the platform's public assertion endpoint; a revoked one disappears from every share link on its own. Imported Open Badges carry the issuer's link. Self-reported records say so, everywhere. The verification page is what Credly made employers expect.          |
-| 🧭 **Skills → jobs**               | Every credential attests skills; every skill maps to roles. Pick a target role and see the weighted gap, what typically closes it, and illustrative labor-market context — the "labor market insights" Credly attaches to a badge, on the learner's own data.                                                       |
-| 📄 **A résumé from the record**    | Summary, skills, experience, licenses & certifications and education, written from the wallet; every credential line links to its verification. Print to PDF, download Markdown, or let the Coach draft it.                                                                                                        |
-| 🤖 **A coach, not a help page**    | The organization's ibl.ai agent (memory, RAG, guardrails tuned in the Agentic OS) answers from the wallet; without one, a built-in coach still writes résumé lines, picks what to send for a role and explains the gap.                                                                                             |
+|                                    |                                                                                                                                                                                                                                                                                                                       |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🎓 **Learner-owned record**        | The wallet belongs to the person, not the issuer. Everything they add lives in their own ibl.ai profile and metadata and follows them across every organization they belong to — the idea behind WGU's Achievement Wallet and the Learning and Employment Record, on the ibl.ai platform.                             |
+| ✅ **Verified, not screenshotted** | Credentials issued on ibl.ai verify live against the platform's public assertion endpoint; a revoked one disappears from every share link on its own. Imported Open Badges carry the issuer's link. Self-reported records say so, everywhere. The verification page is what Credly made employers expect.             |
+| 🧭 **Skills → jobs**               | Every credential attests skills; every skill maps to roles. Pick a target role and see the weighted gap, what typically closes it, and illustrative labor-market context — the "labor market insights" Credly attaches to a badge, on the learner's own data.                                                         |
+| 📄 **A résumé from the record**    | Summary, skills, experience, licenses & certifications and education, written from the wallet; every credential line links to its verification. Print to PDF, download Markdown, or let the Coach draft it.                                                                                                           |
+| 🤖 **A coach, not a help page**    | The organization's ibl.ai agent (memory, RAG, guardrails tuned in the Agentic OS) answers from the wallet; without one, a built-in coach still writes résumé lines, picks what to send for a role and explains the gap.                                                                                               |
 | 🔓 **No server, no secrets**       | Nothing runs on a server of ours and no API token is stored. The browser talks to ibl.ai as the signed-in user; share links are self-contained and verified by the viewer's browser. Sign-in, organizations, profile, notifications, analytics and admin come from the platform, through the same shell as os.ibl.ai. |
 
 ---
@@ -40,11 +40,11 @@ One place for everything you have earned: the badges and certificates your organ
 
 **Credentials** — every credential from every origin, normalized to one shape:
 
-| Origin       | How it arrives                                                                                                  | Verification level                                              |
-| ------------ | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| **Platform** | Issued by the organization on ibl.ai; appears the moment it is issued, pending until the learner accepts it      | **Verified on ibl.ai** — public assertion endpoint, live         |
-| **Imported** | A badge link (Credly, Badgr, Canvas Credentials, any hosted Open Badge) or pasted Open Badges 2.0 / 3.0 JSON     | **Issuer-verified** (hosted) · **Digitally signed** (OB3 proof)  |
-| **Self**     | Typed in by the learner, optionally with a link to a scan                                                       | **Self-reported** — labeled as such wherever it is shown        |
+| Origin       | How it arrives                                                                                               | Verification level                                              |
+| ------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| **Platform** | Issued by the organization on ibl.ai; appears the moment it is issued, pending until the learner accepts it  | **Verified on ibl.ai** — public assertion endpoint, live        |
+| **Imported** | A badge link (Credly, Badgr, Canvas Credentials, any hosted Open Badge) or pasted Open Badges 2.0 / 3.0 JSON | **Issuer-verified** (hosted) · **Digitally signed** (OB3 proof) |
+| **Self**     | Typed in by the learner, optionally with a link to a scan                                                    | **Self-reported** — labeled as such wherever it is shown        |
 
 Each credential page shows the badge, issuer, earning criteria, evidence and skills; **accept / decline** (the Credly flow); **public / private**; collections ("Analytics applications", "Teaching license renewal"); and share actions — **Add to LinkedIn profile** (the same deep link Credly builds), a verify link, a ready-to-paste blurb, email, X, an embed snippet — plus export as Open Badges 3.0 JSON or the original issuer JSON, and print.
 
@@ -71,11 +71,11 @@ A share link is self-contained. Its URL fragment — never sent to any server �
 /verify/<id>?org=…&u=…[#c=…]   one credential's verification page
 ```
 
-| The credential is…        | The viewer's browser…                                                                                     | Verdict shown                                      |
-| ------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| issued on ibl.ai          | calls `GET /dm/api/credentials/public/assertions/{id}/` (no auth) and shows the issuer's record            | Verified · Revoked (with reason) · Expired          |
-| a hosted Open Badge       | re-fetches the issuer's JSON when the issuer allows browser reads and compares name + issuer               | Verified · Does not match · issuer link otherwise   |
-| self-reported             | shows the holder's copy from the link                                                                      | Self-reported                                      |
+| The credential is…  | The viewer's browser…                                                                           | Verdict shown                                     |
+| ------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| issued on ibl.ai    | calls `GET /dm/api/credentials/public/assertions/{id}/` (no auth) and shows the issuer's record | Verified · Revoked (with reason) · Expired        |
+| a hosted Open Badge | re-fetches the issuer's JSON when the issuer allows browser reads and compares name + issuer    | Verified · Does not match · issuer link otherwise |
+| self-reported       | shows the holder's copy from the link                                                           | Self-reported                                     |
 
 Because the snapshot is in the link, the holder re-copies it from **Share** after changing what is public — the page says so.
 
@@ -149,12 +149,15 @@ New to ibl.ai? [ibl.ai/join](https://ibl.ai/join) creates your account and your 
 
 ### Scripts
 
-| Command                            | What it does                                        |
-| ---------------------------------- | --------------------------------------------------- |
-| `pnpm dev`                         | Dev server on port 3000                             |
-| `pnpm build` / `pnpm start`        | Production build / serve it                         |
-| `pnpm typecheck` · `lint` · `test` | TypeScript · oxlint · Vitest                        |
-| `pnpm test:e2e`                    | Playwright journeys (needs `e2e/.env.development`)  |
+| Command                            | What it does                                                                                            |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `pnpm dev`                         | Dev server on port 3000                                                                                 |
+| `pnpm build` / `pnpm start`        | Production build / serve it                                                                             |
+| `pnpm typecheck` · `lint` · `test` | TypeScript · oxlint · Vitest                                                                            |
+| `pnpm test:e2e`                    | Playwright journeys (needs `e2e/.env.development`)                                                      |
+| `pnpm format` · `format:check`     | oxfmt (the CI gate)                                                                                     |
+| `pnpm test:coverage`               | Vitest with the coverage thresholds (CI)                                                                |
+| `pnpm release`                     | release-it: version from the commits, CHANGELOG, tag, GitHub Release (CI runs it on every push to main) |
 
 ---
 
@@ -162,16 +165,16 @@ New to ibl.ai? [ibl.ai/join](https://ibl.ai/join) creates your account and your 
 
 All configuration is `NEXT_PUBLIC_*`, read in the browser, and optional against hosted `iblai.app`; defaults live in [`lib/iblai/config.ts`](lib/iblai/config.ts). There is no server-side configuration and no secret.
 
-| Variable                          | Default                   | Description                                                                              |
-| --------------------------------- | ------------------------- | ---------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_MAIN_TENANT_KEY`     | `main`                    | The community organization — only the fallback before anyone has signed in              |
-| `NEXT_PUBLIC_WALLET_DEMO`         | `false`                   | `true` runs the bundled sample wallet with no platform calls                             |
-| `NEXT_PUBLIC_DEFAULT_AGENT_ID`    | —                         | Pin the Coach's agent instead of reading it from the organization's metadata (`/setup`)  |
-| `NEXT_PUBLIC_APP_NAME`            | `Credential Wallet`       | Browser tab and the metadata namespace (`apps.<slug>`)                                   |
-| `NEXT_PUBLIC_API_BASE_URL`        | `https://api.iblai.app`   | Consolidated API; `/dm`, `/lms`, `/axd` derive from it                                   |
-| `NEXT_PUBLIC_AUTH_URL`            | `https://login.iblai.app` | The hosted Auth SPA                                                                      |
-| `NEXT_PUBLIC_BASE_WS_URL`         | `wss://asgi.data.iblai.app` | Chat websocket for the Coach                                                           |
-| `NEXT_PUBLIC_SUPPORT_EMAIL`       | `support@ibl.ai`          | Shown in chat footers and error toasts                                                   |
+| Variable                       | Default                     | Description                                                                             |
+| ------------------------------ | --------------------------- | --------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_MAIN_TENANT_KEY`  | `main`                      | The community organization — only the fallback before anyone has signed in              |
+| `NEXT_PUBLIC_WALLET_DEMO`      | `false`                     | `true` runs the bundled sample wallet with no platform calls                            |
+| `NEXT_PUBLIC_DEFAULT_AGENT_ID` | —                           | Pin the Coach's agent instead of reading it from the organization's metadata (`/setup`) |
+| `NEXT_PUBLIC_APP_NAME`         | `Credential Wallet`         | Browser tab and the metadata namespace (`apps.<slug>`)                                  |
+| `NEXT_PUBLIC_API_BASE_URL`     | `https://api.iblai.app`     | Consolidated API; `/dm`, `/lms`, `/axd` derive from it                                  |
+| `NEXT_PUBLIC_AUTH_URL`         | `https://login.iblai.app`   | The hosted Auth SPA                                                                     |
+| `NEXT_PUBLIC_BASE_WS_URL`      | `wss://asgi.data.iblai.app` | Chat websocket for the Coach                                                            |
+| `NEXT_PUBLIC_SUPPORT_EMAIL`    | `support@ibl.ai`            | Shown in chat footers and error toasts                                                  |
 
 ---
 
@@ -183,7 +186,11 @@ ibl.ai/wallet is a static-friendly Next.js front end for the ibl.ai platform: no
 pnpm build && PORT=3000 pnpm start
 ```
 
-Register every origin the app runs on (`http://localhost:3000`, `https://wallet.example.edu`) as an allowed redirect origin of the organizations that sign in. The only server piece is vibe-starter's nonce-based Content-Security-Policy middleware, which carries no data.
+Register every origin the app runs on (`http://localhost:3000`, `https://wallet.example.edu`) as an allowed redirect origin of the organizations that sign in. The only server piece is vibe-starter's nonce-based Content-Security-Policy proxy (`proxy.ts`), which carries no data. `vercel.json` makes the repo a one-click Vercel project; elsewhere `pnpm build` writes a standalone server.
+
+### Release
+
+Every push to `main` runs release-it in CI (`.github/workflows/release.yml`): the version and `CHANGELOG.md` come from the conventional commit subjects since the last `v*` tag, and the release commit, tag and GitHub Release are pushed by the bot. Publish the baseline tag once by hand: `git tag v0.1.0 && git push origin v0.1.0`.
 
 ---
 

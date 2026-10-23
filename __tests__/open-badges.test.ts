@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { credlyJsonCandidates, detectFormat, guessKind, parseOpenBadge, toOpenBadge3, toWalletBundle } from "../lib/wallet/open-badges";
+import {
+  credlyJsonCandidates,
+  detectFormat,
+  guessKind,
+  parseOpenBadge,
+  toOpenBadge3,
+  toWalletBundle,
+} from "../lib/wallet/open-badges";
 import { SAMPLE_OB2_ASSERTION, SAMPLE_OB3_CREDENTIAL } from "../lib/wallet/demo-data";
 
 describe("open badges import", () => {
@@ -29,7 +36,12 @@ describe("open badges import", () => {
       state: "accepted",
       issued_at: "2024-05-01T00:00:00Z",
       image_url: "https://images.credly.com/x.png",
-      badge_template: { name: "Cloud Basics", description: "d", skills: [{ name: "Cloud Computing" }, { name: "AWS" }], issuer: { name: "Acme Cloud", url: "https://acme.example" } },
+      badge_template: {
+        name: "Cloud Basics",
+        description: "d",
+        skills: [{ name: "Cloud Computing" }, { name: "AWS" }],
+        issuer: { name: "Acme Cloud", url: "https://acme.example" },
+      },
     });
     expect(c.verification.format).toBe("credly");
     expect(c.id).toBe("https://www.credly.com/badges/abc-123");
@@ -40,7 +52,9 @@ describe("open badges import", () => {
   it("rejects things that are not badges", () => {
     expect(() => parseOpenBadge("not json")).toThrow(/valid JSON/);
     expect(() => parseOpenBadge({ hello: "world" })).toThrow(/Could not recognize/);
-    expect(() => parseOpenBadge({ type: "Assertion", badge: {}, recipient: {} })).toThrow(/badge.name/);
+    expect(() => parseOpenBadge({ type: "Assertion", badge: {}, recipient: {} })).toThrow(
+      /badge.name/,
+    );
   });
 
   it("detects formats", () => {

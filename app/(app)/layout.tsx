@@ -53,7 +53,13 @@ function readSession(): Session {
   return session;
 }
 
-type SheetTab = "organization" | "management" | "integrations" | "monetization" | "advanced" | "billing";
+type SheetTab =
+  | "organization"
+  | "management"
+  | "integrations"
+  | "monetization"
+  | "advanced"
+  | "billing";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [session] = useState(readSession);
@@ -88,16 +94,32 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <AdminModeProvider isAdmin={isAdmin} mode={adminMode} setMode={setAdminMode}>
       <WalletProvider>
-        <SidebarProvider defaultOpen>
-          <WalletSidebar isAdmin={isAdmin} tenantKey={tenantKey} currentTenant={currentTenant} onFooterAction={onFooterAction} demo={demo} />
-          <SidebarInset className="flex h-screen min-w-0 flex-col overflow-hidden bg-white">
-            <TopBar tenantKey={tenantKey} username={username} email={email} isAdmin={liveAdmin} currentTenant={currentTenant} userTenants={tenants} demo={demo} />
-            {demo ? <DemoBanner /> : null}
-            <main className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-[var(--sidebar-bg,#fafbfc)]">
-              {pathname.startsWith("/admin") && !liveAdmin ? null : children}
-            </main>
-          </SidebarInset>
-        </SidebarProvider>
+        <div className="flex min-h-dvh flex-col bg-white md:h-dvh md:overflow-hidden">
+          <SidebarProvider defaultOpen className="min-h-0 flex-1">
+            <WalletSidebar
+              isAdmin={isAdmin}
+              tenantKey={tenantKey}
+              currentTenant={currentTenant}
+              onFooterAction={onFooterAction}
+              demo={demo}
+            />
+            <SidebarInset className="flex min-h-0 w-full flex-1 flex-col bg-white md:overflow-hidden">
+              <TopBar
+                tenantKey={tenantKey}
+                username={username}
+                email={email}
+                isAdmin={liveAdmin}
+                currentTenant={currentTenant}
+                userTenants={tenants}
+                demo={demo}
+              />
+              {demo ? <DemoBanner /> : null}
+              <main className="flex min-h-0 flex-1 flex-col bg-[var(--sidebar-bg,#fafbfc)] md:overflow-y-auto">
+                {pathname.startsWith("/admin") && !liveAdmin ? null : children}
+              </main>
+            </SidebarInset>
+          </SidebarProvider>
+        </div>
 
         {!demo && tenantKey && username ? (
           <>
@@ -113,7 +135,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               currentSpa="mentor"
               platformBaseDomain={config.platformBaseDomain()}
             />
-            <InviteUserDialog tenant={tenantKey} isOpen={inviteOpen} onClose={() => setInviteOpen(false)} hasManageUsersPermission={liveAdmin} />
+            <InviteUserDialog
+              tenant={tenantKey}
+              isOpen={inviteOpen}
+              onClose={() => setInviteOpen(false)}
+              hasManageUsersPermission={liveAdmin}
+            />
           </>
         ) : null}
       </WalletProvider>

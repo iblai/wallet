@@ -9,10 +9,12 @@ import config from "./config";
 export const APP_SLUG = slugify(config.appName() || "vibe-starter");
 
 export function slugify(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "") || "app";
+  return (
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "app"
+  );
 }
 
 export type Metadata = Record<string, unknown>;
@@ -24,7 +26,11 @@ export function readAppNamespace(metadata: unknown): Metadata {
 }
 
 /** Merge `patch` into `metadata.apps[APP_SLUG]`, dropping `remove` keys, without touching anything else. */
-export function mergeAppNamespace(metadata: unknown, patch: Metadata, remove: string[] = []): Metadata {
+export function mergeAppNamespace(
+  metadata: unknown,
+  patch: Metadata,
+  remove: string[] = [],
+): Metadata {
   const root = metadata && typeof metadata === "object" ? { ...(metadata as Metadata) } : {};
   const apps = { ...(root.apps as Record<string, unknown> | undefined) };
   const mine: Metadata = { ...readAppNamespace(root), ...patch };
@@ -33,4 +39,3 @@ export function mergeAppNamespace(metadata: unknown, patch: Metadata, remove: st
   root.apps = apps;
   return root;
 }
-

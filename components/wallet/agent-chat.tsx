@@ -9,7 +9,13 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Chat, type ChatConfig } from "@iblai/iblai-js/web-containers/next";
-import { useUsername, useAxdToken, useUserTenants, useVisitingTenant, useCachedSessionId } from "@iblai/iblai-js/web-utils";
+import {
+  useUsername,
+  useAxdToken,
+  useUserTenants,
+  useVisitingTenant,
+  useCachedSessionId,
+} from "@iblai/iblai-js/web-utils";
 import { redirectToAuthSpa } from "@/lib/iblai/auth-utils";
 import config from "@/lib/iblai/config";
 import { resolveAppTenant } from "@/lib/iblai/tenant";
@@ -23,7 +29,9 @@ export function AgentChat({ mentorId }: { mentorId: string }) {
   const restoreSessionId = searchParams.get("session") ?? undefined;
   const newParam = searchParams.get("new") ?? undefined;
   const [cachedSessionId, saveCachedSessionId] = useCachedSessionId();
-  const [seededFor, setSeededFor] = useState<string | undefined>(restoreSessionId || newParam ? undefined : "none");
+  const [seededFor, setSeededFor] = useState<string | undefined>(
+    restoreSessionId || newParam ? undefined : "none",
+  );
   useEffect(() => {
     if (!mentorId) {
       setSeededFor("none");
@@ -31,7 +39,8 @@ export function AgentChat({ mentorId }: { mentorId: string }) {
     }
     const map = { ...((cachedSessionId ?? {}) as Record<string, string>) };
     if (restoreSessionId) {
-      if (map[mentorId] !== restoreSessionId) saveCachedSessionId({ ...map, [mentorId]: restoreSessionId });
+      if (map[mentorId] !== restoreSessionId)
+        saveCachedSessionId({ ...map, [mentorId]: restoreSessionId });
       setSeededFor(restoreSessionId);
     } else if (newParam) {
       if (map[mentorId]) {
@@ -42,7 +51,11 @@ export function AgentChat({ mentorId }: { mentorId: string }) {
     } else setSeededFor("none");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restoreSessionId, newParam, mentorId]);
-  const sessionReady = restoreSessionId ? seededFor === restoreSessionId : newParam ? seededFor === `new:${newParam}` : true;
+  const sessionReady = restoreSessionId
+    ? seededFor === restoreSessionId
+    : newParam
+      ? seededFor === `new:${newParam}`
+      : true;
 
   const [tenantKey] = useState(resolveAppTenant);
   const username = useUsername();

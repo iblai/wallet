@@ -116,7 +116,9 @@ export const ORG_SETTINGS_DEFAULTS: OrgSettings = {
 };
 
 type OrgMetadataResponse = { metadata?: Metadata; [k: string]: unknown };
-type PlatformPublicMetadataBody = NonNullable<Parameters<ReturnType<typeof useUpdateTenantMetadataMutation>[0]>[0][0]["requestBody"]>;
+type PlatformPublicMetadataBody = NonNullable<
+  Parameters<ReturnType<typeof useUpdateTenantMetadataMutation>[0]>[0][0]["requestBody"]
+>;
 
 /**
  * The org's settings for this app. Any member can read (public); writes need

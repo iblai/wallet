@@ -3,6 +3,8 @@
 import { Suspense, useState } from "react";
 
 import { SsoLogin } from "@iblai/iblai-js/web-containers/next";
+import { LoadingScreen } from "@/components/loading-screen";
+import { resolveSsoRedirectPath } from "@/lib/iblai/sso-redirect";
 
 /**
  * SSO Login Complete page.
@@ -19,7 +21,7 @@ export default function SsoLoginCompletePage() {
     return true;
   });
   return (
-    <Suspense fallback={<div>Completing login…</div>}>
+    <Suspense fallback={<LoadingScreen message="Completing sign-in…" />}>
       <SsoLogin
         localStorageKeys={{
           CURRENT_TENANT: "current_tenant",
@@ -33,6 +35,12 @@ export default function SsoLoginCompletePage() {
         }}
         redirectPathKey="redirectTo"
         defaultRedirectPath="/"
+        resolveRedirectPath={(resolved) =>
+          resolveSsoRedirectPath(
+            resolved,
+            typeof window !== "undefined" ? window.location.search : "",
+          )
+        }
       />
     </Suspense>
   );

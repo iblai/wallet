@@ -28,7 +28,8 @@ export function linkedInAddToProfileUrl(c: WalletCredential, verifyUrl?: string)
   }
   const cert = verifyUrl ?? c.verification.url;
   if (cert) p.set("certUrl", cert);
-  if (c.verification.level === "platform" || c.source === "imported") p.set("certId", c.id.slice(0, 120));
+  if (c.verification.level === "platform" || c.source === "imported")
+    p.set("certId", c.id.slice(0, 120));
   return `https://www.linkedin.com/profile/add?${p.toString()}`;
 }
 
@@ -47,7 +48,9 @@ export function mailtoShare(c: WalletCredential, url: string): string {
 }
 
 export function shareBlurb(c: WalletCredential, url?: string): string {
-  const when = c.issuedOn ? ` on ${new Date(c.issuedOn).toLocaleDateString(undefined, { year: "numeric", month: "long" })}` : "";
+  const when = c.issuedOn
+    ? ` on ${new Date(c.issuedOn).toLocaleDateString(undefined, { year: "numeric", month: "long" })}`
+    : "";
   const skills = c.skills.length ? ` Skills: ${c.skills.slice(0, 6).join(", ")}.` : "";
   return `I earned ${c.name} from ${c.issuer.name}${when}.${skills}${url ? ` Verify it here: ${url}` : ""}`;
 }
@@ -63,12 +66,17 @@ export function absoluteUrl(path: string): string {
 }
 
 export function embedSnippet(c: WalletCredential, verifyUrl: string): string {
-  const img = c.image ? `<img src="${c.image}" alt="${escapeHtml(c.name)}" width="120" height="120" style="display:block;margin-bottom:8px;border-radius:12px" />` : "";
+  const img = c.image
+    ? `<img src="${c.image}" alt="${escapeHtml(c.name)}" width="120" height="120" style="display:block;margin-bottom:8px;border-radius:12px" />`
+    : "";
   return `<a href="${verifyUrl}" target="_blank" rel="noopener" style="font:14px/1.4 system-ui,sans-serif;color:#0058cc;text-decoration:none">${img}<strong>${escapeHtml(c.name)}</strong><br/>${escapeHtml(c.issuer.name)} · verified credential</a>`;
 }
 
 function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch] as string);
+  return s.replace(
+    /[&<>"']/g,
+    (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch] as string,
+  );
 }
 
 export function handleFromName(name: string): string {
@@ -111,7 +119,14 @@ export interface ShareSnapshot {
   v: 1;
   org: string;
   username: string;
-  profile: { name: string; headline?: string; location?: string; about?: string; image?: string; links?: { label: string; url: string }[] };
+  profile: {
+    name: string;
+    headline?: string;
+    location?: string;
+    about?: string;
+    image?: string;
+    links?: { label: string; url: string }[];
+  };
   /** Platform-issued credentials: verified live by the viewer's browser. */
   platformIds: string[];
   /** Everything else, summarized. */
@@ -120,7 +135,8 @@ export interface ShareSnapshot {
   targetRoleId?: string;
 }
 
-const clip = (s: string | undefined, n: number) => (s && s.length > n ? `${s.slice(0, n - 1)}…` : s);
+const clip = (s: string | undefined, n: number) =>
+  s && s.length > n ? `${s.slice(0, n - 1)}…` : s;
 
 export function summarizeCredential(c: WalletCredential): SharedCredential {
   return {
@@ -167,14 +183,22 @@ export function readFragment<T>(key: string): T | null {
 }
 
 /** `/verify/<id>` — platform ids verify on their own; anything else carries its summary. */
-export function verifyLink(c: WalletCredential, origin: string, holder: { org: string; username: string }): string {
+export function verifyLink(
+  c: WalletCredential,
+  origin: string,
+  holder: { org: string; username: string },
+): string {
   const base = `${origin}/verify/${encodeURIComponent(c.id)}?org=${encodeURIComponent(holder.org)}&u=${encodeURIComponent(holder.username)}`;
   if (c.source === "platform") return base;
   return `${base}#c=${encodeFragment({ v: 1, holder: holder.username, credential: summarizeCredential(c) })}`;
 }
 
 /** `/p/<org>/<username>#d=…` — the public wallet page, self-contained. */
-export function publicPageLink(snapshot: ShareSnapshot, origin: string, collectionId?: string): string {
+export function publicPageLink(
+  snapshot: ShareSnapshot,
+  origin: string,
+  collectionId?: string,
+): string {
   const base = `${origin}/p/${encodeURIComponent(snapshot.org)}/${encodeURIComponent(snapshot.username)}`;
   const query = collectionId ? `?collection=${encodeURIComponent(collectionId)}` : "";
   return `${base}${query}#d=${encodeFragment(snapshot)}`;

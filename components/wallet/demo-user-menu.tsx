@@ -33,14 +33,18 @@ export function DemoUserMenu() {
         <DropdownMenuGroup>
           <DropdownMenuLabel>
             <div className="text-sm font-medium text-gray-900">{state.profile.name}</div>
-            <div className="text-xs font-normal text-muted-foreground">{state.profile.email}</div>
+            <div className="text-muted-foreground text-xs font-normal">{state.profile.email}</div>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem render={<Link href="/profile" />}>Profile</DropdownMenuItem>
-        <DropdownMenuItem render={<Link href={`/p/demo-wallet/${state.profile.username}`} />}>Public wallet</DropdownMenuItem>
+        <DropdownMenuItem render={<Link href={`/p/demo-wallet/${state.profile.username}`} />}>
+          Public wallet
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem render={<Link href="/profile#connect" />}>Connect ibl.ai organization</DropdownMenuItem>
+        <DropdownMenuItem render={<Link href="/profile#connect" />}>
+          Connect ibl.ai organization
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

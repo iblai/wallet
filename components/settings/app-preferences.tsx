@@ -26,13 +26,17 @@ export function AppPreferences() {
     <Card>
       <CardHeader>
         <CardTitle>App preferences</CardTitle>
-        <CardDescription>Yours alone; saved to your ibl.ai profile for this organization.</CardDescription>
+        <CardDescription>
+          Yours alone; saved to your ibl.ai profile for this organization.
+        </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
         <div className="flex items-center justify-between gap-4 text-sm">
           <label htmlFor="pref-theme">
             <span className="font-medium">Dark theme</span>
-            <span className="block text-xs text-muted-foreground">Example preference — wire it to your theme provider.</span>
+            <span className="text-muted-foreground block text-xs">
+              Example preference — wire it to your theme provider.
+            </span>
           </label>
           <Switch
             id="pref-theme"
@@ -44,7 +48,9 @@ export function AppPreferences() {
         <div className="flex items-center justify-between gap-4 text-sm">
           <label htmlFor="pref-onboarding">
             <span className="font-medium">Onboarding done</span>
-            <span className="block text-xs text-muted-foreground">Example flag — an onboarding flow would set this on its last step.</span>
+            <span className="text-muted-foreground block text-xs">
+              Example flag — an onboarding flow would set this on its last step.
+            </span>
           </label>
           <Switch
             id="pref-onboarding"

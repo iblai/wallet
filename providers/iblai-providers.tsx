@@ -19,10 +19,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import { usePathname, useSearchParams } from "next/navigation";
-import {
-  initializeDataLayer,
-  type TokenResponse,
-} from "@iblai/iblai-js/data-layer";
+import { initializeDataLayer, type TokenResponse } from "@iblai/iblai-js/data-layer";
 import { AuthProvider, TenantProvider, ServiceWorkerProvider } from "@iblai/iblai-js/web-utils";
 import { Toaster } from "sonner";
 import { RadixPointerEventsGuard } from "@/components/radix-pointer-events-guard";
@@ -35,6 +32,11 @@ import { resolveAppTenant, checkTenantMismatch, setAppTenant } from "@/lib/iblai
 import { redirectToAuthSpa, switchTenant } from "@/lib/iblai/auth-utils";
 
 const storageService = LocalStorageService.getInstance();
+
+// The SDK logs the session tokens with console.log; production keeps warnings and errors only.
+if (process.env.NODE_ENV === "production" && typeof window !== "undefined") {
+  console.log = console.info = console.debug = () => {};
+}
 
 /**
  * Routes that do NOT require authentication (`false` = public).
@@ -63,13 +65,20 @@ function seedDemoSession() {
     if (!localStorage.getItem("userData")) {
       localStorage.setItem(
         "userData",
-        JSON.stringify({ user_nicename: "jordan.rivera", user_email: "jordan.rivera@example.com", user_fullname: "Jordan Rivera" }),
+        JSON.stringify({
+          user_nicename: "jordan.rivera",
+          user_email: "jordan.rivera@example.com",
+          user_fullname: "Jordan Rivera",
+        }),
       );
     }
     const key = config.mainTenantKey() || "demo-wallet";
     // `localStorage.demo_admin = "1"` previews the Admin mode of the shell on the sample data.
     const demoAdmin = localStorage.getItem("demo_admin") === "1";
-    localStorage.setItem("tenants", JSON.stringify([{ key, org: key, platform_name: "Demo organization", is_admin: demoAdmin }]));
+    localStorage.setItem(
+      "tenants",
+      JSON.stringify([{ key, org: key, platform_name: "Demo organization", is_admin: demoAdmin }]),
+    );
     localStorage.setItem("app_tenant", key);
     localStorage.setItem("tenant", key);
     localStorage.setItem("current_tenant", key);
@@ -84,7 +93,11 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
   // here it is a query parameter so every route keeps its shape). The
   // TenantProvider below re-authenticates when the session is for another org.
   const requestedParam = searchParams?.get("tenant") ?? "";
-  if (typeof window !== "undefined" && requestedParam && localStorage.getItem("app_tenant") !== requestedParam) {
+  if (
+    typeof window !== "undefined" &&
+    requestedParam &&
+    localStorage.getItem("app_tenant") !== requestedParam
+  ) {
     setAppTenant(requestedParam);
   }
 
@@ -107,7 +120,8 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
         storageService,
         {
           // Demo mode has no session to refresh: never bounce to the Auth SPA.
-          401: () => (config.demoMode() ? undefined : redirectToAuthSpa(undefined, undefined, true)),
+          401: () =>
+            config.demoMode() ? undefined : redirectToAuthSpa(undefined, undefined, true),
         },
       );
     } catch (e) {
@@ -126,18 +140,27 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
   useEffect(() => setMounted(true), []);
 
   const username = useMemo(() => {
-    if (typeof window === "undefined") return "";
+    if (!isInitialized || typeof window === "undefined") return "";
     try {
       const raw = localStorage.getItem("userData");
       if (raw) return JSON.parse(raw).user_nicename ?? "";
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     return "";
   }, [isInitialized]);
 
   // Tenant resolution: .env -> app_tenant -> localStorage tenant
-  const tenantKey = useMemo(() => resolveAppTenant(), [isInitialized]);
+  const tenantKey = useMemo(() => (isInitialized ? resolveAppTenant() : ""), [isInitialized]);
 
   const isSsoRoute = pathname?.startsWith("/sso-login") ?? false;
+
+  // Cross-SPA cookie sync on real hosts only: localhost shares cookies across every dev
+  // server, and on the shared vibe zone (*.iblai.me) the parent domain is not ours.
+  const enableStorageSync =
+    typeof window !== "undefined" &&
+    !isLocalHost() &&
+    !window.location.hostname.endsWith(".iblai.me");
 
   const LOADING = <LoadingScreen />;
 
@@ -162,10 +185,9 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
   if (!tenantKey && !isSsoRoute) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <p role="alert" className="max-w-md p-8 text-sm text-destructive">
-          NEXT_PUBLIC_MAIN_TENANT_KEY is not set or is still a placeholder. For a
-          multi-organization app set it to <code>main</code> (the community org)
-          in .env.local and restart.
+        <p role="alert" className="text-destructive max-w-md p-8 text-sm">
+          NEXT_PUBLIC_MAIN_TENANT_KEY is not set or is still a placeholder. For a multi-organization
+          app set it to <code>main</code> (the community org) in .env.local and restart.
         </p>
       </div>
     );
@@ -178,66 +200,64 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
       <Toaster />
       {/* The SDK <Chat> registers public/sw.js for offline caching in Tauri. */}
       <ServiceWorkerProvider basePath="">
-      <AuthProvider
-        skip={isSsoRoute}
-        redirectToAuthSpa={redirectToAuthSpa}
-        username={username}
-        pathname={pathname ?? "/"}
-        storageService={storageService}
-        middleware={PUBLIC_ROUTES}
-        enableStorageSync
-        fallback={LOADING}
-      >
-        <TenantProvider
+        <AuthProvider
           skip={isSsoRoute}
-          currentTenant={tenantKey}
-          requestedTenant={tenantKey}
-          saveCurrentTenant={(t: any) => {
-            const key = typeof t === "string" ? t : t?.key ?? String(t);
-            localStorage.setItem("current_tenant", key);
-            localStorage.setItem("tenant", key);
-
-            // If the SDK resolved a different tenant than what the app
-            // expects, redirect to re-login for the correct tenant.
-            checkTenantMismatch();
-          }}
-          saveUserTenants={(t: unknown) =>
-            localStorage.setItem("tenants", JSON.stringify(t))
-          }
-          // TenantProvider re-authenticates against the requested tenant and
-          // hands back a fresh, tenant-scoped token pair. Without persisting it
-          // the next membership check still runs on the pre-switch tokens, so
-          // the provider loops on
-          //   "User still does not belong to tenant after re-auth"
-          // and the app never leaves its loading state. iblai/os wires these up
-          // (providers/index.tsx -> saveUserTokens).
-          saveUserTokens={(tokens: TokenResponse) => {
-            if (tokens?.axd_token) {
-              localStorage.setItem("axd_token", tokens.axd_token.token);
-              localStorage.setItem("axd_token_expires", tokens.axd_token.expires);
-            }
-            if (tokens?.dm_token) {
-              localStorage.setItem("dm_token", tokens.dm_token.token);
-              localStorage.setItem("dm_token_expires", tokens.dm_token.expires);
-            }
-          }}
-          saveTenant={(t: string) => localStorage.setItem("tenant", t)}
-          // A custom domain maps a hostname to an org (os.ibl.ai feature).
-          // On a local host the lookup only stalls the first paint for ~30s.
-          skipCustomDomainCheck={isLocalHost()}
-          onAuthFailure={(reason: string) =>
-            console.error("[TenantProvider] Auth failure:", reason)
-          }
-          handleTenantSwitch={async () => {
-            await switchTenant(resolveAppTenant());
-          }}
           redirectToAuthSpa={redirectToAuthSpa}
           username={username}
+          pathname={pathname ?? "/"}
+          storageService={storageService}
+          middleware={PUBLIC_ROUTES}
+          enableStorageSync={enableStorageSync}
           fallback={LOADING}
         >
-          {children}
-        </TenantProvider>
-      </AuthProvider>
+          <TenantProvider
+            skip={isSsoRoute}
+            currentTenant={tenantKey}
+            requestedTenant={tenantKey}
+            saveCurrentTenant={(t: any) => {
+              const key = typeof t === "string" ? t : (t?.key ?? String(t));
+              localStorage.setItem("current_tenant", key);
+              localStorage.setItem("tenant", key);
+
+              // If the SDK resolved a different tenant than what the app
+              // expects, redirect to re-login for the correct tenant.
+              checkTenantMismatch();
+            }}
+            saveUserTenants={(t: unknown) => localStorage.setItem("tenants", JSON.stringify(t))}
+            // TenantProvider re-authenticates against the requested tenant and
+            // hands back a fresh, tenant-scoped token pair. Without persisting it
+            // the next membership check still runs on the pre-switch tokens, so
+            // the provider loops on
+            //   "User still does not belong to tenant after re-auth"
+            // and the app never leaves its loading state. iblai/os wires these up
+            // (providers/index.tsx -> saveUserTokens).
+            saveUserTokens={(tokens: TokenResponse) => {
+              if (tokens?.axd_token) {
+                localStorage.setItem("axd_token", tokens.axd_token.token);
+                localStorage.setItem("axd_token_expires", tokens.axd_token.expires);
+              }
+              if (tokens?.dm_token) {
+                localStorage.setItem("dm_token", tokens.dm_token.token);
+                localStorage.setItem("dm_token_expires", tokens.dm_token.expires);
+              }
+            }}
+            saveTenant={(t: string) => localStorage.setItem("tenant", t)}
+            // A custom domain maps a hostname to an org (os.ibl.ai feature).
+            // On a local host the lookup only stalls the first paint for ~30s.
+            skipCustomDomainCheck={isLocalHost()}
+            onAuthFailure={(reason: string) =>
+              console.error("[TenantProvider] Auth failure:", reason)
+            }
+            handleTenantSwitch={async () => {
+              await switchTenant(resolveAppTenant());
+            }}
+            redirectToAuthSpa={redirectToAuthSpa}
+            username={username}
+            fallback={LOADING}
+          >
+            {children}
+          </TenantProvider>
+        </AuthProvider>
       </ServiceWorkerProvider>
     </ReduxProvider>
   );

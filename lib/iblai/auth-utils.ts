@@ -48,7 +48,9 @@ export async function redirectToAuthSpa(
   saveRedirect?: boolean,
 ) {
   const redirectOrigin = getRedirectOrigin();
-  const path = redirectTo ?? (typeof window !== "undefined" ? `${window.location.pathname}${window.location.search}` : "/");
+  const path =
+    redirectTo ??
+    (typeof window !== "undefined" ? `${window.location.pathname}${window.location.search}` : "/");
 
   if (saveRedirect) {
     localStorage.setItem("redirectTo", path);

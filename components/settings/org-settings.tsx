@@ -42,23 +42,42 @@ export function OrgSettingsForm() {
       <CardHeader>
         <CardTitle>App settings</CardTitle>
         <CardDescription>
-          Settings that apply to everyone in this organization. Stored on the
-          platform, shared by every device.
+          Settings that apply to everyone in this organization. Stored on the platform, shared by
+          every device.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={onSubmit} className="grid max-w-lg gap-4">
           <div className="grid gap-1.5">
             <Label htmlFor="app-name">App name</Label>
-            <Input id="app-name" value={appName} onChange={(e) => setAppName(e.target.value)} placeholder="Acme Support" disabled={isLoading} />
+            <Input
+              id="app-name"
+              value={appName}
+              onChange={(e) => setAppName(e.target.value)}
+              placeholder="Acme Support"
+              disabled={isLoading}
+            />
           </div>
           <div className="grid gap-1.5">
             <Label htmlFor="welcome">Welcome message</Label>
-            <Input id="welcome" value={welcomeMessage} onChange={(e) => setWelcomeMessage(e.target.value)} placeholder="Shown to members on their first visit" disabled={isLoading} />
+            <Input
+              id="welcome"
+              value={welcomeMessage}
+              onChange={(e) => setWelcomeMessage(e.target.value)}
+              placeholder="Shown to members on their first visit"
+              disabled={isLoading}
+            />
           </div>
           <div className="grid gap-1.5">
             <Label htmlFor="support-url">Support URL</Label>
-            <Input id="support-url" type="url" value={supportUrl} onChange={(e) => setSupportUrl(e.target.value)} placeholder="https://help.example.com" disabled={isLoading} />
+            <Input
+              id="support-url"
+              type="url"
+              value={supportUrl}
+              onChange={(e) => setSupportUrl(e.target.value)}
+              placeholder="https://help.example.com"
+              disabled={isLoading}
+            />
           </div>
           <div>
             <button

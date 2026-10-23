@@ -17,11 +17,23 @@ import {
   PlatformSidebarCollapsedLabelFlyout,
   usePlatformSidebarFooterActions,
   usePlatformSidebarNavCallback,
+  useSidebar,
   type PlatformSidebarFooterActionId,
   type PlatformSidebarFooterConfig,
   type PlatformSidebarSectionConfig,
 } from "@iblai/iblai-js/web-containers/next";
-import { Award, BookOpen, FileText, Globe, Home, LineChart, Plus, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
+import {
+  Award,
+  BookOpen,
+  FileText,
+  Globe,
+  Home,
+  LineChart,
+  Plus,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
 import { Logo } from "@/components/navbar/logo";
 import { useAdminMode } from "@/lib/iblai/admin-mode";
 import { cn } from "@/lib/utils";
@@ -85,7 +97,10 @@ function NavRow({ row, collapsed }: { row: NavRowSpec; collapsed: boolean }) {
         active ? "bg-[#eef6fc] text-[#1e40af]" : "text-[#4a5568] hover:bg-[#f4f4f4]",
       )}
     >
-      <Icon className={cn("size-5 shrink-0", active ? "text-[#1e40af]" : "text-[#5f5f61]")} strokeWidth={1.5} />
+      <Icon
+        className={cn("size-5 shrink-0", active ? "text-[#1e40af]" : "text-[#5f5f61]")}
+        strokeWidth={1.5}
+      />
       <span className="min-w-0 flex-1 truncate">{row.label}</span>
     </button>
   );
@@ -100,11 +115,16 @@ export function WalletSidebar({
 }: {
   isAdmin: boolean;
   tenantKey: string;
-  currentTenant?: { key?: string | null; enable_monetization?: boolean | null } | null;
+  currentTenant?: {
+    key?: string | null;
+    name?: string | null;
+    enable_monetization?: boolean | null;
+  } | null;
   onFooterAction: (id: PlatformSidebarFooterActionId) => void;
   demo: boolean;
 }) {
   const router = useRouter();
+  const { isMobile, setOpenMobile } = useSidebar();
   const { adminMode } = useAdminMode();
   const liveAdmin = isAdmin && adminMode;
   const footerConfig = useMemo<PlatformSidebarFooterConfig | null>(
@@ -167,7 +187,13 @@ export function WalletSidebar({
     out.push({
       type: "custom",
       id: "footer",
-      render: (ctx) => <FooterCluster collapsed={ctx.collapsed} config={footerConfig} showCredentials={liveAdmin} />,
+      render: (ctx) => (
+        <FooterCluster
+          collapsed={ctx.collapsed}
+          config={footerConfig}
+          showCredentials={liveAdmin}
+        />
+      ),
     });
     return out;
   }, [liveAdmin, footerConfig]);
@@ -175,8 +201,16 @@ export function WalletSidebar({
   return (
     <PlatformSidebar
       className="wallet-sidebar"
-      logo={<Logo />}
-      primaryAction={{ label: "Add credential", icon: Plus, onClick: () => router.push("/credentials/import") }}
+      logo={<Logo tenantKey={tenantKey} currentTenant={currentTenant} demo={demo} />}
+      primaryAction={{
+        label: "Add credential",
+        icon: Plus,
+        onClick: () => {
+          // The SDK closes its phone sheet only after its own rows.
+          if (isMobile) setOpenMobile(false);
+          router.push("/credentials/import");
+        },
+      }}
       sections={sections}
       footer={null}
     />
@@ -190,24 +224,72 @@ const SUPPORT_URL = "https://ibl.ai/docs";
  * inside it: rows and visibility come from `usePlatformSidebarFooterActions`
  * (the OS rules), markup mirrors `PlatformSidebarFooter`.
  */
-function FooterCluster({ collapsed, config, showCredentials }: { collapsed: boolean; config: PlatformSidebarFooterConfig | null; showCredentials: boolean }) {
-  const actions = usePlatformSidebarFooterActions(config ?? { isAdmin: false, isLiveAdmin: false, enableRbac: false, rbacPermissions: {}, notificationsAllowed: false, onAction: () => {} });
-  const rows: { id: string; label: string; icon: NavIcon; onClick?: () => void; href?: string }[] = [
-    ...(showCredentials ? [{ id: "credentials", label: "Credentials", icon: ShieldCheck as NavIcon, href: "/admin/credentials" }] : []),
-    ...actions.map((a) => ({ id: a.id, label: a.label, icon: a.icon as NavIcon, onClick: () => config?.onAction(a.id) })),
-  ];
+function FooterCluster({
+  collapsed,
+  config,
+  showCredentials,
+}: {
+  collapsed: boolean;
+  config: PlatformSidebarFooterConfig | null;
+  showCredentials: boolean;
+}) {
+  const actions = usePlatformSidebarFooterActions(
+    config ?? {
+      isAdmin: false,
+      isLiveAdmin: false,
+      enableRbac: false,
+      rbacPermissions: {},
+      notificationsAllowed: false,
+      onAction: () => {},
+    },
+  );
+  const rows: { id: string; label: string; icon: NavIcon; onClick?: () => void; href?: string }[] =
+    [
+      ...(showCredentials
+        ? [
+            {
+              id: "credentials",
+              label: "Credentials",
+              icon: ShieldCheck as NavIcon,
+              href: "/admin/credentials",
+            },
+          ]
+        : []),
+      ...actions.map((a) => ({
+        id: a.id,
+        label: a.label,
+        icon: a.icon as NavIcon,
+        onClick: () => config?.onAction(a.id),
+      })),
+    ];
   if (!config && !showCredentials) return null;
   return (
-    <div className={cn("wallet-sidebar-bottom shrink-0 border-t border-[#e2e8f0]", collapsed ? "flex flex-col items-center gap-0.5 px-0 py-3" : "space-y-0.5 py-2")}>
+    <div
+      className={cn(
+        "wallet-sidebar-bottom shrink-0 border-t border-[#e2e8f0]",
+        collapsed ? "flex flex-col items-center gap-0.5 px-0 py-3" : "space-y-0.5 py-2",
+      )}
+    >
       {rows.map((r) => (
         <FooterRow key={r.id} row={r} collapsed={collapsed} />
       ))}
-      {config ? <FooterRow row={{ id: "support", label: "Support", icon: BookOpen, href: SUPPORT_URL }} collapsed={collapsed} /> : null}
+      {config ? (
+        <FooterRow
+          row={{ id: "support", label: "Support", icon: BookOpen, href: SUPPORT_URL }}
+          collapsed={collapsed}
+        />
+      ) : null}
     </div>
   );
 }
 
-function FooterRow({ row, collapsed }: { row: { id: string; label: string; icon: NavIcon; onClick?: () => void; href?: string }; collapsed: boolean }) {
+function FooterRow({
+  row,
+  collapsed,
+}: {
+  row: { id: string; label: string; icon: NavIcon; onClick?: () => void; href?: string };
+  collapsed: boolean;
+}) {
   const router = useRouter();
   const pathname = usePathname() ?? "/";
   const { onAfterNav } = usePlatformSidebarNavCallback();
@@ -223,14 +305,31 @@ function FooterRow({ row, collapsed }: { row: { id: string; label: string; icon:
   if (collapsed) {
     return (
       <PlatformSidebarCollapsedLabelFlyout label={row.label}>
-        <button type="button" onClick={go} aria-label={row.label} aria-current={active ? "page" : undefined} className={cn("inline-flex size-10 cursor-pointer items-center justify-center rounded-lg transition-colors", active ? "bg-[#eef6fc] text-[#1e40af]" : "text-[#5f5f61] hover:bg-[#f0f0f0]")}>
+        <button
+          type="button"
+          onClick={go}
+          aria-label={row.label}
+          aria-current={active ? "page" : undefined}
+          className={cn(
+            "inline-flex size-10 cursor-pointer items-center justify-center rounded-lg transition-colors",
+            active ? "bg-[#eef6fc] text-[#1e40af]" : "text-[#5f5f61] hover:bg-[#f0f0f0]",
+          )}
+        >
           <Icon className="size-4 shrink-0" strokeWidth={1.5} />
         </button>
       </PlatformSidebarCollapsedLabelFlyout>
     );
   }
   return (
-    <button type="button" onClick={go} aria-current={active ? "page" : undefined} className={cn("flex h-9 w-full min-w-0 cursor-pointer items-center gap-2 rounded-md px-2 text-left text-[14px] font-normal transition-colors", active ? "bg-[#eef6fc] text-[#1e40af]" : "text-[#5f5f61] hover:bg-[#f4f4f4]")}>
+    <button
+      type="button"
+      onClick={go}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "flex h-9 w-full min-w-0 cursor-pointer items-center gap-2 rounded-md px-2 text-left text-[14px] font-normal transition-colors",
+        active ? "bg-[#eef6fc] text-[#1e40af]" : "text-[#5f5f61] hover:bg-[#f4f4f4]",
+      )}
+    >
       <Icon className="size-4 shrink-0" strokeWidth={1.5} />
       <span className="min-w-0 flex-1 truncate">{row.label}</span>
     </button>

@@ -61,8 +61,18 @@ export function SetupScreen() {
   useEffect(() => {
     if (step !== "agent" || agents) return;
     const { org, username } = me();
-    sessionFetch<{ results?: AgentSummary[] } | AgentSummary[]>(`/api/search/orgs/${encodeURIComponent(org)}/users/${encodeURIComponent(username)}/mentors/`)
-      .then((d) => setAgents((Array.isArray(d) ? d : (d.results ?? [])).map((a) => ({ unique_id: a.unique_id, name: a.name, description: a.description ?? "" }))))
+    sessionFetch<{ results?: AgentSummary[] } | AgentSummary[]>(
+      `/api/search/orgs/${encodeURIComponent(org)}/users/${encodeURIComponent(username)}/mentors/`,
+    )
+      .then((d) =>
+        setAgents(
+          (Array.isArray(d) ? d : (d.results ?? [])).map((a) => ({
+            unique_id: a.unique_id,
+            name: a.name,
+            description: a.description ?? "",
+          })),
+        ),
+      )
       .catch((e) => setError(messageOf(e)));
   }, [step, agents]);
 
@@ -152,11 +162,15 @@ export function SetupScreen() {
             />
           </div>
           {error && (
-            <p role="alert" className="mt-4 text-sm text-destructive">
+            <p role="alert" className="text-destructive mt-4 text-sm">
               {error}
             </p>
           )}
-          <button type="submit" className={`mt-6 ${onboardingPrimaryButtonClass}`} disabled={isLoading}>
+          <button
+            type="submit"
+            className={`mt-6 ${onboardingPrimaryButtonClass}`}
+            disabled={isLoading}
+          >
             Continue
           </button>
         </form>
@@ -173,9 +187,11 @@ export function SetupScreen() {
           {!creating ? (
             <fieldset className="space-y-2">
               <legend className="sr-only">Agent</legend>
-              {agents === null && !error && <p className="text-sm text-muted-foreground">Loading agents…</p>}
+              {agents === null && !error && (
+                <p className="text-muted-foreground text-sm">Loading agents…</p>
+              )}
               {agents?.length === 0 && (
-                <p className="text-sm text-muted-foreground">No agents yet — create one below.</p>
+                <p className="text-muted-foreground text-sm">No agents yet — create one below.</p>
               )}
               {agents?.map((a) => {
                 const on = selected === a.unique_id;
@@ -184,7 +200,9 @@ export function SetupScreen() {
                     key={a.unique_id}
                     className={cn(
                       "flex w-full cursor-pointer flex-col items-start gap-0.5 rounded-xl border p-3 text-left transition-all focus-within:ring-2 focus-within:ring-[#2563EB]",
-                      on ? "border-[#2563EB] bg-[#2563EB]/[0.06] ring-1 ring-[#2563EB]" : "border-gray-200 hover:border-gray-300",
+                      on
+                        ? "border-[#2563EB] bg-[#2563EB]/[0.06] ring-1 ring-[#2563EB]"
+                        : "border-gray-200 hover:border-gray-300",
                     )}
                   >
                     <input
@@ -196,7 +214,9 @@ export function SetupScreen() {
                       className="sr-only"
                     />
                     <span className="text-sm font-medium text-gray-900">{a.name}</span>
-                    {a.description && <span className="line-clamp-2 text-xs text-gray-500">{a.description}</span>}
+                    {a.description && (
+                      <span className="line-clamp-2 text-xs text-gray-500">{a.description}</span>
+                    )}
                   </label>
                 );
               })}
@@ -205,7 +225,12 @@ export function SetupScreen() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="agent-name">Agent name</Label>
-                <Input id="agent-name" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Support Assistant" />
+                <Input
+                  id="agent-name"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  placeholder="Support Assistant"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="agent-purpose">What it does (one line)</Label>
@@ -216,13 +241,14 @@ export function SetupScreen() {
                   placeholder="Answers customer questions about orders and returns."
                 />
               </div>
-              <p className="text-xs text-muted-foreground">
-                Created from the platform's default template; refine prompts, datasets, and tools later (see /iblai-vibe-agent).
+              <p className="text-muted-foreground text-xs">
+                Created from the platform's default template; refine prompts, datasets, and tools
+                later (see /iblai-vibe-agent).
               </p>
             </div>
           )}
           {error && (
-            <p role="alert" className="mt-4 text-sm text-destructive">
+            <p role="alert" className="text-destructive mt-4 text-sm">
               {error}
             </p>
           )}
@@ -239,7 +265,11 @@ export function SetupScreen() {
           >
             {creating ? "Pick an existing agent instead" : "Create a new agent instead"}
           </button>
-          <button type="button" className={`mt-2 ${onboardingSecondaryButtonClass}`} onClick={() => setStep("name")}>
+          <button
+            type="button"
+            className={`mt-2 ${onboardingSecondaryButtonClass}`}
+            onClick={() => setStep("name")}
+          >
             Back
           </button>
         </form>

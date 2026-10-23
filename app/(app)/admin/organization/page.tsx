@@ -13,7 +13,7 @@ export default function AdminOrganizationPage() {
     <>
       <AccountPanel tab="organization" />
       <OrgSettingsForm />
-      <p className="px-4 pb-8 text-xs text-muted-foreground md:px-8">
+      <p className="text-muted-foreground px-4 pb-8 text-xs md:px-8">
         Change the app's default agent on the{" "}
         <Link href="/setup" className="underline">
           setup page

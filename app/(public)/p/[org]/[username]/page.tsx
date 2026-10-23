@@ -19,7 +19,11 @@ import { LoadingScreen } from "@/components/loading-screen";
  * self-reported credentials show with their verification level and the
  * issuer's link.
  */
-export default function PublicPage({ params }: { params: Promise<{ org: string; username: string }> }) {
+export default function PublicPage({
+  params,
+}: {
+  params: Promise<{ org: string; username: string }>;
+}) {
   const { org, username } = use(params);
   return (
     <Suspense fallback={<LoadingScreen />}>
@@ -37,7 +41,10 @@ export default function PublicPage({ params }: { params: Promise<{ org: string; 
 function NotFound() {
   return (
     <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-16 md:px-6">
-      <EmptyState title="No public wallet here" description="This link carries no wallet, or the holder has not published one. Ask them for a fresh link from their Share page." />
+      <EmptyState
+        title="No public wallet here"
+        description="This link carries no wallet, or the holder has not published one. Ask them for a fresh link from their Share page."
+      />
     </div>
   );
 }
@@ -47,7 +54,9 @@ function DemoPublic({ username }: { username: string }) {
   const collection = useSearchParams().get("collection") ?? undefined;
   if (state.isLoading) return <LoadingScreen />;
   if (!state.settings.publicPageEnabled || username !== state.profile.username) return <NotFound />;
-  const credentials = state.credentials.filter((c) => c.visibility === "public" && credentialStatus(c) === "active");
+  const credentials = state.credentials.filter(
+    (c) => c.visibility === "public" && credentialStatus(c) === "active",
+  );
   const data: PublicSnapshot = {
     org: "demo-wallet",
     username,
@@ -84,12 +93,17 @@ function LinkPublic({ org, username }: { org: string; username: string }) {
     let cancelled = false;
     (async () => {
       // Platform-issued: the viewer's browser asks ibl.ai directly.
-      const live = await Promise.all(snap.platformIds.map((id) => fetchPublicAssertion(id).catch(() => null)));
+      const live = await Promise.all(
+        snap.platformIds.map((id) => fetchPublicAssertion(id).catch(() => null)),
+      );
       const platform = live.filter((c): c is WalletCredential => !!c && !c.revoked);
       const others = snap.credentials.map(sharedToCredential);
       const credentials = [...platform, ...others].filter((c) => credentialStatus(c) === "active");
       const colMap = new Map((snap.collections ?? []).map((c) => [c.id, c]));
-      for (const c of credentials) c.collections = [...colMap.values()].filter((col) => col.credentialIds.includes(c.id)).map((col) => col.id);
+      for (const c of credentials)
+        c.collections = [...colMap.values()]
+          .filter((col) => col.credentialIds.includes(c.id))
+          .map((col) => col.id);
       if (cancelled) return;
       setData({
         org: snap.org || org,
@@ -98,7 +112,12 @@ function LinkPublic({ org, username }: { org: string; username: string }) {
         profile: snap.profile,
         credentials,
         skills: [...new Set(credentials.flatMap((c) => c.skills))],
-        collections: (snap.collections ?? []).map((c) => ({ id: c.id, name: c.name, description: c.description, shared: true })),
+        collections: (snap.collections ?? []).map((c) => ({
+          id: c.id,
+          name: c.name,
+          description: c.description,
+          shared: true,
+        })),
         targetRoleId: snap.targetRoleId,
       });
     })();
