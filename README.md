@@ -186,7 +186,15 @@ ibl.ai/wallet is a static-friendly Next.js front end for the ibl.ai platform: no
 pnpm build && PORT=3000 pnpm start
 ```
 
-Register every origin the app runs on (`http://localhost:3000`, `https://wallet.example.edu`) as an allowed redirect origin of the organizations that sign in. The only server piece is vibe-starter's nonce-based Content-Security-Policy proxy (`proxy.ts`), which carries no data. `vercel.json` makes the repo a one-click Vercel project; elsewhere `pnpm build` writes a standalone server.
+On hosted iblai.app no origin registration is needed: the sign-in site accepts any `redirect-to` host. A self-hosted platform may allowlist origins; register every origin the app runs on there. The only server piece is vibe-starter's nonce-based Content-Security-Policy proxy (`proxy.ts`), which carries no data.
+
+### Vercel
+
+Import the repository; `vercel.json` pins the Next.js preset and the build is the regular output (standalone is for a container host). Project settings:
+
+- Environment: `ENABLE_EXPERIMENTAL_COREPACK=1` (pnpm 12 from `packageManager`), `NEXT_PUBLIC_MAIN_TENANT_KEY=main`, and optionally `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_SUPPORT_EMAIL`, `NEXT_PUBLIC_DEFAULT_AGENT_ID`. Leave `NEXT_PUBLIC_WALLET_DEMO` unset; a separate project with it set to `true` serves the demo.
+- Domain: add it to the project. The platform's `custom-domains` lookup for the host should answer `{}` (no platform pinned), which keeps the multi-organization sign-in.
+- After the first deploy: sign in, check the console shows no token lines, then open a public wallet link and a verify link cold.
 
 ### Release
 

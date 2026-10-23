@@ -1,0 +1,9 @@
+# The Vercel CLI does not read .gitignore: keep the platform shorthand, local env and test sessions off an upload.
+iblai.env
+.env
+.env.*
+!.env.example
+e2e/.env*
+coverage
+playwright-report
+test-results
