@@ -165,12 +165,12 @@ All configuration is `NEXT_PUBLIC_*`, read in the browser, and optional against 
 
 | Variable                       | Default                     | Description                                                                         |
 | ------------------------------ | --------------------------- | ----------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_MAIN_TENANT_KEY`  | `main`                      | The community organization — only the fallback before anyone has signed in          |
+| `NEXT_PUBLIC_MAIN_TENANT_KEY`  | `main` (in code)            | The community organization — only the fallback before anyone has signed in          |
 | `NEXT_PUBLIC_WALLET_DEMO`      | `false`                     | `true` runs the bundled sample wallet with no platform calls                        |
 | `NEXT_PUBLIC_DEFAULT_AGENT_ID` | —                           | Pin the Coach's agent instead of reading it from the platform's metadata (`/setup`) |
 | `NEXT_PUBLIC_API_BASE_URL`     | `https://api.iblai.app`     | Consolidated API; `/dm`, `/lms`, `/axd` derive from it                              |
 | `NEXT_PUBLIC_AUTH_URL`         | `https://login.iblai.app`   | The hosted Auth SPA                                                                 |
-| `NEXT_PUBLIC_BASE_WS_URL`      | `wss://asgi.data.iblai.app` | Chat websocket for the Coach                                                        |
+| `NEXT_PUBLIC_BASE_WS_URL`      | `wss://asgi.data.iblai.app` | Chat websocket for the Coach; its HTTPS origin serves the Draft for me completion   |
 | `NEXT_PUBLIC_SUPPORT_EMAIL`    | `support@ibl.ai`            | Shown in chat footers and error toasts                                              |
 
 ---
@@ -236,7 +236,7 @@ Learner ─► React pages ─► SDK hooks / sessionFetch ─► api.iblai.app/
              credentials: …/credentials/orgs/<org>/users/<me>/assertions/        (for each platform I belong to)
              skills, education, experience, résumé: …/skills/…, …/career/…       (the profile's career records)
              everything the learner adds: …/core/users/platform-metadata/        (apps.credential-wallet)
-             résumé summary: …/ai-mentor/orgs/<org>/v1/chat/completions          (OpenAI-compatible, Draft for me)
+             résumé summary: …/ai-mentor/orgs/<org>/v1/chat/completions          (Draft for me — on asgi.data.iblai.app, not /dm)
         └► SDK <Chat> ─► the platform's agent (the Coach)
 Employer ─► /p/<org>/<user>#d=… ─► GET …/credentials/public/assertions/{id}/    (no auth; platform-issued)
                                  └► issuer's hosted badge JSON when CORS allows   (imported)

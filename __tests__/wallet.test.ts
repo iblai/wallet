@@ -180,17 +180,45 @@ describe("résumé", () => {
     expect(autoSummary(demoState())).toMatch(/Data Scientist roles/);
   });
 
-  it("hands the summary prompt only the facts of the record", () => {
+  it("hands the summary prompt the facts of the record, and only those", () => {
     const s = demoState();
     const [system, user] = summaryPrompt(s);
     expect(system.role).toBe("system");
-    expect(system.content).toMatch(/nothing beyond the facts given/);
+    expect(system.content).toMatch(/never invent an employer/);
+    expect(system.content).toMatch(/never say that the record is empty/i);
     expect(user.content).toContain(`Name: ${s.profile.name}`);
+    expect(user.content).toContain(`About: ${s.profile.about}`);
     expect(user.content).toContain("Target role: Data Scientist");
+    expect(user.content).toContain("Learning: Deep Learning");
     const active = s.credentials.filter((c) => credentialStatus(c) === "active");
     expect(user.content).toContain(`Credential: ${active[0].name} from ${active[0].issuer.name}`);
     const pending = s.credentials.find((c) => credentialStatus(c) === "pending")!;
+    expect(user.content).toContain(`Credential (awaiting acceptance): ${pending.name} from`);
     expect(user.content).not.toContain(`Credential: ${pending.name} from`);
+    // A rich record gets no new-record instruction.
+    expect(user.content).not.toContain("This record is new");
+  });
+
+  it("asks for an editable opener when the record is new", () => {
+    const s = deriveState({
+      profile: { username: "jane", name: "Jane Doe" },
+      settings: {
+        ...WALLET_SETTINGS_DEFAULTS,
+        targetRoleId: "data-scientist",
+        desiredSkills: ["SQL", "Python"],
+      },
+      platformCredentials: [],
+      platformEducation: [],
+      platformExperience: [],
+      platformEarnedSkills: [],
+      isLoading: false,
+      isDemo: false,
+    });
+    const [, user] = summaryPrompt(s);
+    expect(user.content).toContain("This record is new");
+    expect(user.content).toContain("Learning: SQL, Python");
+    expect(user.content).toContain("Target role: Data Scientist");
+    expect(user.content).not.toMatch(/^(Role|Education|Credential|Skills):/m);
   });
 });
 

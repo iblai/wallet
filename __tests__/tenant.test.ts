@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 
 /**
- * lib/iblai/tenant.ts — admin detection reads the `tenants` list the sign-in
- * persisted and matches it against the app's pinned org, never the SDK's
- * notion of "current tenant".
+ * lib/iblai/tenant.ts — org resolution prefers the session's own org over a
+ * stale pin, and admin detection reads the `tenants` list the sign-in
+ * persisted, never the SDK's notion of "current tenant".
  */
 
 const load = async () => await import("../lib/iblai/tenant");
@@ -28,9 +28,45 @@ beforeEach(() => {
   process.env.NEXT_PUBLIC_MAIN_TENANT_KEY = "acme";
 });
 
+describe("resolveAppTenant", () => {
+  it("keeps a pin the session's tenants confirm", async () => {
+    stubWindow({
+      app_tenant: "other",
+      current_tenant: "acme",
+      tenants: JSON.stringify([{ key: "acme" }, { key: "other" }]),
+    });
+    expect((await load()).resolveAppTenant()).toBe("other");
+  });
+
+  it("drops a pin the session disowns and uses the sign-in's org", async () => {
+    const store: Record<string, string> = {
+      app_tenant: "main",
+      current_tenant: JSON.stringify({ key: "acme", platform_name: "Acme" }),
+      tenants: JSON.stringify([{ key: "acme" }]),
+    };
+    stubWindow(store);
+    expect((await load()).resolveAppTenant()).toBe("acme");
+    // The stale pin is removed, so it cannot outrank the session again.
+    expect(store.app_tenant).toBeUndefined();
+  });
+
+  it("keeps a pin while no tenants list has been stored yet", async () => {
+    stubWindow({ app_tenant: "other" });
+    expect((await load()).resolveAppTenant()).toBe("other");
+  });
+
+  it("falls back to the community org when signed out", async () => {
+    stubWindow({});
+    expect((await load()).resolveAppTenant()).toBe("acme");
+  });
+});
+
 describe("isTenantAdmin", () => {
   it("is true only when the pinned org's entry says is_admin", async () => {
-    stubWindow({ tenants: JSON.stringify([{ key: "main" }, { key: "acme", is_admin: true }]) });
+    stubWindow({
+      app_tenant: "acme",
+      tenants: JSON.stringify([{ key: "main" }, { key: "acme", is_admin: true }]),
+    });
     const { isTenantAdmin } = await load();
     expect(isTenantAdmin()).toBe(true);
   });

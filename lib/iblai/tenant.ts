@@ -8,7 +8,8 @@
  * is only a last resort for a visitor with no session yet.
  *
  * Priority:
- *   1. app_tenant — an explicit choice in this app (switcher, `?tenant=`)
+ *   1. app_tenant — an explicit choice in this app (switcher, `?tenant=`),
+ *      unless the session's `tenants` disown it (a stale pin)
  *   2. current_tenant / tenant — what the sign-in handed the browser
  *   3. NEXT_PUBLIC_MAIN_TENANT_KEY — the community org (`main`), as fallback
  */
@@ -25,12 +26,26 @@ const PLACEHOLDER_PLATFORMS = new Set([
   "",
 ]);
 
+/**
+ * The org pinned in this app (switcher, `?tenant=`), or "". A pin the session's
+ * `tenants` disown is stale — a demo run, another account's switch — and is
+ * dropped here rather than left to outrank the sign-in on every request.
+ */
+function pinnedTenant(): string {
+  const pinned = localStorage.getItem("app_tenant");
+  if (!pinned) return "";
+  const tenants = readTenants();
+  if (!tenants.length || tenants.some((t) => t.key === pinned)) return pinned;
+  setAppTenant("");
+  return "";
+}
+
 /** The org this app is currently working in. */
 export function resolveAppTenant(): string {
   if (typeof window === "undefined") return "";
 
   // 1. An explicit choice made in this app (tenant switch, ?tenant=).
-  const appTenant = localStorage.getItem("app_tenant");
+  const appTenant = pinnedTenant();
   if (appTenant) return appTenant;
 
   // 2. The sign-in's answer: the user's default org, or the one re-authed into.
@@ -79,7 +94,7 @@ export function setAppTenant(key: string) {
 export function checkTenantMismatch(): boolean {
   if (typeof window === "undefined") return false;
 
-  const appTenant = localStorage.getItem("app_tenant") ?? "";
+  const appTenant = pinnedTenant();
   const sdkTenant = tenantKeyOf(localStorage.getItem("tenant"));
 
   if (appTenant && sdkTenant && sdkTenant !== appTenant) {

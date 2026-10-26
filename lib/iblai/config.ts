@@ -59,6 +59,8 @@ const apiBase = () => {
   return domain() === "iblai.app" ? "https://api.iblai.app" : "";
 };
 
+const wsBase = () => getEnv("NEXT_PUBLIC_BASE_WS_URL", `wss://asgi.data.${domain()}`);
+
 const config = {
   authUrl: () => getEnv("NEXT_PUBLIC_AUTH_URL", `https://login.${domain()}`),
 
@@ -88,11 +90,14 @@ const config = {
   // Learner micro-frontend (progress, dates, discussions pages).
   mfeUrl: () => getEnv("NEXT_PUBLIC_MFE_URL", `https://apps.learn.${domain()}`),
 
-  baseWsUrl: () => getEnv("NEXT_PUBLIC_BASE_WS_URL", `wss://asgi.data.${domain()}`),
+  baseWsUrl: wsBase,
 
-  wsUrl: () => getEnv("NEXT_PUBLIC_BASE_WS_URL", `wss://asgi.data.${domain()}`),
+  wsUrl: wsBase,
 
-  mainTenantKey: () => getEnv("NEXT_PUBLIC_MAIN_TENANT_KEY", ""),
+  // The streaming host over HTTPS: chat completions live here, not on dmUrl() (that gateway 500s on chat).
+  asgiUrl: () => new URL(wsBase()).origin.replace(/^ws/, "http"),
+
+  mainTenantKey: () => getEnv("NEXT_PUBLIC_MAIN_TENANT_KEY", "main"),
   tauriCustomScheme: () => getEnv("NEXT_PUBLIC_TAURI_CUSTOM_SCHEME", ""),
   platformBaseDomain: () => domain(),
 

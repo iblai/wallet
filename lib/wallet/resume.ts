@@ -196,13 +196,22 @@ export function autoSummary(state: WalletState): string {
   return `${who}.${proof}${skills}${fit}`.replace(/\s+/g, " ").trim();
 }
 
-/** The facts "Draft for me" sends to the platform's AI, which is told to use nothing else. */
+/**
+ * The facts "Draft for me" sends to the platform's AI. A thin record (a new
+ * user) asks for an editable opener with [bracketed] prompts, never a note
+ * that facts are missing.
+ */
 export function summaryPrompt(state: WalletState): ChatMessage[] {
   const role = roleById(state.settings.targetRoleId);
   const skills = topSkillNames(state, 8);
+  const active = state.credentials.filter((c) => credentialStatus(c) === "active");
+  const pending = state.credentials.filter((c) => credentialStatus(c) === "pending");
+  const p = state.profile;
   const facts = [
-    `Name: ${state.profile.name}`,
-    state.profile.headline ? `Headline: ${state.profile.headline}` : "",
+    `Name: ${p.name}`,
+    p.headline ? `Headline: ${p.headline}` : "",
+    p.about ? `About: ${p.about}` : "",
+    p.location ? `Location: ${p.location}` : "",
     ...state.experience
       .slice(0, 3)
       .map((e) => `Role: ${e.title} at ${e.company}${e.current ? " (current)" : ""}`),
@@ -212,22 +221,42 @@ export function summaryPrompt(state: WalletState): ChatMessage[] {
         (e) =>
           `Education: ${[e.degree, e.fieldOfStudy].filter(Boolean).join(", ") || "Studies"} at ${e.institution}`,
       ),
-    ...state.credentials
-      .filter((c) => credentialStatus(c) === "active")
+    ...active
       .slice(0, 8)
       .map((c) => `Credential: ${c.name} from ${c.issuer.name} (${verificationLabel(c)})`),
+    ...pending
+      .slice(0, 3)
+      .map((c) => `Credential (awaiting acceptance): ${c.name} from ${c.issuer.name}`),
     skills.length ? `Skills: ${skills.join(", ")}` : "",
+    state.desiredSkills.length ? `Learning: ${state.desiredSkills.slice(0, 6).join(", ")}` : "",
     role ? `Target role: ${role.title}` : "",
   ].filter(Boolean);
+  const thin =
+    !state.experience.length &&
+    !state.education.length &&
+    !active.length &&
+    !pending.length &&
+    !skills.length;
   return [
     {
       role: "system",
       content:
-        "You write résumé summaries: two or three sentences of plain text, no first-person pronouns, no headings or lists, and nothing beyond the facts given.",
+        "You write the summary section of a résumé: two or three sentences of plain text in the impersonal résumé voice (no I, my, he or she), with no headings, lists or field labels. Use only the facts given; never invent an employer, title, school, date, number or credential, and infer nothing from the person's name. When the record is thin, write what the facts support as prose, then end with one square-bracket prompt telling the person what to add, such as [Add your target role, years of experience and the two skills you want to lead with]. Never say that the record is empty or that facts are missing.",
     },
-    { role: "user", content: `Write the summary for this person.\n\n${facts.join("\n")}` },
+    {
+      role: "user",
+      content: [
+        "Write the summary for this person.",
+        "",
+        ...facts,
+        ...(thin ? ["", THIN_RECORD] : []),
+      ].join("\n"),
+    },
   ];
 }
+
+const THIN_RECORD =
+  "This record is new: no work history, education or credential yet. Write an opening summary the person can edit: one or two plain sentences on the direction they are heading and the skills they are building where the facts give them, then one square-bracket prompt naming what to add.";
 
 function topSkillNames(state: WalletState, n: number): string[] {
   return state.skills

@@ -1,8 +1,12 @@
 /**
  * One chat completion on the platform's OpenAI-compatible endpoint
- * (`/api/ai-mentor/orgs/<org>/v1/`), as the signed-in user. The DM answers a
- * member only when they name themselves in `learner_id`; admins pass too.
+ * (`/api/ai-mentor/orgs/<org>/v1/`), as the signed-in user. The two calls split
+ * hosts the way the OS and the SDK's `useRemoteChat` do: the model list is on
+ * the DM host (the streaming host 403s it), the completion on the streaming
+ * host (the DM gateway 500s on chat). The DM answers a member only when they
+ * name themselves in `learner_id`; admins pass too.
  */
+import config from "./config";
 import { SessionFetchError, sessionFetch } from "./session-fetch";
 
 export type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
@@ -23,7 +27,7 @@ export async function complete(
     const model = data.some((m) => m.id === PREFERRED_MODEL) ? PREFERRED_MODEL : data[0]?.id;
     if (!model) throw new Error("This platform has no AI model available.");
     const res = await sessionFetch<{ choices?: { message?: { content?: string | null } }[] }>(
-      `${base}/chat/completions${me}`,
+      `${config.asgiUrl()}${base}/chat/completions${me}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

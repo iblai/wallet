@@ -28,9 +28,9 @@ describe("complete", () => {
       json(200, { choices: [{ message: { content: "  Done.  " } }] }),
     );
     await expect(complete("acme", "jane", messages)).resolves.toBe("Done.");
-    const base = `${config.dmUrl()}/api/ai-mentor/orgs/acme/v1`;
-    expect(f.mock.calls[0][0]).toBe(`${base}/models?learner_id=jane`);
-    expect(f.mock.calls[1][0]).toBe(`${base}/chat/completions?learner_id=jane`);
+    const path = "/api/ai-mentor/orgs/acme/v1";
+    expect(f.mock.calls[0][0]).toBe(`${config.dmUrl()}${path}/models?learner_id=jane`);
+    expect(f.mock.calls[1][0]).toBe(`${config.asgiUrl()}${path}/chat/completions?learner_id=jane`);
     expect(f.mock.calls[1][1]?.method).toBe("POST");
     expect(sentBody(f.mock.calls[1])).toEqual({ model: "iblai/iblai-pro", messages });
   });

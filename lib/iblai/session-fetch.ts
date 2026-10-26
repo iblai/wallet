@@ -18,7 +18,9 @@ export class SessionFetchError extends Error {
 
 export async function sessionFetch<T = unknown>(path: string, init: RequestInit = {}): Promise<T> {
   const token = typeof window === "undefined" ? "" : (localStorage.getItem("dm_token") ?? "");
-  const res = await fetch(`${config.dmUrl()}${path}`, {
+  // A path is on the DM host; an absolute URL names another platform host (lib/iblai/completions.ts).
+  const url = /^https?:\/\//.test(path) ? path : `${config.dmUrl()}${path}`;
+  const res = await fetch(url, {
     ...init,
     headers: {
       Accept: "application/json",

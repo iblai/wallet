@@ -72,7 +72,7 @@ function seedDemoSession() {
         }),
       );
     }
-    const key = config.mainTenantKey() || "demo-wallet";
+    const key = "demo-wallet";
     // `localStorage.demo_admin = "1"` previews the Admin mode of the shell on the sample data.
     const demoAdmin = localStorage.getItem("demo_admin") === "1";
     localStorage.setItem(
@@ -186,8 +186,8 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <p role="alert" className="text-destructive max-w-md p-8 text-sm">
-          NEXT_PUBLIC_MAIN_TENANT_KEY is not set or is still a placeholder. For a multi-organization
-          app set it to <code>main</code> (the community org) in .env.local and restart.
+          NEXT_PUBLIC_MAIN_TENANT_KEY is still a placeholder. For a multi-organization app set it to{" "}
+          <code>main</code> (the community org) in .env.local and restart, or remove it.
         </p>
       </div>
     );

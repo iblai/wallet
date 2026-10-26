@@ -14,6 +14,8 @@ const ENV_KEYS = [
   "NEXT_PUBLIC_AUTH_URL",
   "NEXT_PUBLIC_LEGACY_LMS_URL",
   "NEXT_PUBLIC_MFE_URL",
+  "NEXT_PUBLIC_BASE_WS_URL",
+  "NEXT_PUBLIC_MAIN_TENANT_KEY",
   "IBLAI_API_KEY",
 ] as const;
 
@@ -50,6 +52,13 @@ describe("hosted defaults in code", () => {
     expect(config.mfeUrl()).toBe("https://apps.learn.iblai.app");
   });
 
+  it("serves chat completions from the streaming host's HTTPS origin", async () => {
+    expect((await loadConfig()).asgiUrl()).toBe("https://asgi.data.iblai.app");
+    process.env.NEXT_PUBLIC_BASE_WS_URL = "ws://asgi.example.edu:8000/ws/langflow/";
+    vi.resetModules();
+    expect((await loadConfig()).asgiUrl()).toBe("http://asgi.example.edu:8000");
+  });
+
   it("uses an explicit NEXT_PUBLIC_API_BASE_URL verbatim", async () => {
     process.env.NEXT_PUBLIC_API_BASE_URL = "https://api.example.edu";
     const config = await loadConfig();
@@ -65,6 +74,7 @@ describe("hosted defaults in code", () => {
     expect(config.dmUrl()).toBe("https://base.manager.example.edu");
     expect(config.axdUrl()).toBe("https://base.manager.example.edu");
     expect(config.authUrl()).toBe("https://login.example.edu");
+    expect(config.asgiUrl()).toBe("https://asgi.data.example.edu");
     expect(config.legacyLmsUrl()).toBe("https://learn.example.edu");
     expect(config.mfeUrl()).toBe("https://apps.learn.example.edu");
   });
@@ -87,6 +97,13 @@ describe("app accessors", () => {
     const config = await loadConfig();
     expect(config.defaultAgentId()).toBe("");
     expect(config.supportEmail()).toBe("support@ibl.ai");
+  });
+
+  it("default the community org to main, and follow the env when set", async () => {
+    expect((await loadConfig()).mainTenantKey()).toBe("main");
+    process.env.NEXT_PUBLIC_MAIN_TENANT_KEY = "acme";
+    vi.resetModules();
+    expect((await loadConfig()).mainTenantKey()).toBe("acme");
   });
 
   it("read the env when set", async () => {
