@@ -7,10 +7,13 @@
  * between the orgs they belong to (`tenants`). The community org (`main`)
  * is only a last resort for a visitor with no session yet.
  *
+ * Storage follows the SDK: `tenant` is the current platform's key, `current_tenant`
+ * its record (an entry of `tenants`, the user's platforms).
+ *
  * Priority:
  *   1. app_tenant — an explicit choice in this app (switcher, `?tenant=`),
  *      unless the session's `tenants` disown it (a stale pin)
- *   2. current_tenant / tenant — what the sign-in handed the browser
+ *   2. tenant — what the sign-in handed the browser
  *   3. NEXT_PUBLIC_MAIN_TENANT_KEY — the community org (`main`), as fallback
  */
 
@@ -49,11 +52,7 @@ export function resolveAppTenant(): string {
   if (appTenant) return appTenant;
 
   // 2. The sign-in's answer: the user's default org, or the one re-authed into.
-  //    SsoLogin stores `current_tenant` as the whole tenant object; the SDK's
-  //    TenantProvider later stores just the key. Accept both.
-  const current =
-    tenantKeyOf(localStorage.getItem("current_tenant")) ||
-    tenantKeyOf(localStorage.getItem("tenant"));
+  const current = tenantKeyOf(localStorage.getItem("tenant"));
   if (current) return current;
 
   // 3. The community org, until someone signs in.
@@ -63,18 +62,9 @@ export function resolveAppTenant(): string {
   return "";
 }
 
-/** A stored tenant value → its key: a bare key, or the JSON of a tenant object. */
+/** A stored `tenant` value → its key, or "" for the empty and stringified-null cases. */
 export function tenantKeyOf(raw: string | null): string {
-  if (!raw || raw === "null" || raw === "undefined") return "";
-  if (raw.startsWith("{")) {
-    try {
-      const o = JSON.parse(raw) as { key?: string; org?: string };
-      return o.key ?? o.org ?? "";
-    } catch {
-      return "";
-    }
-  }
-  return raw;
+  return !raw || raw === "null" || raw === "undefined" ? "" : raw;
 }
 
 /** Pin the app to an org the user picked (switcher / `?tenant=`). */

@@ -32,7 +32,7 @@ describe("resolveAppTenant", () => {
   it("keeps a pin the session's tenants confirm", async () => {
     stubWindow({
       app_tenant: "other",
-      current_tenant: "acme",
+      tenant: "acme",
       tenants: JSON.stringify([{ key: "acme" }, { key: "other" }]),
     });
     expect((await load()).resolveAppTenant()).toBe("other");
@@ -41,13 +41,22 @@ describe("resolveAppTenant", () => {
   it("drops a pin the session disowns and uses the sign-in's org", async () => {
     const store: Record<string, string> = {
       app_tenant: "main",
-      current_tenant: JSON.stringify({ key: "acme", platform_name: "Acme" }),
+      tenant: "acme",
       tenants: JSON.stringify([{ key: "acme" }]),
     };
     stubWindow(store);
     expect((await load()).resolveAppTenant()).toBe("acme");
     // The stale pin is removed, so it cannot outrank the session again.
     expect(store.app_tenant).toBeUndefined();
+  });
+
+  it("reads the key from `tenant`, never from a (possibly stale) `current_tenant` record", async () => {
+    stubWindow({
+      tenant: "acme",
+      current_tenant: JSON.stringify({ key: "stale", org: "stale", platform_name: "Old" }),
+      tenants: JSON.stringify([{ key: "acme" }]),
+    });
+    expect((await load()).resolveAppTenant()).toBe("acme");
   });
 
   it("keeps a pin while no tenants list has been stored yet", async () => {
@@ -95,14 +104,13 @@ describe("isTenantAdmin", () => {
   });
 });
 
-describe("tenantKeyOf (multi-org)", () => {
-  it("accepts a bare key or the JSON tenant object SsoLogin stores", async () => {
+describe("tenantKeyOf", () => {
+  it("passes a bare key through and drops the empty and stringified-null cases", async () => {
     const { tenantKeyOf } = await import("../lib/iblai/tenant");
-    expect(tenantKeyOf("sfbu")).toBe("sfbu");
-    expect(tenantKeyOf(JSON.stringify({ key: "sfbu", org: "sfbu", platform_name: "SFBU" }))).toBe(
-      "sfbu",
-    );
+    expect(tenantKeyOf("acme")).toBe("acme");
     expect(tenantKeyOf("null")).toBe("");
-    expect(tenantKeyOf("{not json")).toBe("");
+    expect(tenantKeyOf("undefined")).toBe("");
+    expect(tenantKeyOf("")).toBe("");
+    expect(tenantKeyOf(null)).toBe("");
   });
 });

@@ -75,13 +75,11 @@ function seedDemoSession() {
     const key = "demo-wallet";
     // `localStorage.demo_admin = "1"` previews the Admin mode of the shell on the sample data.
     const demoAdmin = localStorage.getItem("demo_admin") === "1";
-    localStorage.setItem(
-      "tenants",
-      JSON.stringify([{ key, org: key, platform_name: "Demo organization", is_admin: demoAdmin }]),
-    );
+    const demo = { key, org: key, platform_name: "Demo organization", is_admin: demoAdmin };
+    localStorage.setItem("tenants", JSON.stringify([demo]));
+    localStorage.setItem("current_tenant", JSON.stringify(demo));
     localStorage.setItem("app_tenant", key);
     localStorage.setItem("tenant", key);
-    localStorage.setItem("current_tenant", key);
   } catch {}
 }
 
@@ -214,10 +212,10 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
             skip={isSsoRoute}
             currentTenant={tenantKey}
             requestedTenant={tenantKey}
-            saveCurrentTenant={(t: any) => {
-              const key = typeof t === "string" ? t : (t?.key ?? String(t));
-              localStorage.setItem("current_tenant", key);
-              localStorage.setItem("tenant", key);
+            // The SDK's contract: `current_tenant` is the platform's record, `tenant` its key.
+            saveCurrentTenant={(t: { key: string }) => {
+              localStorage.setItem("current_tenant", JSON.stringify(t));
+              localStorage.setItem("tenant", t.key);
 
               // If the SDK resolved a different tenant than what the app
               // expects, redirect to re-login for the correct tenant.
