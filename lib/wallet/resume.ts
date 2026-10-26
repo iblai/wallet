@@ -14,6 +14,7 @@ import {
 } from "./types";
 import { roleById, gapAnalysis } from "./market";
 import { verifyLink } from "./share";
+import type { ChatMessage } from "../iblai/completions";
 
 export interface ResumeSection {
   id: "summary" | "skills" | "credentials" | "experience" | "education";
@@ -174,11 +175,7 @@ export function autoSummary(state: WalletState): string {
   const verified = active.filter((c) =>
     ["platform", "hosted", "signed"].includes(c.verification.level),
   ).length;
-  const topSkills = state.skills
-    .filter((s) => s.origin !== "desired")
-    .sort((a, b) => b.evidence.length - a.evidence.length)
-    .slice(0, 4)
-    .map((s) => s.name);
+  const topSkills = topSkillNames(state, 4);
   const latestJob = state.experience[0];
   const who =
     state.profile.headline ||
@@ -197,6 +194,47 @@ export function autoSummary(state: WalletState): string {
     fit = ` Targeting ${role.title} roles with ${g.coverage}% of the core skill set already evidenced.`;
   }
   return `${who}.${proof}${skills}${fit}`.replace(/\s+/g, " ").trim();
+}
+
+/** The facts "Draft for me" sends to the platform's AI, which is told to use nothing else. */
+export function summaryPrompt(state: WalletState): ChatMessage[] {
+  const role = roleById(state.settings.targetRoleId);
+  const skills = topSkillNames(state, 8);
+  const facts = [
+    `Name: ${state.profile.name}`,
+    state.profile.headline ? `Headline: ${state.profile.headline}` : "",
+    ...state.experience
+      .slice(0, 3)
+      .map((e) => `Role: ${e.title} at ${e.company}${e.current ? " (current)" : ""}`),
+    ...state.education
+      .slice(0, 2)
+      .map(
+        (e) =>
+          `Education: ${[e.degree, e.fieldOfStudy].filter(Boolean).join(", ") || "Studies"} at ${e.institution}`,
+      ),
+    ...state.credentials
+      .filter((c) => credentialStatus(c) === "active")
+      .slice(0, 8)
+      .map((c) => `Credential: ${c.name} from ${c.issuer.name} (${verificationLabel(c)})`),
+    skills.length ? `Skills: ${skills.join(", ")}` : "",
+    role ? `Target role: ${role.title}` : "",
+  ].filter(Boolean);
+  return [
+    {
+      role: "system",
+      content:
+        "You write résumé summaries: two or three sentences of plain text, no first-person pronouns, no headings or lists, and nothing beyond the facts given.",
+    },
+    { role: "user", content: `Write the summary for this person.\n\n${facts.join("\n")}` },
+  ];
+}
+
+function topSkillNames(state: WalletState, n: number): string[] {
+  return state.skills
+    .filter((s) => s.origin !== "desired")
+    .sort((a, b) => b.evidence.length - a.evidence.length)
+    .slice(0, n)
+    .map((s) => s.name);
 }
 
 export function resumeToMarkdown(doc: ResumeDoc): string {

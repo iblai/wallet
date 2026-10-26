@@ -6,12 +6,14 @@ import { Copy, Download, FileText, Printer, RotateCcw, Sparkles } from "lucide-r
 import { useWallet } from "@/lib/wallet/provider";
 import { resolveAppTenant } from "@/lib/iblai/tenant";
 import config from "@/lib/iblai/config";
+import { complete } from "@/lib/iblai/completions";
 import {
   autoSummary,
   buildResume,
   featuredCredentials,
   resumeToMarkdown,
   resumeToText,
+  summaryPrompt,
   type ResumeDoc,
 } from "@/lib/wallet/resume";
 import { credentialStatus } from "@/lib/wallet/types";
@@ -49,6 +51,7 @@ export default function ResumePage() {
   // One object per settings value, so the memos below see a stable dependency.
   const prefs = useMemo(() => state.settings.resume ?? {}, [state.settings.resume]);
   const [summary, setSummary] = useState(prefs.summary ?? "");
+  const [drafting, setDrafting] = useState(false);
   const [origin, setOrigin] = useState("");
   useEffect(() => {
     setOrigin(window.location.origin);
@@ -101,6 +104,16 @@ export default function ResumePage() {
       toast.error("Clipboard unavailable");
     }
   };
+  const draft = async () => {
+    setDrafting(true);
+    try {
+      setSummary(await complete(org, state.profile.username, summaryPrompt(state)));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not draft a summary");
+    } finally {
+      setDrafting(false);
+    }
+  };
   const slug = state.profile.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
   return (
@@ -132,18 +145,31 @@ export default function ResumePage() {
           <div className="space-y-5 print:hidden">
             <Section
               title="Summary"
-              description="Two or three sentences at the top. The Coach drafts one from your record."
+              description={
+                state.isDemo
+                  ? "Two or three sentences at the top."
+                  : "Two or three sentences at the top; Draft for me writes one from your record with your platform's AI."
+              }
             >
               <Textarea
+                id="resume-summary"
+                aria-label="Summary"
                 value={summary}
                 onChange={(e) => setSummary(e.target.value)}
                 rows={5}
                 placeholder={autoSummary(state)}
               />
               <div className="mt-2 flex flex-wrap gap-2">
-                <Button size="sm" variant="outline" onClick={() => setSummary(autoSummary(state))}>
-                  <Sparkles /> Draft for me
-                </Button>
+                {!state.isDemo ? (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={drafting}
+                    onClick={() => void draft()}
+                  >
+                    <Sparkles /> {drafting ? "Drafting…" : "Draft for me"}
+                  </Button>
+                ) : null}
                 <Button
                   size="sm"
                   className="ibl-button-primary"

@@ -32,7 +32,6 @@ const env = {
   NEXT_PUBLIC_MAIN_TENANT_KEY: process.env.NEXT_PUBLIC_MAIN_TENANT_KEY,
   NEXT_PUBLIC_TAURI_CUSTOM_SCHEME: process.env.NEXT_PUBLIC_TAURI_CUSTOM_SCHEME,
   NEXT_PUBLIC_DEFAULT_AGENT_ID: process.env.NEXT_PUBLIC_DEFAULT_AGENT_ID,
-  NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
   NEXT_PUBLIC_SUPPORT_EMAIL: process.env.NEXT_PUBLIC_SUPPORT_EMAIL,
   NEXT_PUBLIC_WALLET_DEMO: process.env.NEXT_PUBLIC_WALLET_DEMO,
 };
@@ -97,15 +96,11 @@ const config = {
   tauriCustomScheme: () => getEnv("NEXT_PUBLIC_TAURI_CUSTOM_SCHEME", ""),
   platformBaseDomain: () => domain(),
 
-  // The agent the home page chats with: the last path segment of its
-  // os.ibl.ai URL (https://os.ibl.ai/platform/<org-key>/<agent-uuid>). Empty
-  // means "not chosen yet" — /setup lets an admin pick or create one and
-  // stores the choice in the org's metadata (lib/iblai/metadata.ts); env wins
-  // when both are set.
+  // The Coach's agent: the last path segment of its os.ibl.ai URL
+  // (https://os.ibl.ai/platform/<org-key>/<agent-uuid>). Empty means the one an
+  // admin chose on /setup (the platform's metadata, lib/iblai/metadata.ts), else
+  // the platform's default agent; env wins when set.
   defaultAgentId: () => getEnv("NEXT_PUBLIC_DEFAULT_AGENT_ID", ""),
-  // What the browser tab and the setup screen call the app. Two or three
-  // Title Case words ("Acme Support"), never a slug.
-  appName: () => getEnv("NEXT_PUBLIC_APP_NAME", ""),
   supportEmail: () => getEnv("NEXT_PUBLIC_SUPPORT_EMAIL", "support@ibl.ai"),
 
   // Credential Wallet: with no ibl.ai organization connected, run against the

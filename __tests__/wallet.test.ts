@@ -14,9 +14,14 @@ import {
   type WalletState,
 } from "../lib/wallet/types";
 import { DEMO_CREDENTIALS, DEMO_PROFILE } from "../lib/wallet/demo-data";
-import { deriveState } from "../lib/wallet/derive";
-import { autoSummary, buildResume, resumeToMarkdown, resumeToText } from "../lib/wallet/resume";
-import { coachAnswer, routeQuestion } from "../lib/wallet/coach";
+import { deriveState, fromAssertion, platformRows } from "../lib/wallet/derive";
+import {
+  autoSummary,
+  buildResume,
+  resumeToMarkdown,
+  resumeToText,
+  summaryPrompt,
+} from "../lib/wallet/resume";
 
 const base = (over: Partial<WalletCredential> = {}): WalletCredential => ({
   id: "c1",
@@ -122,7 +127,43 @@ describe("derived wallet state", () => {
   });
 });
 
-describe("résumé and coach", () => {
+describe("credentials from every platform", () => {
+  const issued = (entityId: string, org: string, name: string) =>
+    fromAssertion({
+      entityId,
+      issuedOn: "2026-01-01",
+      credentialDetails: { name: `Badge ${entityId}`, issuerDetails: { name, org } },
+    });
+
+  it("keeps the issuing platform of an assertion", () => {
+    expect(issued("a1", "acme", "Acme University").issuer).toMatchObject({
+      name: "Acme University",
+      org: "acme",
+    });
+  });
+
+  it("lists every platform the user belongs to, and the issuers outside the list", () => {
+    const rows = platformRows(
+      [
+        { key: "acme", org: "acme", platform_name: "Acme University" },
+        { key: "beta-key", org: "beta", platform_name: "Beta College" },
+      ],
+      [
+        issued("a1", "acme", "Acme University"),
+        issued("a2", "acme", "Acme University"),
+        issued("m1", "main", "ibl.ai"),
+        base({ id: "self-1", source: "self" }),
+      ],
+    );
+    expect(rows.map((r) => [r.name, r.credentials.map((c) => c.id)])).toEqual([
+      ["Acme University", ["a1", "a2"]],
+      ["Beta College", []],
+      ["ibl.ai", ["m1"]],
+    ]);
+  });
+});
+
+describe("résumé", () => {
   it("builds a résumé with the expected sections", () => {
     const doc = buildResume(demoState(), "https://w");
     expect(doc.sections.map((s) => s.id)).toEqual([
@@ -139,13 +180,17 @@ describe("résumé and coach", () => {
     expect(autoSummary(demoState())).toMatch(/Data Scientist roles/);
   });
 
-  it("answers coach prompts from the wallet", () => {
+  it("hands the summary prompt only the facts of the record", () => {
     const s = demoState();
-    expect(coachAnswer("next", s)).toContain("Data Scientist");
-    expect(coachAnswer("status", s)).toMatch(/Wallet health: \d+\/100/);
-    expect(coachAnswer("send", s, "https://w")).toContain("verify: https://w/verify/");
-    expect(routeQuestion("what should I learn next?")).toBe("next");
-    expect(routeQuestion("help me with my CV")).toBe("resume");
+    const [system, user] = summaryPrompt(s);
+    expect(system.role).toBe("system");
+    expect(system.content).toMatch(/nothing beyond the facts given/);
+    expect(user.content).toContain(`Name: ${s.profile.name}`);
+    expect(user.content).toContain("Target role: Data Scientist");
+    const active = s.credentials.filter((c) => credentialStatus(c) === "active");
+    expect(user.content).toContain(`Credential: ${active[0].name} from ${active[0].issuer.name}`);
+    const pending = s.credentials.find((c) => credentialStatus(c) === "pending")!;
+    expect(user.content).not.toContain(`Credential: ${pending.name} from`);
   });
 });
 

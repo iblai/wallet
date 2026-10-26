@@ -1,9 +1,8 @@
 "use client";
 
 /**
- * The starter's home-page chat, moved here: the SDK <Chat> with the app's
- * agent. The Coach page mounts it when an agent is configured and the user
- * is signed in; the wallet facts go in through the Coach's prompt chips.
+ * The starter's home-page chat, moved here: the SDK <Chat> with the Coach's
+ * agent, mounted by the Coach page for a signed-in user.
  * Everything below is vibe-starter's app/(app)/page.tsx, unchanged in logic.
  */
 import { useEffect, useState } from "react";

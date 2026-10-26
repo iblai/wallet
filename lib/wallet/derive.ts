@@ -26,6 +26,7 @@ export interface SourceInputs {
   platformEarnedSkills: { name: string; points?: number }[];
   skillPoints?: { total: number; percentile?: number };
   resumeFileUrl?: string;
+  unreachablePlatforms?: string[];
   isLoading: boolean;
   isDemo: boolean;
 }
@@ -100,9 +101,36 @@ export function deriveState(i: SourceInputs): WalletState {
     settings,
     skillPoints: i.skillPoints,
     resumeFileUrl: i.resumeFileUrl,
+    unreachablePlatforms: i.unreachablePlatforms,
     isLoading: i.isLoading,
     isDemo: i.isDemo,
   };
+}
+
+export interface PlatformRow {
+  org: string;
+  name: string;
+  credentials: WalletCredential[];
+}
+
+/** "Your platforms": each platform the user belongs to, with what it issued them, plus any other issuer (`main`). */
+export function platformRows(
+  tenants: { key: string; org?: unknown; platform_name?: unknown; name?: unknown }[],
+  credentials: WalletCredential[],
+): PlatformRow[] {
+  const rows = new Map<string, PlatformRow>();
+  for (const t of tenants) {
+    const org = String(t.org || t.key);
+    rows.set(org, { org, name: String(t.platform_name || t.name || t.key), credentials: [] });
+  }
+  for (const c of credentials) {
+    if (c.source !== "platform") continue;
+    const org = c.issuer.org ?? "";
+    const row = rows.get(org) ?? { org, name: c.issuer.name, credentials: [] };
+    row.credentials.push(c);
+    rows.set(org, row);
+  }
+  return [...rows.values()];
 }
 
 /** A platform Assertion → wallet credential. Verified by the platform; public by the assertion endpoint. */
@@ -140,6 +168,7 @@ export function fromAssertion(a: {
       name: (issuer.name as string) ?? "ibl.ai",
       url: issuer.url as string | undefined,
       image: issuer.iconImage as string | undefined,
+      org: issuer.org as string | undefined,
     },
     issuedOn: a.issuedOn,
     expires: a.expires || undefined,

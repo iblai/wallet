@@ -10,11 +10,13 @@ import { test, expect } from "@playwright/test";
 const appHost = process.env.APP_HOST || "http://localhost:3000";
 
 test.describe("member journey", () => {
-  test('home shows a chat or the "No agent yet" state, never a crash', async ({ page }) => {
-    await page.goto(appHost);
+  test('/coach shows a chat or the "No agent for the Coach yet" state, never a crash', async ({
+    page,
+  }) => {
+    await page.goto(`${appHost}/coach`);
     await page.waitForLoadState("domcontentloaded");
     const chatOrEmpty = page
-      .getByRole("heading", { name: /no agent yet/i })
+      .getByRole("heading", { name: /no agent for the coach yet/i })
       .or(page.getByRole("textbox").first());
     await expect(chatOrEmpty).toBeVisible({ timeout: 30_000 });
   });

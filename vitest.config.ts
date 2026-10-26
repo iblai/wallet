@@ -9,11 +9,11 @@ export default defineConfig({
       provider: "v8",
       // The pure modules the unit tests own; components and the API slices are exercised by e2e.
       include: [
+        "lib/iblai/completions.ts",
         "lib/iblai/config.ts",
         "lib/iblai/metadata-core.ts",
         "lib/iblai/sso-redirect.ts",
         "lib/iblai/tenant.ts",
-        "lib/wallet/coach.ts",
         "lib/wallet/demo-data.ts",
         "lib/wallet/derive.ts",
         "lib/wallet/health.ts",

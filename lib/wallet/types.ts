@@ -48,6 +48,8 @@ export interface CredentialIssuer {
   url?: string;
   email?: string;
   image?: string;
+  /** The issuing platform's org, on platform credentials. */
+  org?: string;
 }
 
 export interface CredentialEvidence {
@@ -201,6 +203,8 @@ export interface WalletState {
   /** Platform skill points + percentile, when signed in. */
   skillPoints?: { total: number; percentile?: number };
   resumeFileUrl?: string;
+  /** Platform keys whose credentials could not be read. */
+  unreachablePlatforms?: string[];
   isLoading: boolean;
   isDemo: boolean;
 }

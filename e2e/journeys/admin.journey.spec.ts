@@ -90,12 +90,12 @@ test.describe("admin journey", () => {
     await expect(page.getByLabel("App name")).toBeVisible();
   });
 
-  test("/setup asks for the app name first", async ({ page }) => {
+  test("/setup shows the Coach's agent picker", async ({ page }) => {
     test.skip(!(await isAdmin(page)), "test account is not an org admin");
     await page.goto(`${appHost}/setup`);
-    await expect(page.getByRole("heading", { name: /what is this app called/i })).toBeVisible({
+    await expect(page.getByRole("heading", { name: /which agent is the coach/i })).toBeVisible({
       timeout: 30_000,
     });
-    await expect(page.getByLabel("App name")).toBeVisible();
+    await expect(page.getByPlaceholder("Search Agents")).toBeVisible();
   });
 });

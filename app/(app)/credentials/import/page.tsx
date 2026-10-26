@@ -30,7 +30,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import config from "@/lib/iblai/config";
+import { readTenants } from "@/lib/iblai/tenant";
+import { platformRows } from "@/lib/wallet/derive";
 
 /**
  * Three ways in, all ending in the same `WalletCredential`:
@@ -38,7 +39,7 @@ import config from "@/lib/iblai/config";
  *     the browser when the issuer allows it (CORS), otherwise paste the JSON.
  *  2. Pasted JSON — Open Badges 2.0 assertion or 3.0 credential.
  *  3. A record you hold on paper — typed in, labeled self-reported.
- * Credentials issued on ibl.ai never need importing: they appear live.
+ * Credentials issued on any of the user's platforms never need importing: they appear live.
  */
 export default function ImportPage() {
   return (
@@ -56,7 +57,7 @@ export default function ImportPage() {
           <ArrowLeft className="size-4" /> Credentials
         </Link>
         <Tabs defaultValue="url" className="mt-3">
-          <TabsList className="max-w-full overflow-x-auto">
+          <TabsList className="max-w-full overflow-x-auto overflow-y-hidden">
             <TabsTrigger value="url">
               <Link2 /> Badge link
             </TabsTrigger>
@@ -67,7 +68,7 @@ export default function ImportPage() {
               <PenLine /> Add manually
             </TabsTrigger>
             <TabsTrigger value="platform">
-              <Plug /> ibl.ai
+              <Plug /> Your platforms
             </TabsTrigger>
           </TabsList>
           <TabsContent value="url">
@@ -420,68 +421,81 @@ function Field({
 
 function FromPlatform() {
   const { state } = useWallet();
-  const demo = config.demoMode();
-  const platformCount = state.credentials.filter((c) => c.source === "platform").length;
+  if (state.isDemo) {
+    const sample = state.credentials.filter((c) => c.source === "platform").length;
+    return (
+      <Section
+        title="Credentials from your platforms"
+        description="Nothing to import: credentials issued to you on any of your platforms appear in this wallet the moment they are issued."
+      >
+        <p className="text-sm text-gray-700">
+          This demo wallet shows {sample} sample platform-issued credentials. Run it without{" "}
+          <code className="rounded bg-gray-100 px-1">NEXT_PUBLIC_WALLET_DEMO</code> and sign in with
+          your ibl.ai account to see your own. No platform yet? Create one at{" "}
+          <a
+            className="text-[#0058cc] underline"
+            href="https://ibl.ai/join"
+            target="_blank"
+            rel="noreferrer"
+          >
+            ibl.ai/join
+          </a>
+          .
+        </p>
+        <p className="text-muted-foreground mt-3 text-xs">
+          Issuing is done by your platform's admins (OS → Credentials, or the credentials API).
+          Earners accept here.
+        </p>
+      </Section>
+    );
+  }
+
+  const tenants = readTenants();
+  const rows = platformRows(tenants, state.credentials);
+  const nameOf = (key: string) => String(tenants.find((t) => t.key === key)?.platform_name || key);
   return (
     <Section
-      title="Credentials issued on ibl.ai"
-      description="Nothing to import: credentials your organization issues on the platform appear in this wallet the moment they are issued."
+      title="Credentials from your platforms"
+      description="Nothing to import: credentials issued to you on any of your platforms appear in this wallet the moment they are issued."
     >
-      {demo ? (
-        <div className="text-sm text-gray-700">
-          <p>
-            This demo wallet shows {platformCount} sample platform-issued credentials. Connect your
-            organization to see your own:
-          </p>
-          <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm">
-            <li>
-              Create or open your organization at{" "}
-              <a
-                className="text-[#0058cc] underline"
-                href="https://ibl.ai/join"
-                target="_blank"
-                rel="noreferrer"
-              >
-                ibl.ai/join
-              </a>
-              ; the org key is on{" "}
-              <a
-                className="text-[#0058cc] underline"
-                href="https://login.iblai.app/me"
-                target="_blank"
-                rel="noreferrer"
-              >
-                login.iblai.app/me
-              </a>
-              .
-            </li>
-            <li>
-              In <code className="rounded bg-gray-100 px-1">.env.local</code>, set{" "}
-              <code className="rounded bg-gray-100 px-1">NEXT_PUBLIC_WALLET_DEMO=false</code>, your
-              org key and a Platform API Token, then restart.
-            </li>
-            <li>
-              Add <code className="rounded bg-gray-100 px-1">http://localhost:3000</code> to the
-              organization's allowed redirect origins and sign in.
-            </li>
-          </ol>
-          <p className="text-muted-foreground mt-3 text-xs">
-            Issuing is done by your organization's admins (OS → Credentials, or the credentials
-            API). Earners accept here.
-          </p>
-        </div>
-      ) : (
-        <p className="text-sm text-gray-700">
-          {platformCount
-            ? `${platformCount} platform-issued credential${platformCount === 1 ? "" : "s"} are in your wallet.`
-            : "No credentials have been issued to you on this organization yet."}{" "}
-          Issued credentials show up under{" "}
-          <Link href="/credentials?filter=pending" className="text-[#0058cc] underline">
-            Awaiting acceptance
-          </Link>{" "}
-          until you accept them.
+      <ul className="divide-y divide-gray-100">
+        {rows.map((r) => (
+          <li key={r.org} className="py-3 first:pt-0">
+            <div className="flex items-baseline justify-between gap-3">
+              <span className="text-sm font-medium text-gray-900">{r.name}</span>
+              <span className="text-muted-foreground shrink-0 text-xs">
+                {r.credentials.length} credential{r.credentials.length === 1 ? "" : "s"}
+              </span>
+            </div>
+            {r.credentials.length ? (
+              <ul className="mt-1 space-y-0.5">
+                {r.credentials.map((c) => (
+                  <li key={c.id} className="truncate text-sm">
+                    <Link
+                      href={`/credentials/${encodeURIComponent(c.id)}`}
+                      className="text-[#0058cc] hover:underline"
+                    >
+                      {c.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+      {state.unreachablePlatforms?.length ? (
+        <p role="alert" className="mt-2 text-xs text-red-500">
+          Could not read your credentials on {state.unreachablePlatforms.map(nameOf).join(", ")}.
         </p>
-      )}
+      ) : null}
+      <p className="text-muted-foreground mt-3 text-xs">
+        New ones wait under{" "}
+        <Link href="/credentials?filter=pending" className="text-[#0058cc] underline">
+          Awaiting acceptance
+        </Link>{" "}
+        until you accept them.
+      </p>
     </Section>
   );
 }

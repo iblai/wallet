@@ -16,7 +16,7 @@
     {
       "id": "M1",
       "journey": "member",
-      "name": "home shows a chat or the No agent yet state",
+      "name": "/coach shows a chat or the No agent for the Coach yet state",
       "spec": "journeys/member.journey.spec.ts"
     },
     {
@@ -64,7 +64,7 @@
     {
       "id": "D5",
       "journey": "admin",
-      "name": "/setup asks for the app name first",
+      "name": "/setup shows the Coach's agent picker",
       "spec": "journeys/admin.journey.spec.ts"
     }
   ]

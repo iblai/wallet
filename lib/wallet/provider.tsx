@@ -3,8 +3,8 @@
 /**
  * One context for every wallet page. Two sources feed it:
  *
- *  - PlatformSource (signed in): platform credentials via the SDK's
- *    `useProfileCredentials`, skills via `useProfileSkills`, education /
+ *  - PlatformSource (signed in): credentials from every platform the user
+ *    belongs to, skills via `useProfileSkills`, education /
  *    experience / résumé via the career hooks, and everything the user added
  *    in the wallet via `useUserSettings` (per-user platform metadata).
  *  - DemoSource (NEXT_PUBLIC_WALLET_DEMO): the bundled sample wallet, with
@@ -25,7 +25,8 @@ import {
 } from "react";
 import config from "@/lib/iblai/config";
 import { useUserSettings } from "@/lib/iblai/metadata";
-import { resolveAppTenant } from "@/lib/iblai/tenant";
+import { readTenants, resolveAppTenant } from "@/lib/iblai/tenant";
+import { sessionFetch } from "@/lib/iblai/session-fetch";
 import { deriveState, fromAssertion } from "./derive";
 
 export { deriveState, fromAssertion };
@@ -286,6 +287,15 @@ function DemoSource({ children }: { children: ReactNode }) {
 
 // ---------- platform source ----------
 
+type Assertion = Parameters<typeof fromAssertion>[0];
+type AssertionPage = {
+  result?: { results?: Assertion[]; data?: Assertion[] };
+  results?: Assertion[];
+  data?: Assertion[];
+};
+const assertionsOf = (r: AssertionPage | null) =>
+  r?.result?.results ?? r?.result?.data ?? r?.results ?? r?.data ?? [];
+
 // Created once at module scope; its SDK data hooks run only when it renders, never in the demo build.
 const PlatformSource = platformImpl();
 
@@ -293,7 +303,6 @@ const PlatformSource = platformImpl();
 // either way); the indirection keeps PlatformSource and DemoSource symmetric.
 import { useProfileSkills, useUserMetadata } from "@iblai/iblai-js/web-containers";
 import {
-  useGetUserCredentialsQuery,
   useGetUserEducationQuery,
   useGetUserExperienceQuery,
   useGetUserResumeQuery,
@@ -312,33 +321,34 @@ function platformImpl() {
     }, []);
 
     const store = useUserSettings<WalletSettings>(WALLET_SETTINGS_DEFAULTS);
-    // The platform's assertions for this user. The generated client names the
-    // path segment `userId`, and the endpoint accepts a username there (see
-    // /iblai-api-credential); the SDK's `useProfileCredentials` forgets to
-    // pass it, hence the direct query.
-    const creds = useGetUserCredentialsQuery(
-      {
-        platformKey: org,
-        userId: username,
-        includeExpired: true,
-        includeRevoked: true,
-        pageSize: 100,
-      } as unknown as { platformKey: string },
-      { skip: !org || !username },
-    );
-    const fetchedCredentials = useMemo(() => {
-      const r = creds.data as
-        | {
-            result?: { results?: unknown[]; data?: unknown[] };
-            results?: unknown[];
-            data?: unknown[];
-          }
-        | undefined;
-      return (r?.result?.results ?? r?.result?.data ?? r?.results ?? r?.data ?? []) as Parameters<
-        typeof fromAssertion
-      >[0][];
-    }, [creds.data]);
-    const credsLoading = creds.isLoading;
+    // The user's assertions on every platform they belong to: the DM lets a user
+    // read their own on each with this one session (its CredentialPermission).
+    const [assertions, setAssertions] = useState<{
+      found: Assertion[];
+      unreachable: string[];
+    } | null>(null);
+    useEffect(() => {
+      if (!username) return;
+      const keys = [...new Set([org, ...readTenants().map((t) => t.key)])].filter(Boolean);
+      let live = true;
+      void Promise.allSettled(
+        keys.map((k) =>
+          sessionFetch<AssertionPage>(
+            `/api/credentials/orgs/${encodeURIComponent(k)}/users/${encodeURIComponent(username)}/assertions/?include_expired=true&include_revoked=true&page_size=100`,
+          ),
+        ),
+      ).then((results) => {
+        if (live)
+          setAssertions({
+            found: results.flatMap((r) => (r.status === "fulfilled" ? assertionsOf(r.value) : [])),
+            unreachable: keys.filter((_, i) => results[i].status === "rejected"),
+          });
+      });
+      return () => {
+        live = false;
+      };
+    }, [org, username]);
+    const credsLoading = !!username && !assertions;
     const { earnedSkills } = useProfileSkills(false);
     const { userMetaData } = useUserMetadata();
     const edu = useGetUserEducationQuery({ org, username }, { skip: !org || !username });
@@ -350,8 +360,8 @@ function platformImpl() {
     const pts = { data: undefined as { total_points: number; percentile?: number } | undefined };
 
     const platformCredentials = useMemo(
-      () => (fetchedCredentials ?? []).map(fromAssertion),
-      [fetchedCredentials],
+      () => (assertions?.found ?? []).map(fromAssertion),
+      [assertions],
     );
     const platformIds = useMemo(
       () => new Set(platformCredentials.map((c) => c.id)),
@@ -437,6 +447,7 @@ function platformImpl() {
             ? { total: pts.data.total_points, percentile: pts.data.percentile }
             : undefined,
           resumeFileUrl,
+          unreachablePlatforms: assertions?.unreachable,
           isLoading: store.isLoading || credsLoading,
           isDemo: false,
         }),
@@ -451,6 +462,7 @@ function platformImpl() {
         pts.data,
         resumeFileUrl,
         credsLoading,
+        assertions,
         username,
         userMetaData,
       ],

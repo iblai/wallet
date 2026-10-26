@@ -28,8 +28,8 @@ One place for everything you have earned: the badges and certificates your organ
 | 🎓 **Learner-owned record**        | The wallet belongs to the person, not the issuer. Everything they add lives in their own ibl.ai profile and metadata and follows them across every organization they belong to — the idea behind WGU's Achievement Wallet and the Learning and Employment Record, on the ibl.ai platform.                             |
 | ✅ **Verified, not screenshotted** | Credentials issued on ibl.ai verify live against the platform's public assertion endpoint; a revoked one disappears from every share link on its own. Imported Open Badges carry the issuer's link. Self-reported records say so, everywhere. The verification page is what Credly made employers expect.             |
 | 🧭 **Skills → jobs**               | Every credential attests skills; every skill maps to roles. Pick a target role and see the weighted gap, what typically closes it, and illustrative labor-market context — the "labor market insights" Credly attaches to a badge, on the learner's own data.                                                         |
-| 📄 **A résumé from the record**    | Summary, skills, experience, licenses & certifications and education, written from the wallet; every credential line links to its verification. Print to PDF, download Markdown, or let the Coach draft it.                                                                                                           |
-| 🤖 **A coach, not a help page**    | The organization's ibl.ai agent (memory, RAG, guardrails tuned in the Agentic OS) answers from the wallet; without one, a built-in coach still writes résumé lines, picks what to send for a role and explains the gap.                                                                                               |
+| 📄 **A résumé from the record**    | Summary, skills, experience, licenses & certifications and education, written from the wallet; every credential line links to its verification. Print to PDF or download Markdown; Draft for me writes the summary with the platform's AI.                                                                            |
+| 🤖 **A coach, not a help page**    | The platform's ibl.ai agent (memory, RAG, guardrails tuned in the Agentic OS): the one an admin picks on `/setup`, or else the platform's default agent.                                                                                                                                                              |
 | 🔓 **No server, no secrets**       | Nothing runs on a server of ours and no API token is stored. The browser talks to ibl.ai as the signed-in user; share links are self-contained and verified by the viewer's browser. Sign-in, organizations, profile, notifications, analytics and admin come from the platform, through the same shell as os.ibl.ai. |
 
 ---
@@ -50,11 +50,11 @@ Each credential page shows the badge, issuer, earning criteria, evidence and ski
 
 **Skills** — evidenced skills (from accepted credentials and ibl.ai skill points), self-reported skills with a 1–5 level, and goals; a target role with the weighted gap analysis; other roles the wallet already fits.
 
-**Résumé** — classic, modern or compact; sections on/off; choose which credentials to feature; summary drafted from the record and editable.
+**Résumé** — classic, modern or compact; sections on/off; choose which credentials to feature; summary drafted from the record by the platform's AI, and editable.
 
 **Share** — a public wallet page link, collection links (send only what an application needs), per-credential public/private, and the whole record as an Open Badges 3.0 bundle (a Verifiable Presentation without proof — the LER shape other wallets read).
 
-**Coach** — prompts that write from the wallet: where it stands, what to earn next, the résumé summary, the full résumé, which credentials to send for a role, a LinkedIn post, which roles fit today, how to talk about each credential in an interview.
+**Coach** — a chat (the SDK `<Chat>`) with the platform's agent: the one an admin picks on `/setup` (`MentorSelectionGrid`, or a new one from `CreateAgentModal`), or else the platform's default agent.
 
 **Profile** — the SDK's full ibl.ai profile (basic, social, education with its credentials and skills sub-tabs, experience with résumé upload, memory, history, privacy, security), reached from the avatar menu as in the OS.
 
@@ -113,11 +113,9 @@ Captured from the bundled sample wallet (`NEXT_PUBLIC_WALLET_DEMO=true`): one le
 
 <img src="docs/images/resume.png" alt="Résumé builder" width="900">
 
-**Share — the public page and collection links · Coach**
+**Share — the public page and collection links**
 
 <img src="docs/images/share.png" alt="Share page" width="900">
-
-<img src="docs/images/coach.png" alt="Coach" width="900">
 
 **What an employer sees**
 
@@ -165,16 +163,15 @@ New to ibl.ai? [ibl.ai/join](https://ibl.ai/join) creates your account and your 
 
 All configuration is `NEXT_PUBLIC_*`, read in the browser, and optional against hosted `iblai.app`; defaults live in [`lib/iblai/config.ts`](lib/iblai/config.ts). There is no server-side configuration and no secret.
 
-| Variable                       | Default                     | Description                                                                             |
-| ------------------------------ | --------------------------- | --------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_MAIN_TENANT_KEY`  | `main`                      | The community organization — only the fallback before anyone has signed in              |
-| `NEXT_PUBLIC_WALLET_DEMO`      | `false`                     | `true` runs the bundled sample wallet with no platform calls                            |
-| `NEXT_PUBLIC_DEFAULT_AGENT_ID` | —                           | Pin the Coach's agent instead of reading it from the organization's metadata (`/setup`) |
-| `NEXT_PUBLIC_APP_NAME`         | `Credential Wallet`         | Browser tab and the metadata namespace (`apps.<slug>`)                                  |
-| `NEXT_PUBLIC_API_BASE_URL`     | `https://api.iblai.app`     | Consolidated API; `/dm`, `/lms`, `/axd` derive from it                                  |
-| `NEXT_PUBLIC_AUTH_URL`         | `https://login.iblai.app`   | The hosted Auth SPA                                                                     |
-| `NEXT_PUBLIC_BASE_WS_URL`      | `wss://asgi.data.iblai.app` | Chat websocket for the Coach                                                            |
-| `NEXT_PUBLIC_SUPPORT_EMAIL`    | `support@ibl.ai`            | Shown in chat footers and error toasts                                                  |
+| Variable                       | Default                     | Description                                                                         |
+| ------------------------------ | --------------------------- | ----------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_MAIN_TENANT_KEY`  | `main`                      | The community organization — only the fallback before anyone has signed in          |
+| `NEXT_PUBLIC_WALLET_DEMO`      | `false`                     | `true` runs the bundled sample wallet with no platform calls                        |
+| `NEXT_PUBLIC_DEFAULT_AGENT_ID` | —                           | Pin the Coach's agent instead of reading it from the platform's metadata (`/setup`) |
+| `NEXT_PUBLIC_API_BASE_URL`     | `https://api.iblai.app`     | Consolidated API; `/dm`, `/lms`, `/axd` derive from it                              |
+| `NEXT_PUBLIC_AUTH_URL`         | `https://login.iblai.app`   | The hosted Auth SPA                                                                 |
+| `NEXT_PUBLIC_BASE_WS_URL`      | `wss://asgi.data.iblai.app` | Chat websocket for the Coach                                                        |
+| `NEXT_PUBLIC_SUPPORT_EMAIL`    | `support@ibl.ai`            | Shown in chat footers and error toasts                                              |
 
 ---
 
@@ -192,7 +189,7 @@ On hosted iblai.app no origin registration is needed: the sign-in site accepts a
 
 Import the repository; `vercel.json` pins the Next.js preset and the build is the regular output (standalone is for a container host). Project settings:
 
-- Environment: `ENABLE_EXPERIMENTAL_COREPACK=1` (pnpm 12 from `packageManager`), `NEXT_PUBLIC_MAIN_TENANT_KEY=main`, and optionally `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_SUPPORT_EMAIL`, `NEXT_PUBLIC_DEFAULT_AGENT_ID`. Leave `NEXT_PUBLIC_WALLET_DEMO` unset; a separate project with it set to `true` serves the demo.
+- Environment: `ENABLE_EXPERIMENTAL_COREPACK=1` (pnpm 12 from `packageManager`), `NEXT_PUBLIC_MAIN_TENANT_KEY=main`, and optionally `NEXT_PUBLIC_SUPPORT_EMAIL`, `NEXT_PUBLIC_DEFAULT_AGENT_ID`. Leave `NEXT_PUBLIC_WALLET_DEMO` unset; a separate project with it set to `true` serves the demo.
 - Domain: add it to the project. The platform's `custom-domains` lookup for the host should answer `{}` (no platform pinned), which keeps the multi-organization sign-in.
 - After the first deploy: sign in, check the console shows no token lines, then open a public wallet link and a verify link cold.
 
@@ -211,23 +208,23 @@ wallet/
 │   ├── (app)/                            # the signed-in wallet — the OS shell
 │   │   ├── layout.tsx                    # SidebarProvider → PlatformSidebar + SidebarInset (PlatformNavbar)
 │   │   ├── page.tsx                      # Wallet home
-│   │   ├── credentials/                  # list · [id] detail · import (link · JSON · manual · ibl.ai)
+│   │   ├── credentials/                  # list · [id] detail · import (link · JSON · manual · your platforms)
 │   │   ├── skills/ · resume/ · share/    # skills + gap analysis · résumé builder · public page + export
-│   │   ├── coach/                        # the org's agent (SDK <Chat>) or the built-in coach
+│   │   ├── coach/                        # SDK <Chat> with the platform's agent
 │   │   ├── profile/ · agents/ · account/ · notifications/
 │   │   └── admin/                        # credentials (issue side) · analytics · users · billing · memory · organization
 │   ├── (public)/p/[org]/[username]/      # public wallet page — no session, verified in the viewer's browser
 │   ├── (public)/verify/[id]/             # one credential's verification page
-│   ├── setup/                            # first run: name the app, pick or create the Coach's agent
+│   ├── setup/                            # admins pick or create the Coach's agent
 │   └── sso-login-complete/               # the Auth SPA's return
 ├── components/
 │   ├── shell/                            # wallet-sidebar (PlatformSidebar sections + footer cluster) · top-bar (PlatformNavbar)
 │   ├── wallet/                           # credential card, badges, section/page, public wallet, demo banner, agent chat
 │   └── ui/                               # shadcn/ui (Base UI) primitives
 ├── lib/
-│   ├── wallet/                           # types · open-badges (import/export) · market (roles, gap) · health · resume · coach
+│   ├── wallet/                           # types · open-badges (import/export) · market (roles, gap) · health · resume
 │   │                                     # derive (pure state) · provider (demo vs platform) · share (links) · public-platform
-│   └── iblai/                            # config · tenant (multi-org) · auth-utils · metadata (user/org settings) · session-fetch
+│   └── iblai/                            # config · tenant (multi-org) · auth-utils · metadata (user/org settings) · session-fetch · completions
 ├── __tests__/ · e2e/                     # Vitest · Playwright journeys
 └── docs/images/                          # screenshots
 ```
@@ -236,10 +233,11 @@ wallet/
 
 ```
 Learner ─► React pages ─► SDK hooks / sessionFetch ─► api.iblai.app/dm/…        Authorization: Token <dm_token>
-             credentials: …/credentials/orgs/<org>/users/<me>/assertions/        (issued on the platform)
+             credentials: …/credentials/orgs/<org>/users/<me>/assertions/        (for each platform I belong to)
              skills, education, experience, résumé: …/skills/…, …/career/…       (the profile's career records)
              everything the learner adds: …/core/users/platform-metadata/        (apps.credential-wallet)
-        └► SDK <Chat> ─► the organization's agent (the Coach)
+             résumé summary: …/ai-mentor/orgs/<org>/v1/chat/completions          (OpenAI-compatible, Draft for me)
+        └► SDK <Chat> ─► the platform's agent (the Coach)
 Employer ─► /p/<org>/<user>#d=… ─► GET …/credentials/public/assertions/{id}/    (no auth; platform-issued)
                                  └► issuer's hosted badge JSON when CORS allows   (imported)
 ```

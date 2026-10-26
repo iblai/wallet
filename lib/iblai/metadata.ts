@@ -28,7 +28,12 @@ import {
   useUpdateUserPlatformMetadataMutation,
 } from "@iblai/iblai-js/data-layer";
 import { resolveAppTenant } from "./tenant";
-import { mergeAppNamespace, readAppNamespace, type Metadata } from "./metadata-core";
+import {
+  mergeAppNamespace,
+  platformDefaultAgentId,
+  readAppNamespace,
+  type Metadata,
+} from "./metadata-core";
 
 export { APP_SLUG, mergeAppNamespace, readAppNamespace } from "./metadata-core";
 
@@ -97,14 +102,12 @@ export function useUserSettings<T extends UserSettings = UserSettings>(
 
 /** Extend with your own fields. Public read — nothing secret goes here. */
 export type OrgSettings = {
-  /** The agent the home page chats with when NEXT_PUBLIC_DEFAULT_AGENT_ID is empty. */
+  /** The Coach's agent; empty uses the platform's default (`overall_default_mentor`). */
   defaultAgentId?: string;
-  /** What the app calls itself (browser tab, setup). */
+  /** What the app calls itself. */
   appName?: string;
   welcomeMessage?: string;
   supportUrl?: string;
-  /** Set by /setup when an admin finished the first run. */
-  setupCompletedAt?: string;
   [key: string]: unknown;
 };
 
@@ -153,12 +156,16 @@ export function useOrgSettings<T extends OrgSettings = OrgSettings>(
       await mutate([
         { org, requestBody: { metadata } as unknown as PlatformPublicMetadataBody },
       ]).unwrap();
+      // Resolve once readers see the write, not only when the PUT lands.
+      await query.refetch();
     },
     [mutate, org, query],
   );
 
   return {
     settings,
+    /** The platform's own default agent, outside this app's namespace. */
+    platformDefaultAgentId: platformDefaultAgentId(current?.metadata),
     update,
     isLoading: query.isLoading,
     isSaving: mutation.isLoading,
