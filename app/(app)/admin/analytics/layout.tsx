@@ -18,6 +18,8 @@ export default function AdminAnalyticsLayout({ children }: { children: React.Rea
         <AnalyticsLayout
           currentPath={pathname}
           basePath={basePath}
+          // The SDK strip also offers these four; the wallet has no route for them.
+          excludeTabs={["courses", "programs", "memory", "audit"]}
           onTabChange={(tab: string) => router.push(tab ? `${basePath}/${tab}` : basePath)}
         >
           {children}

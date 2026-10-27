@@ -117,17 +117,22 @@ function Preview({
 }
 
 function useSave() {
-  const { actions } = useWallet();
+  const { state, actions } = useWallet();
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const save = async (c: WalletCredential) => {
+    // The page is usable before the wallet has loaded; a save then would write over it.
+    if (state.isLoading) {
+      toast.error("Your wallet is still loading. Try again in a moment.");
+      return;
+    }
     setSaving(true);
     try {
       await actions.addCredential(c);
       toast.success(`${c.name} added`);
       router.push(`/credentials/${encodeURIComponent(c.id)}`);
-    } catch {
-      toast.error("Could not save the credential");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not save the credential");
     } finally {
       setSaving(false);
     }

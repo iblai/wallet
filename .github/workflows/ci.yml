@@ -34,3 +34,14 @@ jobs:
       - run: pnpm build
         env:
           NEXT_PUBLIC_MAIN_TENANT_KEY: main
+      # The demo journeys: the sample wallet on the build just made, no account, no platform call.
+      - run: pnpm exec playwright install chromium --only-shell
+      - run: pnpm test:e2e:demo
+        env:
+          NEXT_PUBLIC_MAIN_TENANT_KEY: main
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: failure()
+        with:
+          name: playwright-demo
+          path: test-results/
+          if-no-files-found: ignore

@@ -101,7 +101,7 @@ components), the wiring in BRAND.md.
 | `proxy.ts`                                                 | The nonce-based CSP (`applyCsp`, `frame-ancestors 'none'`) and the `x-pathname` header                                                                                                                                                                                            |
 | `app/manifest.ts`                                          | PWA manifest; icons in `public/icon-{256,1024}.png`                                                                                                                                                                                                                               |
 | `providers/iblai-providers.tsx`, `store/iblai-store.ts`    | SDK providers (+ service worker, toaster, Radix guard); the store's slice keys are fixed by the SDK — keep them                                                                                                                                                                   |
-| `e2e/`                                                     | Playwright: auth, member, admin journeys; `COVERAGE.md` + `coverage.json`                                                                                                                                                                                                         |
+| `e2e/`                                                     | Playwright in the OS's shape: `fixtures/wallet-test.ts` (page objects, `memberPage`, `publicPage`, `@demo`), `page-objects/`, `utils/app.ts`, journeys 01–13, `COVERAGE.md` + `coverage.json` (checked by `__tests__/e2e-coverage.test.ts`)                                       |
 
 ## Invariants (and why)
 
@@ -167,6 +167,7 @@ pnpm lint            # oxlint, zero warnings
 pnpm format          # oxfmt (format:check is the CI gate)
 pnpm test            # Vitest
 pnpm test:coverage   # Vitest with the coverage thresholds (CI)
-pnpm test:e2e        # Playwright (needs e2e/.env.development)
+pnpm e2e:accounts    # once: the two Playwright accounts in the throwaway organization iblai.env names
+pnpm test:e2e        # Playwright: chromium + mobile + demo against pnpm dev (test:e2e:demo needs no account; CI runs it)
 pnpm release         # release-it (CI runs it on every push to main)
 ```

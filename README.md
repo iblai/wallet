@@ -152,10 +152,22 @@ New to ibl.ai? [ibl.ai/join](https://ibl.ai/join) creates your account and your 
 | `pnpm dev`                         | Dev server on port 3000                                                                                 |
 | `pnpm build` / `pnpm start`        | Production build / serve it                                                                             |
 | `pnpm typecheck` · `lint` · `test` | TypeScript · oxlint · Vitest                                                                            |
-| `pnpm test:e2e`                    | Playwright journeys (needs `e2e/.env.development`)                                                      |
+| `pnpm e2e:accounts`                | Once: creates the two Playwright accounts in the throwaway organization `iblai.env` names               |
+| `pnpm test:e2e`                    | Playwright against `pnpm dev`: Chrome, a Pixel 7, the demo project (`test:e2e:demo` needs no account)   |
 | `pnpm format` · `format:check`     | oxfmt (the CI gate)                                                                                     |
 | `pnpm test:coverage`               | Vitest with the coverage thresholds (CI)                                                                |
 | `pnpm release`                     | release-it: version from the commits, CHANGELOG, tag, GitHub Release (CI runs it on every push to main) |
+
+### End-to-end tests
+
+`e2e/` is a Playwright suite in the shape of the OS's: page objects, fixtures (`memberPage`, `publicPage`),
+thirteen numbered journeys and a checkpoint registry (`e2e/COVERAGE.md` + `e2e/coverage.json`, kept honest
+by `__tests__/e2e-coverage.test.ts`). The journeys sign in through the real Auth SPA as two accounts
+`pnpm e2e:accounts` creates in a **throwaway organization**: `iblai.env` must name it (`PLATFORM`) with its
+Platform API Token (`TOKEN`). `/iblai-vibe-connect` writes that file — run it from an empty directory and
+move `iblai.env` here; from this root it would rewrite `NEXT_PUBLIC_MAIN_TENANT_KEY`, which means the
+community organization in this app. Never read or print `e2e/.env.development`. The `demo` project drives
+the sample wallet with no account, so CI runs it on every push; the signed-in journeys run on your machine.
 
 ---
 

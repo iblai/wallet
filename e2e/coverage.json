@@ -1,71 +1,573 @@
 {
-  "version": 1,
-  "checkpoints": [
+  "version": 2,
+  "lastUpdated": "2026-10-28",
+  "summary": {
+    "totalCheckpoints": 78,
+    "coveredCheckpoints": 76,
+    "pendingCheckpoints": 2,
+    "percent": 97,
+    "totalJourneys": 13
+  },
+  "journeys": [
     {
-      "id": "A1",
-      "journey": "auth",
-      "name": "authenticated user lands on the home page",
-      "spec": "journeys/auth.journey.spec.ts"
+      "id": "authentication",
+      "name": "Authentication",
+      "spec": "01-authentication.spec.ts",
+      "sourceFiles": [
+        "providers/iblai-providers.tsx",
+        "lib/iblai/auth-utils.ts",
+        "lib/iblai/tenant.ts",
+        "components/navbar/user-profile-button.tsx"
+      ],
+      "checkpoints": [
+        {
+          "id": "auth-01",
+          "description": "Signed-out visitor on / is sent to the Auth SPA login (app=mentor, redirect-to)",
+          "status": "covered"
+        },
+        {
+          "id": "auth-02",
+          "description": "Signed-out visitor on /credentials is redirected; /p/… and /verify/… stay public",
+          "status": "covered"
+        },
+        {
+          "id": "auth-03",
+          "description": "Signed-in admin: tenant is the key, current_tenant its record and an entry of tenants, no app_tenant pin",
+          "status": "covered"
+        },
+        {
+          "id": "auth-04",
+          "description": "?tenant=<own organization> pins app_tenant and the page renders",
+          "status": "covered"
+        },
+        {
+          "id": "auth-05",
+          "description": "Log Out from More options clears the session and goes to the Auth SPA logout",
+          "status": "covered"
+        }
+      ]
     },
     {
-      "id": "A2",
-      "journey": "auth",
-      "name": "auth tokens are stored in localStorage",
-      "spec": "journeys/auth.journey.spec.ts"
+      "id": "shell-and-navigation",
+      "name": "Shell & Navigation",
+      "spec": "02-shell-and-navigation.spec.ts",
+      "sourceFiles": [
+        "app/(app)/layout.tsx",
+        "components/shell/wallet-sidebar.tsx",
+        "components/shell/top-bar.tsx",
+        "components/navbar/admin-mode-switch.tsx"
+      ],
+      "checkpoints": [
+        {
+          "id": "nav-01",
+          "description": "Every sidebar row (Credentials, Skills, Résumé, Share, Coach, Wallet) lands on its page with the top-bar title and aria-current",
+          "status": "covered"
+        },
+        {
+          "id": "nav-02",
+          "description": "Add credential (sidebar) opens the import page",
+          "status": "covered"
+        },
+        {
+          "id": "nav-03",
+          "description": "Collapse sidebar / Expand sidebar and Ctrl+B toggle the rail",
+          "status": "covered"
+        },
+        {
+          "id": "nav-04",
+          "description": "The bell opens the notifications dropdown; View all goes to /notifications",
+          "status": "covered"
+        },
+        {
+          "id": "nav-05",
+          "description": "More options offers Profile and Log Out",
+          "status": "covered"
+        },
+        {
+          "id": "nav-06",
+          "description": "Footer: Invites opens Invite Users; Management, Integrations, Advanced open their dialogs; Notifications navigates",
+          "status": "covered"
+        },
+        {
+          "id": "nav-07",
+          "description": "Support opens ibl.ai/docs in a new tab",
+          "status": "covered"
+        },
+        {
+          "id": "nav-08",
+          "description": "User mode hides Analytics and the admin footer rows; Admin mode brings them back",
+          "status": "covered"
+        }
+      ]
     },
     {
-      "id": "M1",
-      "journey": "member",
-      "name": "/coach shows a chat or the No agent for the Coach yet state",
-      "spec": "journeys/member.journey.spec.ts"
+      "id": "home",
+      "name": "Home",
+      "spec": "03-home.spec.ts",
+      "sourceFiles": ["app/(app)/page.tsx"],
+      "checkpoints": [
+        {
+          "id": "home-01",
+          "description": "Empty wallet: Welcome, {first}. Your wallet is empty. and Add your first credential → import",
+          "status": "covered"
+        },
+        {
+          "id": "home-02",
+          "description": "Demo: greeting, summary line and the four tiles with their numbers; the pending tile filters the list",
+          "status": "covered"
+        },
+        {
+          "id": "home-03",
+          "description": "Demo: Needs your decision → Review opens the pending credential; All credentials; the checklist links",
+          "status": "covered"
+        },
+        {
+          "id": "home-04",
+          "description": "Demo: Toward {role} → Full gap analysis opens Skills",
+          "status": "covered"
+        }
+      ]
     },
     {
-      "id": "M2",
-      "journey": "member",
-      "name": "agents page lists agents",
-      "spec": "journeys/member.journey.spec.ts"
+      "id": "credentials-lifecycle",
+      "name": "Credentials lifecycle",
+      "spec": "04-credentials-lifecycle.spec.ts",
+      "sourceFiles": [
+        "app/(app)/credentials/page.tsx",
+        "app/(app)/credentials/[id]/page.tsx",
+        "app/(app)/credentials/import/page.tsx",
+        "components/wallet/credential-card.tsx"
+      ],
+      "checkpoints": [
+        {
+          "id": "cred-01",
+          "description": "Empty list: No credentials yet; Add credential → import",
+          "status": "covered"
+        },
+        {
+          "id": "cred-02",
+          "description": "Paste JSON: bad JSON is named; Sample 2.0 is recognized; Add to wallet toasts and opens the credential",
+          "status": "covered"
+        },
+        {
+          "id": "cred-03",
+          "description": "The pending badge's banner; Accept → Accepted and made public, Active, Public",
+          "status": "covered"
+        },
+        {
+          "id": "cred-04",
+          "description": "The list counts it (All 1); search finds it; a miss shows Nothing matches",
+          "status": "covered"
+        },
+        {
+          "id": "cred-05",
+          "description": "Share… dialog: the verify link carries the holder's copy (#c=); Copy link toasts",
+          "status": "covered"
+        },
+        {
+          "id": "cred-06",
+          "description": "Open Badges 3.0 JSON downloads <slug>.ob3.json, an OpenBadgeCredential",
+          "status": "covered"
+        },
+        {
+          "id": "cred-07",
+          "description": "Make private / Make public toast and change Visibility",
+          "status": "covered"
+        },
+        {
+          "id": "cred-08",
+          "description": "Badge link: an http link is refused; an https badge is fetched and recognized",
+          "status": "covered"
+        },
+        {
+          "id": "cred-09",
+          "description": "Add manually: Name and Issuer gate the submit; the record is Self-reported; Remove from wallet",
+          "status": "covered"
+        },
+        {
+          "id": "cred-10",
+          "description": "Remove from wallet (confirm) → Removed; the list is empty again",
+          "status": "covered"
+        },
+        {
+          "id": "cred-11",
+          "description": "Member: import the 3.0 sample, accept it, remove it",
+          "status": "covered"
+        }
+      ]
     },
     {
-      "id": "M3",
-      "journey": "member",
-      "name": "profile carries the app preferences card",
-      "spec": "journeys/member.journey.spec.ts"
+      "id": "credential-states",
+      "name": "Credential states (demo)",
+      "spec": "05-credential-states.spec.ts",
+      "sourceFiles": [
+        "app/(app)/credentials/page.tsx",
+        "app/(app)/credentials/[id]/page.tsx",
+        "components/wallet/badges.tsx",
+        "components/wallet/demo-banner.tsx"
+      ],
+      "checkpoints": [
+        {
+          "id": "cst-01",
+          "description": "Filter counts All 7 / Verified 5 / Awaiting acceptance 1 / Expiring 1 / Expired / revoked 1 / Public 4 / Self-reported 1; ?filter=pending preselects",
+          "status": "covered"
+        },
+        {
+          "id": "cst-02",
+          "description": "Sort By name, search, and the Collection select narrow the list",
+          "status": "covered"
+        },
+        {
+          "id": "cst-03",
+          "description": "Decline on the pending credential → Declined",
+          "status": "covered"
+        },
+        {
+          "id": "cst-04",
+          "description": "The expired self-reported record: Expired, Self-reported, cannot be shared",
+          "status": "covered"
+        },
+        {
+          "id": "cst-05",
+          "description": "The expiring certification shows Expires in N days.",
+          "status": "covered"
+        },
+        {
+          "id": "cst-06",
+          "description": "Collections dialog lists the existing collection and creates a new one",
+          "status": "covered"
+        },
+        {
+          "id": "cst-07",
+          "description": "Reset sample data restores the declined credential",
+          "status": "covered"
+        },
+        {
+          "id": "cst-08",
+          "description": "An unknown id shows Credential not found and Back to credentials",
+          "status": "covered"
+        }
+      ]
     },
     {
-      "id": "M4",
-      "journey": "member",
-      "name": "User mode never shows admin links",
-      "spec": "journeys/member.journey.spec.ts"
+      "id": "skills",
+      "name": "Skills",
+      "spec": "06-skills.spec.ts",
+      "sourceFiles": ["app/(app)/skills/page.tsx", "lib/wallet/derive.ts", "lib/wallet/market.ts"],
+      "checkpoints": [
+        {
+          "id": "skl-01",
+          "description": "Demo: the three tiles, the target role, You have / Gaps and the pay tiles",
+          "status": "covered"
+        },
+        {
+          "id": "skl-02",
+          "description": "Demo: ?role= previews a role; Make it my target saves it",
+          "status": "covered"
+        },
+        {
+          "id": "skl-03",
+          "description": "Demo: Add a goal lists it under Goals; Remove drops it",
+          "status": "covered"
+        },
+        {
+          "id": "skl-04",
+          "description": "Demo: Self-report a skill with a level lists it under Self-reported",
+          "status": "covered"
+        },
+        {
+          "id": "skl-05",
+          "description": "Demo: every sample skill is in one list — a rated skill with evidence stays evidenced (the derive origin fix)",
+          "status": "covered"
+        },
+        {
+          "id": "skl-06",
+          "description": "Admin: a target role set survives a reload and can be changed",
+          "status": "covered"
+        }
+      ]
     },
     {
-      "id": "D1",
-      "journey": "admin",
-      "name": "admin links toggle with Admin mode",
-      "spec": "journeys/admin.journey.spec.ts"
+      "id": "resume",
+      "name": "Résumé",
+      "spec": "07-resume.spec.ts",
+      "sourceFiles": [
+        "app/(app)/resume/page.tsx",
+        "lib/wallet/resume.ts",
+        "lib/iblai/completions.ts"
+      ],
+      "checkpoints": [
+        {
+          "id": "res-01",
+          "description": "Demo: the document shows the name and the five sections",
+          "status": "covered"
+        },
+        {
+          "id": "res-02",
+          "description": "Demo: the template switches; the education toggle hides and shows its section",
+          "status": "covered"
+        },
+        {
+          "id": "res-03",
+          "description": "Demo: unticking a featured credential removes it from the document",
+          "status": "covered"
+        },
+        {
+          "id": "res-04",
+          "description": "Demo: Markdown downloads <name>-resume.md; Copy text toasts; Print / PDF calls window.print",
+          "status": "covered"
+        },
+        {
+          "id": "res-05",
+          "description": "Admin: a summary saved survives a reload; Clear + Save empties it",
+          "status": "covered"
+        },
+        {
+          "id": "res-06",
+          "description": "Admin: Draft for me ends in text or a named error toast, never silence",
+          "status": "covered"
+        }
+      ]
     },
     {
-      "id": "D2",
-      "journey": "admin",
-      "name": "/admin/users renders the SDK Management panel (tab strip + member table) and the invite actions",
-      "spec": "journeys/admin.journey.spec.ts"
+      "id": "share-and-public",
+      "name": "Share & public page",
+      "spec": "08-share-and-public.spec.ts",
+      "sourceFiles": [
+        "app/(app)/share/page.tsx",
+        "app/(public)/p/[org]/[username]/page.tsx",
+        "app/(public)/verify/[id]/page.tsx",
+        "app/(public)/layout.tsx",
+        "components/wallet/public-wallet.tsx",
+        "lib/wallet/share.ts",
+        "lib/wallet/public-platform.ts"
+      ],
+      "checkpoints": [
+        {
+          "id": "shr-01",
+          "description": "Public page On → Public page is live; the link is /p/<org>/<username>#d=…",
+          "status": "covered"
+        },
+        {
+          "id": "shr-02",
+          "description": "Display handle saved; an invalid handle is refused; the previous one restored",
+          "status": "covered"
+        },
+        {
+          "id": "shr-03",
+          "description": "Copy public link toasts; Post on LinkedIn points at the link",
+          "status": "covered"
+        },
+        {
+          "id": "shr-04",
+          "description": "Employer opens the link cold: the name, 1 of 1 verifiable, Credentials (1), the verify link",
+          "status": "covered"
+        },
+        {
+          "id": "shr-05",
+          "description": "Verify: Verified against the issuer (stubbed), Could not reach the issuer without it, Nothing to verify for an unknown id",
+          "status": "covered"
+        },
+        {
+          "id": "shr-06",
+          "description": "Make private / Make public move the credential between the Public and Private lists",
+          "status": "covered"
+        },
+        {
+          "id": "shr-07",
+          "description": "Export record (OB3 bundle) downloads <username>-wallet.json with one credential",
+          "status": "covered"
+        },
+        {
+          "id": "shr-08",
+          "description": "Public page Off → Public page is off; the wallet is emptied again",
+          "status": "covered"
+        }
+      ]
     },
     {
-      "id": "D3",
-      "journey": "admin",
-      "name": "/admin/analytics renders the tab strip",
-      "spec": "journeys/admin.journey.spec.ts"
+      "id": "coach-and-agents",
+      "name": "Coach & Agents",
+      "spec": "09-coach-and-agents.spec.ts",
+      "sourceFiles": [
+        "app/(app)/coach/page.tsx",
+        "app/(app)/agents/page.tsx",
+        "components/wallet/agent-chat.tsx"
+      ],
+      "checkpoints": [
+        {
+          "id": "coach-01",
+          "description": "Admin: the chat, or No agent for the Coach yet with Choose an agent → /setup",
+          "status": "covered"
+        },
+        {
+          "id": "coach-02",
+          "description": "Member: the chat, or Ask an admin of this platform to choose one., never a Choose button",
+          "status": "covered"
+        },
+        {
+          "id": "coach-03",
+          "description": "Admin: the agents browser (heading, search, Create Custom Agent); a card opens the Coach with ?agent=",
+          "status": "covered"
+        },
+        {
+          "id": "coach-04",
+          "description": "Demo: The Coach needs a platform",
+          "status": "covered"
+        }
+      ]
     },
     {
-      "id": "D4",
-      "journey": "admin",
-      "name": "/admin/organization shows the app settings form",
-      "spec": "journeys/admin.journey.spec.ts"
+      "id": "profile-account-notifications",
+      "name": "Profile, Account & Notifications",
+      "spec": "10-profile-account-notifications.spec.ts",
+      "sourceFiles": [
+        "app/(app)/profile/page.tsx",
+        "app/(app)/account/page.tsx",
+        "app/(app)/notifications/[[...id]]/page.tsx",
+        "components/settings/app-preferences.tsx"
+      ],
+      "checkpoints": [
+        {
+          "id": "prof-01",
+          "description": "Admin: the SDK profile tabs and App preferences; Onboarding done flipped survives a reload",
+          "status": "covered"
+        },
+        {
+          "id": "prof-02",
+          "description": "Admin: /account loads the SDK Account panel",
+          "status": "covered"
+        },
+        {
+          "id": "prof-03",
+          "description": "Admin: /notifications shows the inbox or No notifications found",
+          "status": "covered"
+        },
+        {
+          "id": "prof-04",
+          "description": "Demo: Basic → Save toasts Profile saved; Education → Add a school, then Remove it",
+          "status": "covered"
+        }
+      ]
     },
     {
-      "id": "D5",
-      "journey": "admin",
-      "name": "/setup shows the Coach's agent picker",
-      "spec": "journeys/admin.journey.spec.ts"
+      "id": "admin",
+      "name": "Admin",
+      "spec": "11-admin.spec.ts",
+      "sourceFiles": [
+        "app/(app)/admin/users/page.tsx",
+        "app/(app)/admin/organization/page.tsx",
+        "app/(app)/admin/credentials/page.tsx",
+        "app/(app)/admin/billing/page.tsx",
+        "app/(app)/admin/memory/page.tsx",
+        "app/(app)/admin/analytics/layout.tsx",
+        "app/(app)/admin/analytics/page.tsx",
+        "app/(app)/admin/analytics/users/page.tsx",
+        "app/(app)/admin/analytics/topics/page.tsx",
+        "app/(app)/admin/analytics/transcripts/page.tsx",
+        "app/(app)/admin/analytics/financial/page.tsx",
+        "app/(app)/admin/analytics/reports/page.tsx",
+        "app/setup/page.tsx",
+        "components/setup/setup-screen.tsx",
+        "components/settings/org-settings.tsx",
+        "components/admin/account-panel.tsx",
+        "components/admin/analytics-page.tsx"
+      ],
+      "checkpoints": [
+        {
+          "id": "adm-01",
+          "description": "The six analytics rows each land on a page; the SDK strip offers no Courses, Programs, Memory or Audit tab",
+          "status": "covered"
+        },
+        {
+          "id": "adm-02",
+          "description": "/admin/users: Pending invites, Invite user → Invite Users dialog, the SDK Management tabs and table",
+          "status": "covered"
+        },
+        {
+          "id": "adm-03",
+          "description": "/admin/organization: the Welcome message saved survives a reload and is restored",
+          "status": "covered"
+        },
+        {
+          "id": "adm-04",
+          "description": "/admin/credentials: the issued and issuable lists, or their empty states",
+          "status": "covered"
+        },
+        {
+          "id": "adm-05",
+          "description": "/admin/billing and /admin/memory render the SDK panel",
+          "status": "covered"
+        },
+        {
+          "id": "adm-06",
+          "description": "/setup: Which agent is the Coach?, Search Agents, Create a new agent opens a modal, Cancel → /coach",
+          "status": "covered"
+        },
+        {
+          "id": "adm-07",
+          "description": "/setup: an agent picked and saved sends the Coach to it; Use the platform's default agent restores the organization",
+          "status": "covered"
+        },
+        {
+          "id": "adm-08",
+          "description": "Member: /setup says only admins choose; /admin/users and /admin/organization send them home",
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "mobile",
+      "name": "Mobile",
+      "spec": "12-mobile.spec.ts",
+      "sourceFiles": [
+        "app/(app)/layout.tsx",
+        "components/shell/wallet-sidebar.tsx",
+        "app/(public)/p/[org]/[username]/page.tsx",
+        "app/(public)/verify/[id]/page.tsx"
+      ],
+      "checkpoints": [
+        {
+          "id": "mob-01",
+          "description": "Admin on a Pixel 7: fourteen pages show their title with no sideways overflow",
+          "status": "covered"
+        },
+        {
+          "id": "mob-02",
+          "description": "Admin on a Pixel 7: Toggle Sidebar opens the sheet; its rows reach Credentials and Skills and close it",
+          "status": "covered"
+        },
+        {
+          "id": "mob-03",
+          "description": "Demo on a Pixel 7: the public wallet and a verify page without sideways overflow",
+          "status": "covered"
+        },
+        {
+          "id": "mob-04",
+          "description": "Admin on a Pixel 7 can leave Admin mode",
+          "status": "pending",
+          "note": "fixme — the SDK navbar hides the switch below xl (hidden xl:flex)"
+        }
+      ]
+    },
+    {
+      "id": "console-hygiene",
+      "name": "Console hygiene",
+      "spec": "13-console-hygiene.spec.ts",
+      "sourceFiles": ["app/(app)/layout.tsx", "lib/iblai/session-fetch.ts"],
+      "checkpoints": [
+        {
+          "id": "con-01",
+          "description": "Every page loads without a console error or an uncaught exception (two SDK 4xx reads allowed)",
+          "status": "covered"
+        },
+        {
+          "id": "con-02",
+          "description": "No session token appears in the console (compared inside the browser)",
+          "status": "pending",
+          "note": "fixme on next dev — the SDK's development logging prints the session tokens; holds against pnpm start"
+        }
+      ]
     }
   ]
 }

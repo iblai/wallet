@@ -39,6 +39,13 @@ export { APP_SLUG, mergeAppNamespace, readAppNamespace } from "./metadata-core";
 
 // ---------- user settings ----------
 
+// PATCH merges at the top level only, so a write sends the whole `apps` subtree as read;
+// before the read lands, the patch alone would replace every app's settings.
+function assertRead(data: unknown) {
+  if (data === undefined)
+    throw new Error("Your settings have not loaded yet. Try again in a moment.");
+}
+
 /** Extend with your own fields; keep them flat and JSON-serializable. */
 export type UserSettings = {
   theme?: "light" | "dark";
@@ -72,7 +79,7 @@ export function useUserSettings<T extends UserSettings = UserSettings>(
 
   const update = useCallback(
     async (patch: Partial<T>) => {
-      // PATCH merges at the top level only; send the whole `apps` subtree.
+      assertRead(query.data);
       const metadata = mergeAppNamespace(query.data?.metadata, patch as Metadata);
       await mutate({ tenantKey, metadata: { apps: metadata.apps } }).unwrap();
     },
@@ -81,6 +88,7 @@ export function useUserSettings<T extends UserSettings = UserSettings>(
 
   const remove = useCallback(
     async (keys: (keyof T & string)[]) => {
+      assertRead(query.data);
       const metadata = mergeAppNamespace(query.data?.metadata, {}, keys);
       await mutate({ tenantKey, metadata: { apps: metadata.apps } }).unwrap();
     },

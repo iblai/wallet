@@ -117,6 +117,33 @@ describe("derived wallet state", () => {
     expect(s.skills.find((k) => k.name === "Prompt Engineering")).toBeUndefined();
   });
 
+  it("keeps a skill's origin when a later source adds points or a level", () => {
+    const s = deriveState({
+      profile: DEMO_PROFILE,
+      settings: {
+        ...WALLET_SETTINGS_DEFAULTS,
+        credentials: [base({ id: "c-sql", skills: ["SQL"] })],
+        selfSkills: [
+          { name: "SQL", level: 3 },
+          { name: "Excel", level: 5 },
+        ],
+      },
+      platformCredentials: [],
+      platformEducation: [],
+      platformExperience: [],
+      platformEarnedSkills: [{ name: "SQL", points: 100 }],
+      isLoading: false,
+      isDemo: true,
+    });
+    expect(s.skills.find((k) => k.name === "SQL")).toMatchObject({
+      origin: "credential",
+      points: 100,
+      level: 3,
+    });
+    expect(s.skills.find((k) => k.name === "Excel")!.origin).toBe("self");
+    expect(demoState().skills.every((k) => !!k.origin)).toBe(true);
+  });
+
   it("scores wallet health and counts what needs attention", () => {
     const h = walletHealth(demoState());
     expect(h.pendingCount).toBe(1);

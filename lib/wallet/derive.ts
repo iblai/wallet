@@ -57,9 +57,12 @@ export function deriveState(i: SourceInputs): WalletState {
       origin: patch.origin ?? "credential",
       evidence: [],
     };
+    // A later source may add points or a level without an origin: the stored one stays.
+    const { origin, ...rest } = patch;
     const next: WalletSkill = {
       ...cur,
-      ...patch,
+      ...rest,
+      ...(origin ? { origin } : {}),
       name: key,
       evidence: evidence ? [...new Set([...cur.evidence, evidence])] : cur.evidence,
     };
