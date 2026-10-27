@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.0](https://github.com/iblai/wallet/compare/v0.3.0...v0.4.0) (2026-10-27)
+
+### Features
+
+* e2e in the OS shape with generated accounts, a demo project in CI, and three app fixes ([fec3b86](https://github.com/iblai/wallet/commit/fec3b86f7ae4ec7d898edce74812bb2f0c428714))
+
 ## [0.3.0](https://github.com/iblai/wallet/compare/v0.2.0...v0.3.0) (2026-10-26)
 
 ### Features
