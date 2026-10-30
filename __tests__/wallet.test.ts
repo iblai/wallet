@@ -9,6 +9,7 @@ import { walletHealth } from "../lib/wallet/health";
 import {
   credentialStatus,
   daysUntilExpiry,
+  newId,
   WALLET_SETTINGS_DEFAULTS,
   type WalletCredential,
   type WalletState,
@@ -52,6 +53,11 @@ describe("credential status", () => {
     expect(credentialStatus(base(), now)).toBe("active");
     expect(daysUntilExpiry(base({ expires: "2026-01-11" }), now)).toBe(10);
     expect(daysUntilExpiry(base(), now)).toBeNull();
+  });
+
+  it("mints prefixed ids that never repeat", () => {
+    expect(newId("cred")).toMatch(/^cred_/);
+    expect(newId()).not.toBe(newId());
   });
 });
 

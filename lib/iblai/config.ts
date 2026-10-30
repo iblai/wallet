@@ -30,6 +30,7 @@ const env = {
   NEXT_PUBLIC_MFE_URL: process.env.NEXT_PUBLIC_MFE_URL,
   NEXT_PUBLIC_PLATFORM_BASE_DOMAIN: process.env.NEXT_PUBLIC_PLATFORM_BASE_DOMAIN,
   NEXT_PUBLIC_MAIN_TENANT_KEY: process.env.NEXT_PUBLIC_MAIN_TENANT_KEY,
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   NEXT_PUBLIC_TAURI_CUSTOM_SCHEME: process.env.NEXT_PUBLIC_TAURI_CUSTOM_SCHEME,
   NEXT_PUBLIC_DEFAULT_AGENT_ID: process.env.NEXT_PUBLIC_DEFAULT_AGENT_ID,
   NEXT_PUBLIC_SUPPORT_EMAIL: process.env.NEXT_PUBLIC_SUPPORT_EMAIL,
@@ -100,6 +101,8 @@ const config = {
   mainTenantKey: () => getEnv("NEXT_PUBLIC_MAIN_TENANT_KEY", "main"),
   tauriCustomScheme: () => getEnv("NEXT_PUBLIC_TAURI_CUSTOM_SCHEME", ""),
   platformBaseDomain: () => domain(),
+  // This app's public URL: where ibl.ai's $0 checkout returns a new organization's admin.
+  appUrl: () => (getEnv("NEXT_PUBLIC_APP_URL") || "https://wallet.iblai.me").replace(/\/+$/, ""),
 
   // The Coach's agent: the last path segment of its os.ibl.ai URL
   // (https://os.ibl.ai/platform/<org-key>/<agent-uuid>). Empty means the one an

@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "lastUpdated": "2026-10-28",
+  "lastUpdated": "2026-10-30",
   "summary": {
-    "totalCheckpoints": 78,
-    "coveredCheckpoints": 76,
+    "totalCheckpoints": 83,
+    "coveredCheckpoints": 81,
     "pendingCheckpoints": 2,
-    "percent": 97,
-    "totalJourneys": 13
+    "percent": 98,
+    "totalJourneys": 14
   },
   "journeys": [
     {
@@ -566,6 +566,49 @@
           "description": "No session token appears in the console (compared inside the browser)",
           "status": "pending",
           "note": "fixme on next dev — the SDK's development logging prints the session tokens; holds against pnpm start"
+        }
+      ]
+    },
+    {
+      "id": "sample-wallet",
+      "name": "Sample wallet",
+      "spec": "14-sample-wallet.spec.ts",
+      "sourceFiles": [
+        "app/(app)/layout.tsx",
+        "app/(app)/page.tsx",
+        "app/(app)/credentials/page.tsx",
+        "app/(app)/credentials/[id]/page.tsx",
+        "app/(app)/resume/page.tsx",
+        "components/wallet/sample-notice.tsx",
+        "components/wallet/upgrade-modal.tsx",
+        "lib/wallet/provider.tsx",
+        "lib/wallet/sample.ts"
+      ],
+      "checkpoints": [
+        {
+          "id": "smp-01",
+          "description": "A member whose only organization is main sees Jordan Rivera's sample wallet under the amber notice",
+          "status": "covered"
+        },
+        {
+          "id": "smp-02",
+          "description": "The sample's credentials are listed and one opens",
+          "status": "covered"
+        },
+        {
+          "id": "smp-03",
+          "description": "Declining a pending sample credential opens the upgrade dialog and saves nothing",
+          "status": "covered"
+        },
+        {
+          "id": "smp-04",
+          "description": "The sample résumé offers no AI draft",
+          "status": "covered"
+        },
+        {
+          "id": "smp-05",
+          "description": "The upgrade dialog's Upgrade for free opens the wallet's $0 checkout",
+          "status": "covered"
         }
       ]
     }

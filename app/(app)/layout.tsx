@@ -23,6 +23,9 @@ import { WalletProvider } from "@/lib/wallet/provider";
 import { WalletSidebar } from "@/components/shell/wallet-sidebar";
 import { TopBar } from "@/components/shell/top-bar";
 import { DemoBanner } from "@/components/wallet/demo-banner";
+import { SampleNotice } from "@/components/wallet/sample-notice";
+import { UpgradeModal } from "@/components/wallet/upgrade-modal";
+import { isSampleWallet } from "@/lib/wallet/sample";
 
 type Session = {
   tenantKey: string;
@@ -72,6 +75,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? "/";
   const router = useRouter();
   const demo = config.demoMode();
+  const sample = !demo && isSampleWallet(tenantKey, tenants, config.mainTenantKey());
 
   // The admin area is admin-only, in Admin mode only.
   useEffect(() => {
@@ -94,6 +98,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <AdminModeProvider isAdmin={isAdmin} mode={adminMode} setMode={setAdminMode}>
       <WalletProvider>
+        {demo ? null : <UpgradeModal org={tenantKey} email={email} />}
         <div className="flex min-h-dvh flex-col bg-white md:h-dvh md:overflow-hidden">
           <SidebarProvider defaultOpen className="min-h-0 flex-1">
             <WalletSidebar
@@ -114,6 +119,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 demo={demo}
               />
               {demo ? <DemoBanner /> : null}
+              {sample ? <SampleNotice /> : null}
               <main className="flex min-h-0 flex-1 flex-col bg-[var(--sidebar-bg,#fafbfc)] md:overflow-y-auto">
                 {pathname.startsWith("/admin") && !liveAdmin ? null : children}
               </main>

@@ -16,6 +16,7 @@ const ENV_KEYS = [
   "NEXT_PUBLIC_MFE_URL",
   "NEXT_PUBLIC_BASE_WS_URL",
   "NEXT_PUBLIC_MAIN_TENANT_KEY",
+  "NEXT_PUBLIC_APP_URL",
   "IBLAI_API_KEY",
 ] as const;
 
@@ -104,6 +105,16 @@ describe("app accessors", () => {
     process.env.NEXT_PUBLIC_MAIN_TENANT_KEY = "acme";
     vi.resetModules();
     expect((await loadConfig()).mainTenantKey()).toBe("acme");
+  });
+
+  it("default the app URL to the hosted wallet; an empty value is unset, a trailing slash goes", async () => {
+    expect((await loadConfig()).appUrl()).toBe("https://wallet.iblai.me");
+    process.env.NEXT_PUBLIC_APP_URL = "";
+    vi.resetModules();
+    expect((await loadConfig()).appUrl()).toBe("https://wallet.iblai.me");
+    process.env.NEXT_PUBLIC_APP_URL = "https://wallet.example.edu/";
+    vi.resetModules();
+    expect((await loadConfig()).appUrl()).toBe("https://wallet.example.edu");
   });
 
   it("read the env when set", async () => {

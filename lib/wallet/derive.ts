@@ -29,6 +29,7 @@ export interface SourceInputs {
   unreachablePlatforms?: string[];
   isLoading: boolean;
   isDemo: boolean;
+  isSample?: boolean;
 }
 
 export function deriveState(i: SourceInputs): WalletState {
@@ -107,6 +108,7 @@ export function deriveState(i: SourceInputs): WalletState {
     unreachablePlatforms: i.unreachablePlatforms,
     isLoading: i.isLoading,
     isDemo: i.isDemo,
+    isSample: i.isSample ?? false,
   };
 }
 

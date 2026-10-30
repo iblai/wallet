@@ -426,6 +426,20 @@ function Field({
 
 function FromPlatform() {
   const { state } = useWallet();
+  if (state.isSample) {
+    const sample = state.credentials.filter((c) => c.source === "platform").length;
+    return (
+      <Section
+        title="Credentials from your platforms"
+        description="Nothing to import: credentials issued to you on any of your platforms appear in this wallet the moment they are issued."
+      >
+        <p className="text-sm text-gray-700">
+          This sample wallet shows {sample} platform-issued credentials. The ones your organization
+          issues you appear here once you belong to one.
+        </p>
+      </Section>
+    );
+  }
   if (state.isDemo) {
     const sample = state.credentials.filter((c) => c.source === "platform").length;
     return (

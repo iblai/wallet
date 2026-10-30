@@ -1,6 +1,6 @@
 # Credential Wallet E2E Coverage — User Journey Checklist
 
-> Last updated: 2026-10-28 | 78 checkpoints (76 covered, 2 pending/fixme) | 13 journeys | 97% covered | Auth: admin + member storageState, plus the demo project
+> Last updated: 2026-10-30 | 83 checkpoints (81 covered, 2 pending/fixme) | 14 journeys | 98% covered | Auth: admin + member storageState, plus the demo project
 
 ## How This Works
 
@@ -194,3 +194,15 @@ Not covered yet: a platform-issued credential ("Verified on ibl.ai") end to end 
 
 - [x] Every page loads without a console error or an uncaught exception (two SDK 4xx reads allowed) _(con-01)_
 - [ ] No session token appears in the console (compared inside the browser) _(con-02, fixme on next dev — the SDK's development logging prints the session tokens; holds against pnpm start)_
+
+---
+
+## Journey 14: Sample wallet (5 checkpoints) — `journeys/14-sample-wallet.spec.ts`
+
+**Source files:** `app/(app)/layout.tsx`, `app/(app)/page.tsx`, `app/(app)/credentials/page.tsx`, `app/(app)/credentials/[id]/page.tsx`, `app/(app)/resume/page.tsx`, `components/wallet/sample-notice.tsx`, `components/wallet/upgrade-modal.tsx`, `lib/wallet/provider.tsx`, `lib/wallet/sample.ts`
+
+- [x] A member whose only organization is main sees Jordan Rivera's sample wallet under the amber notice _(smp-01)_
+- [x] The sample's credentials are listed and one opens _(smp-02)_
+- [x] Declining a pending sample credential opens the upgrade dialog and saves nothing _(smp-03)_
+- [x] The sample résumé offers no AI draft _(smp-04)_
+- [x] The upgrade dialog's Upgrade for free opens the wallet's $0 checkout _(smp-05; skips until web-containers carries `checkoutUrl`, iblai-web-frontend#2195)_

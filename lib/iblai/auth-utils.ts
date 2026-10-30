@@ -9,6 +9,7 @@
  */
 
 import { handleTenantSwitch as sdkHandleTenantSwitch } from "@iblai/iblai-js/web-utils";
+import { AUTH_APP } from "./auth-redirect";
 import config from "./config";
 import { setAppTenant } from "./tenant";
 
@@ -36,9 +37,6 @@ function getRedirectOrigin(): string {
   }
   return origin;
 }
-
-/** The `app` the Auth SPA is asked for; `mentor` is the OS. */
-export const AUTH_APP = "mentor";
 
 /** Redirect the browser to the ibl.ai Auth SPA for login. */
 export async function redirectToAuthSpa(

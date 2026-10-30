@@ -23,11 +23,14 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { useDispatch } from "react-redux";
+import { setOpenPricingModal } from "@iblai/iblai-js/web-utils";
 import config from "@/lib/iblai/config";
 import { useUserSettings } from "@/lib/iblai/metadata";
 import { readTenants, resolveAppTenant } from "@/lib/iblai/tenant";
 import { sessionFetch } from "@/lib/iblai/session-fetch";
 import { deriveState, fromAssertion } from "./derive";
+import { isSampleWallet } from "./sample";
 
 export { deriveState, fromAssertion };
 import {
@@ -269,17 +272,53 @@ function DemoSource({ children }: { children: ReactNode }) {
         platformCredentials: [],
         platformEducation: [],
         platformExperience: [],
-        platformEarnedSkills: [
-          { name: "SQL", points: 620 },
-          { name: "Data Analysis", points: 540 },
-          { name: "Python", points: 410 },
-          { name: "Machine Learning", points: 270 },
-        ],
+        platformEarnedSkills: DEMO_EARNED_SKILLS,
         skillPoints: DEMO_SKILL_POINTS,
         isLoading: !hydrated,
         isDemo: true,
       }),
     [settings, hydrated],
+  );
+
+  return <WalletContext.Provider value={{ state, actions }}>{children}</WalletContext.Provider>;
+}
+
+const DEMO_EARNED_SKILLS = [
+  { name: "SQL", points: 620 },
+  { name: "Data Analysis", points: 540 },
+  { name: "Python", points: 410 },
+  { name: "Machine Learning", points: 270 },
+];
+
+// ---------- sample source ----------
+
+/** The community organization's sample: the demo wallet, read-only — every change opens the upgrade dialog. */
+function SampleSource({ children }: { children: ReactNode }) {
+  const dispatch = useDispatch();
+  const settings = useMemo(() => demoSeed(), []);
+  const update = useCallback(async () => {
+    dispatch(setOpenPricingModal(true));
+  }, [dispatch]);
+  const actions = useActions(
+    { settings, update, isSaving: false },
+    useMemo(() => new Set<string>(), []),
+    () => {},
+  );
+  const state = useMemo(
+    () =>
+      deriveState({
+        profile: DEMO_PROFILE,
+        settings,
+        platformCredentials: [],
+        platformEducation: [],
+        platformExperience: [],
+        platformEarnedSkills: DEMO_EARNED_SKILLS,
+        skillPoints: DEMO_SKILL_POINTS,
+        isLoading: false,
+        isDemo: true,
+        isSample: true,
+      }),
+    [settings],
   );
 
   return <WalletContext.Provider value={{ state, actions }}>{children}</WalletContext.Provider>;
@@ -475,8 +514,9 @@ function platformImpl() {
 // ---------- entry ----------
 
 export function WalletProvider({ children }: { children: ReactNode }) {
-  return config.demoMode() ? (
-    <DemoSource>{children}</DemoSource>
+  if (config.demoMode()) return <DemoSource>{children}</DemoSource>;
+  return isSampleWallet(resolveAppTenant(), readTenants(), config.mainTenantKey()) ? (
+    <SampleSource>{children}</SampleSource>
   ) : (
     <PlatformSource>{children}</PlatformSource>
   );

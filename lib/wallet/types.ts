@@ -207,6 +207,8 @@ export interface WalletState {
   unreachablePlatforms?: string[];
   isLoading: boolean;
   isDemo: boolean;
+  /** The community organization's read-only sample (`lib/wallet/sample.ts`). */
+  isSample: boolean;
 }
 
 export const WALLET_SETTINGS_DEFAULTS: WalletSettings = {
