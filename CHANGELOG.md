@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.1](https://github.com/iblai/wallet/compare/v0.5.0...v0.5.1) (2026-10-30)
+
+### Bug Fixes
+
+* follow the SDK's platform switch so the free checkout's return stops loading forever ([2835f19](https://github.com/iblai/wallet/commit/2835f19f05d65138601388b4b64349efea62fa61))
+
 ## [0.5.0](https://github.com/iblai/wallet/compare/v0.4.0...v0.5.0) (2026-10-30)
 
 ### Features
