@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.0](https://github.com/iblai/wallet/compare/v0.5.1...v0.6.0) (2026-10-30)
+
+### Features
+
+* add the SIS's house journeys (next-intl, ?tenant= preview), with wallet/main's open work ([377bcfc](https://github.com/iblai/wallet/commit/377bcfc1d11f3be2840d002b022916204dca9fb5))
+
 ## [0.5.1](https://github.com/iblai/wallet/compare/v0.5.0...v0.5.1) (2026-10-30)
 
 ### Bug Fixes
