@@ -9,7 +9,6 @@
  */
 
 import { handleTenantSwitch as sdkHandleTenantSwitch } from "@iblai/iblai-js/web-utils";
-import { AUTH_APP } from "./auth-redirect";
 import config from "./config";
 import { setAppTenant } from "./tenant";
 
@@ -54,7 +53,7 @@ export async function redirectToAuthSpa(
     localStorage.setItem("redirectTo", path);
   }
 
-  let authUrl = `${config.authUrl()}/login?app=${AUTH_APP}&redirect-to=${encodeURIComponent(redirectOrigin)}`;
+  let authUrl = `${config.authUrl()}/login?app=${config.iblPlatform()}&redirect-to=${encodeURIComponent(redirectOrigin)}`;
   // Multi-org: only pin a tenant when a caller asks for one (re-auth, switch).
   if (platformKey) authUrl += `&tenant=${encodeURIComponent(platformKey)}`;
   if (logout) authUrl += "&logout=1";
@@ -98,5 +97,5 @@ export async function switchTenant(tenantKey: string) {
 export function handleLogout() {
   const redirectOrigin = getRedirectOrigin();
   localStorage.clear();
-  window.location.href = `${config.authUrl()}/logout?app=${AUTH_APP}&redirect-to=${encodeURIComponent(redirectOrigin)}`;
+  window.location.href = `${config.authUrl()}/logout?app=${config.iblPlatform()}&redirect-to=${encodeURIComponent(redirectOrigin)}`;
 }

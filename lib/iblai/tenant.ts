@@ -97,7 +97,12 @@ export function checkTenantMismatch(): boolean {
   return false;
 }
 
-export type TenantEntry = { key: string; is_admin?: boolean; [k: string]: unknown };
+export type TenantEntry = {
+  key: string;
+  is_admin?: boolean;
+  show_paywall?: boolean;
+  [k: string]: unknown;
+};
 
 /** The orgs the sign-in handed the browser (`tenants`), or [] when signed out. */
 export function readTenants(): TenantEntry[] {
@@ -108,6 +113,25 @@ export function readTenants(): TenantEntry[] {
   } catch {
     return [];
   }
+}
+
+/** The signed-in user the sign-in stored (`userData`), or {}. */
+function readUserData(): { user_nicename?: string; user_email?: string } {
+  if (typeof window === "undefined") return {};
+  try {
+    const parsed = JSON.parse(localStorage.getItem("userData") ?? "{}");
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+export function readUsername(): string {
+  return readUserData().user_nicename ?? "";
+}
+
+export function readUserEmail(): string {
+  return readUserData().user_email ?? "";
 }
 
 /**

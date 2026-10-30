@@ -15,6 +15,7 @@ import { AdminModeSwitch } from "@/components/navbar/admin-mode-switch";
 import { UserProfileButton } from "@/components/navbar/user-profile-button";
 import { DemoUserMenu } from "@/components/wallet/demo-user-menu";
 import config from "@/lib/iblai/config";
+import { loginReturnUrl } from "@/lib/iblai/house-journeys";
 import { handleLogout, switchTenant } from "@/lib/iblai/auth-utils";
 
 const TITLES: [RegExp, string][] = [
@@ -30,7 +31,8 @@ const TITLES: [RegExp, string][] = [
   [/^\/profile/, "Profile"],
   [/^\/account/, "Account"],
   [/^\/notifications/, "Notifications"],
-  [/^\/admin\/credentials/, "Credentials"],
+  [/^\/onboarding/, "Onboarding"],
+  [/^\/admin\/credentials/, "Issuing"],
   [/^\/admin\/users/, "Users"],
   [/^\/admin\/analytics/, "Analytics"],
   [/^\/admin\/billing/, "Billing"],
@@ -47,6 +49,7 @@ export function TopBar({
   username,
   email,
   isAdmin,
+  trial,
   currentTenant,
   userTenants,
   demo,
@@ -55,6 +58,8 @@ export function TopBar({
   username?: string;
   email: string;
   isAdmin: boolean;
+  /** On the community organization as a trial user: the badge offers Upgrade Plan. */
+  trial: boolean;
   currentTenant?: any;
   userTenants: any[];
   demo: boolean;
@@ -94,9 +99,12 @@ export function TopBar({
               currentTenant,
               stripeEnabled: true,
               isLiveAdmin: isAdmin,
+              userOnFreeTrial: trial,
               mainPlatformKey: config.mainTenantKey(),
               currentUserEmail: email,
               username,
+              // The SDK's default, the page's own origin, is refused off iblai.app.
+              redirectUrl: loginReturnUrl(config.appUrl(), config.iblPlatform()),
             }
           : null
       }

@@ -19,7 +19,11 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import { usePathname, useSearchParams } from "next/navigation";
-import { initializeDataLayer, type TokenResponse } from "@iblai/iblai-js/data-layer";
+import {
+  initializeDataLayer,
+  useLazyGetUserTenantsQuery,
+  type TokenResponse,
+} from "@iblai/iblai-js/data-layer";
 import { AuthProvider, TenantProvider, ServiceWorkerProvider } from "@iblai/iblai-js/web-utils";
 import { Toaster } from "sonner";
 import { RadixPointerEventsGuard } from "@/components/radix-pointer-events-guard";
@@ -28,7 +32,13 @@ import { LoadingScreen } from "@/components/loading-screen";
 import { iblaiStore } from "@/store/iblai-store";
 import { LocalStorageService } from "@/lib/iblai/storage-service";
 import config from "@/lib/iblai/config";
-import { resolveAppTenant, checkTenantMismatch, setAppTenant } from "@/lib/iblai/tenant";
+import {
+  resolveAppTenant,
+  checkTenantMismatch,
+  readTenants,
+  setAppTenant,
+} from "@/lib/iblai/tenant";
+import { decideEntry, type OrgEntry } from "@/lib/iblai/house-journeys";
 import { redirectToAuthSpa, switchTenant } from "@/lib/iblai/auth-utils";
 
 const storageService = LocalStorageService.getInstance();
@@ -84,20 +94,17 @@ function seedDemoSession() {
 }
 
 export function IblaiProviders({ children }: { children: ReactNode }) {
+  return (
+    <ReduxProvider store={iblaiStore}>
+      <Providers>{children}</Providers>
+    </ReduxProvider>
+  );
+}
+
+function Providers({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  // `?tenant=<org>` pins the app to that org (the OS puts it in the path;
-  // here it is a query parameter so every route keeps its shape). The
-  // TenantProvider below re-authenticates when the session is for another org.
   const requestedParam = searchParams?.get("tenant") ?? "";
-  if (
-    typeof window !== "undefined" &&
-    requestedParam &&
-    localStorage.getItem("app_tenant") !== requestedParam
-  ) {
-    setAppTenant(requestedParam);
-  }
 
   // initializeDataLayer MUST be called synchronously before any children
   // render so that Config.lmsUrl / Config.dmUrl are set before RTK Query
@@ -148,8 +155,49 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
     return "";
   }, [isInitialized]);
 
+  // The membership list, before the SDK can attempt a join from a link: what
+  // the sign-in stored, else one fetch (/iblai-vibe-house-journeys).
+  const storedTenants = useMemo(() => (mounted ? readTenants() : []), [mounted]);
+  // A fresh profile has no session to ask with: the AuthProvider signs it in.
+  const needFetch = mounted && !!requestedParam && !!username && storedTenants.length === 0;
+  const [fetchUserTenants] = useLazyGetUserTenantsQuery();
+  const [fetched, setFetched] = useState<OrgEntry[] | null>(null);
+  useEffect(() => {
+    if (!needFetch || fetched) return;
+    fetchUserTenants()
+      .unwrap()
+      .then((list) => {
+        const known: OrgEntry[] = Array.isArray(list) ? list.map((t) => ({ ...t })) : [];
+        localStorage.setItem("tenants", JSON.stringify(known));
+        setFetched(known);
+      })
+      .catch(() => setFetched([]));
+  }, [needFetch, fetched, fetchUserTenants]);
+  const tenants = needFetch ? fetched : storedTenants;
+
+  // `?tenant=<org>` pins the app to that org (the OS puts it in the path;
+  // here it is a query parameter so every route keeps its shape). The
+  // TenantProvider below re-authenticates when the session is for another org.
+  // One the user does not belong to is previewed by the app layout instead,
+  // never joined from a link.
+  const preview =
+    tenants !== null &&
+    decideEntry({ routeOrg: requestedParam, stored: "", tenants }).kind === "preview";
+  if (
+    typeof window !== "undefined" &&
+    tenants !== null &&
+    requestedParam &&
+    !preview &&
+    localStorage.getItem("app_tenant") !== requestedParam
+  ) {
+    setAppTenant(requestedParam);
+  }
+
   // Tenant resolution: .env -> app_tenant -> localStorage tenant
-  const tenantKey = useMemo(() => (isInitialized ? resolveAppTenant() : ""), [isInitialized]);
+  const tenantKey = useMemo(
+    () => (isInitialized && tenants !== null ? resolveAppTenant() : ""),
+    [isInitialized, tenants],
+  );
 
   const isSsoRoute = pathname?.startsWith("/sso-login") ?? false;
 
@@ -162,7 +210,7 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
 
   const LOADING = <LoadingScreen />;
 
-  if (!isInitialized || !mounted) return LOADING;
+  if (!isInitialized || !mounted || tenants === null) return LOADING;
 
   // Demo mode: no organization, no sign-in. Seed the session the layout reads
   // and skip the auth/tenant providers; the SDK data hooks are never mounted
@@ -170,11 +218,11 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
   if (config.demoMode()) {
     seedDemoSession();
     return (
-      <ReduxProvider store={iblaiStore}>
+      <>
         <RadixPointerEventsGuard />
         <Toaster />
         {children}
-      </ReduxProvider>
+      </>
     );
   }
 
@@ -192,7 +240,7 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ReduxProvider store={iblaiStore}>
+    <>
       {/* Recovery for the SDK prompt-gallery teardown defect; see the file. */}
       <RadixPointerEventsGuard />
       <Toaster />
@@ -256,6 +304,6 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
           </TenantProvider>
         </AuthProvider>
       </ServiceWorkerProvider>
-    </ReduxProvider>
+    </>
   );
 }

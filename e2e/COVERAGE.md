@@ -1,6 +1,6 @@
 # Credential Wallet E2E Coverage — User Journey Checklist
 
-> Last updated: 2026-10-30 | 84 checkpoints (82 covered, 2 pending/fixme) | 14 journeys | 98% covered | Auth: admin + member storageState, plus the demo project
+> Last updated: 2026-10-31 | 101 checkpoints (99 covered, 2 pending/fixme) | 15 journeys | 98% covered | Auth: admin + member storageState, plus the demo project
 
 ## How This Works
 
@@ -41,9 +41,9 @@ Not covered yet: a platform-issued credential ("Verified on ibl.ai") end to end 
 
 ---
 
-## Journey 2: Shell & Navigation (8 checkpoints) — `journeys/02-shell-and-navigation.spec.ts`
+## Journey 2: Shell & Navigation (9 checkpoints) — `journeys/02-shell-and-navigation.spec.ts`
 
-**Source files:** `app/(app)/layout.tsx`, `components/shell/wallet-sidebar.tsx`, `components/shell/top-bar.tsx`, `components/navbar/admin-mode-switch.tsx`
+**Source files:** `app/(app)/layout.tsx`, `components/shell/wallet-sidebar.tsx`, `components/shell/top-bar.tsx`, `components/navbar/admin-mode-switch.tsx`, `lib/iblai/house-journeys.ts`
 
 - [x] Every sidebar row (Credentials, Skills, Résumé, Share, Coach, Wallet) lands on its page with the top-bar title and aria-current _(nav-01)_
 - [x] Add credential (sidebar) opens the import page _(nav-02)_
@@ -53,6 +53,7 @@ Not covered yet: a platform-issued credential ("Verified on ibl.ai") end to end 
 - [x] Footer: Invites opens Invite Users; Management, Integrations, Advanced open their dialogs; Notifications navigates _(nav-06)_
 - [x] Support opens ibl.ai/docs in a new tab _(nav-07)_
 - [x] User mode hides Analytics and the admin footer rows; Admin mode brings them back _(nav-08)_
+- [x] The credit balance’s Upgrade Plan asks for a checkout that comes back through the sign-in app, not to the page’s own origin _(nav-09)_
 
 ---
 
@@ -137,26 +138,26 @@ Not covered yet: a platform-issued credential ("Verified on ibl.ai") end to end 
 - [x] Verify: Verified against the issuer (stubbed), Could not reach the issuer without it, Nothing to verify for an unknown id _(shr-05)_
 - [x] Make private / Make public move the credential between the Public and Private lists _(shr-06)_
 - [x] Export record (OB3 bundle) downloads <username>-wallet.json with one credential _(shr-07)_
-- [x] Public page Off → Public page is off; the wallet is emptied again _(shr-08)_
+- [x] Public page Off → Public page is off and the link is hidden; the wallet is emptied again _(shr-08)_
 
 ---
 
 ## Journey 9: Coach & Agents (4 checkpoints) — `journeys/09-coach-and-agents.spec.ts`
 
-**Source files:** `app/(app)/coach/page.tsx`, `app/(app)/agents/page.tsx`, `components/wallet/agent-chat.tsx`
+**Source files:** `app/(app)/coach/page.tsx`, `app/(app)/agents/page.tsx`, `components/wallet/agent-chat.tsx`, `lib/iblai/agent-permissions.ts`, `store/iblai-store.ts`
 
 - [x] Admin: the chat, or No agent for the Coach yet with Choose an agent → /setup _(coach-01)_
 - [x] Member: the chat, or Ask an admin of this platform to choose one., never a Choose button _(coach-02)_
-- [x] Admin: the agents browser (heading, search, Create Custom Agent); a card opens the Coach with ?agent= _(coach-03)_
+- [x] Admin: the agents browser (heading, search, Create Custom Agent); a card opens the Coach with ?agent=, its composer ready and no page error _(coach-03)_
 - [x] Demo: The Coach needs a platform _(coach-04)_
 
 ---
 
 ## Journey 10: Profile, Account & Notifications (4 checkpoints) — `journeys/10-profile-account-notifications.spec.ts`
 
-**Source files:** `app/(app)/profile/page.tsx`, `app/(app)/account/page.tsx`, `app/(app)/notifications/[[...id]]/page.tsx`, `components/settings/app-preferences.tsx`
+**Source files:** `app/(app)/profile/page.tsx`, `app/(app)/account/page.tsx`, `app/(app)/notifications/[[...id]]/page.tsx`
 
-- [x] Admin: the SDK profile tabs and App preferences; Onboarding done flipped survives a reload _(prof-01)_
+- [x] Admin: the SDK profile tabs, without the starter’s example App preferences _(prof-01)_
 - [x] Admin: /account loads the SDK Account panel _(prof-02)_
 - [x] Admin: /notifications shows the inbox or No notifications found _(prof-03)_
 - [x] Demo: Basic → Save toasts Profile saved; Education → Add a school, then Remove it _(prof-04)_
@@ -200,10 +201,33 @@ Not covered yet: a platform-issued credential ("Verified on ibl.ai") end to end 
 
 ## Journey 14: Sample wallet (5 checkpoints) — `journeys/14-sample-wallet.spec.ts`
 
-**Source files:** `app/(app)/layout.tsx`, `app/(app)/page.tsx`, `app/(app)/credentials/page.tsx`, `app/(app)/credentials/[id]/page.tsx`, `app/(app)/resume/page.tsx`, `components/wallet/sample-notice.tsx`, `components/wallet/upgrade-modal.tsx`, `lib/wallet/provider.tsx`, `lib/wallet/sample.ts`
+**Source files:** `app/(app)/layout.tsx`, `app/(app)/page.tsx`, `app/(app)/credentials/page.tsx`, `app/(app)/credentials/[id]/page.tsx`, `app/(app)/resume/page.tsx`, `components/house/sample-notice.tsx`, `components/house/upgrade-modal.tsx`, `lib/wallet/provider.tsx`, `lib/iblai/house-journeys.ts`
 
 - [x] A member whose only organization is main sees Jordan Rivera's sample wallet under the amber notice _(smp-01)_
 - [x] The sample's credentials are listed and one opens _(smp-02)_
 - [x] Declining a pending sample credential opens the upgrade dialog and saves nothing _(smp-03)_
 - [x] The sample résumé offers no AI draft _(smp-04)_
 - [x] The upgrade dialog's Upgrade for free opens the wallet's $0 checkout _(smp-05; skips until web-containers carries `checkoutUrl`, iblai-web-frontend#2195)_
+
+---
+
+## Journey 15: House journeys (16 checkpoints) — `journeys/15-house.spec.ts`
+
+**Source files:** `app/(app)/onboarding/[[...agentId]]/page.tsx`, `app/(app)/layout.tsx`, `components/house/first-run-gate.tsx`, `components/house/onboarding-page.tsx`, `components/house/organization-preview.tsx`, `components/house/sample-notice.tsx`, `components/house/upgrade-modal.tsx`, `components/shell/wallet-sidebar.tsx`, `components/shell/top-bar.tsx`, `lib/iblai/house-journeys.ts`, `providers/iblai-providers.tsx`
+
+- [x] Lands on the community platform inside the shell, with the admin cluster shown _(house-01)_
+- [x] A trial-gated click opens the SDK upgrade dialog, and Escape closes it _(house-02)_
+- [x] The platform is previewed, and Join goes to the auth page's join for it _(house-03)_
+- [x] Create Your Own Platform is ibl.ai's $0 sign-up with this app nested in the return address _(house-04)_
+- [x] A readably keyed platform is not asked its name: the first run is sector, team, done, and the home holds afterwards _(house-05)_
+- [x] An admin who finished it stays home _(house-06)_
+- [x] A member is sent to the platform's form, answers it, sees the final step and lands home _(house-07)_
+- [x] With nothing configured, /onboarding says so and Continue goes home _(house-08)_
+- [x] Back to My Platform leaves the preview for the user's own platform home _(house-09)_
+- [x] Management › Onboarding opens for the admin, its agent links based on this app's onboarding route _(house-10)_
+- [x] A named platform whose sector is set gets only the team step and the finish _(house-11)_
+- [x] The community platform shows the sample: the admin rows, a filled Credentials list and the notice _(house-12)_
+- [x] A write on the sample opens the upgrade dialog _(house-13)_
+- [x] The upgrade dialog's Upgrade for free opens this app's $0 checkout _(house-14)_
+- [x] Still on the community platform while the platform lists their own, the SDK moves them to it _(house-15)_
+- [x] Upgrade Plan asks for a pricing page that returns through the sign-in app _(house-16)_

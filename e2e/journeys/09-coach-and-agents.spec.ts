@@ -20,7 +20,10 @@ test.describe("Journey 9: Coach & Agents — Admin", () => {
   });
 
   // coach-03
-  test("admin browses the agents and opens one on the Coach", async ({ page, coach }) => {
+  test("admin browses the agents and opens one on the Coach, ready to chat", async ({
+    page,
+    coach,
+  }) => {
     await gotoApp(page, "/agents");
     await expect(coach.agentsHeading).toBeVisible({ timeout: 60_000 });
     await expect(coach.agentsSearch).toBeVisible();
@@ -31,10 +34,15 @@ test.describe("Journey 9: Coach & Agents — Admin", () => {
       .waitFor({ state: "visible", timeout: 30_000 })
       .catch(() => {});
     test.skip((await cards.count()) === 0, "the organization has no agent yet");
+    const crashes: string[] = [];
+    page.on("pageerror", (e) => crashes.push(e.message));
     await cards.first().click();
     await page.waitForURL((url) => url.pathname === "/coach" && url.searchParams.has("agent"), {
       timeout: 15_000,
     });
+    // Ready means the store mounts every SDK API and the agent's permissions are in.
+    await expect(coach.composer).toBeEditable({ timeout: 60_000 });
+    expect(crashes).toEqual([]);
   });
 });
 

@@ -178,7 +178,6 @@ export interface WalletSettings {
   education?: WalletEducation[];
   experience?: WalletExperience[];
   profile?: Partial<WalletProfile>;
-  onboardingDone?: boolean;
   [key: string]: unknown;
 }
 
@@ -207,7 +206,7 @@ export interface WalletState {
   unreachablePlatforms?: string[];
   isLoading: boolean;
   isDemo: boolean;
-  /** The community organization's read-only sample (`lib/wallet/sample.ts`). */
+  /** The community organization's read-only sample (`isSampleOrg`). */
   isSample: boolean;
 }
 
@@ -227,7 +226,6 @@ export const WALLET_SETTINGS_DEFAULTS: WalletSettings = {
     sections: { skills: true, credentials: true, education: true, experience: true },
     maxSkills: 12,
   },
-  onboardingDone: false,
 };
 
 export function newId(prefix = "wal"): string {

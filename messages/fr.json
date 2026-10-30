@@ -1,0 +1,25 @@
+{
+  "houseJourneys": {
+    "preview": {
+      "body": "Vous n’êtes pas encore membre de {name}. Rejoignez-la, ou créez votre propre plateforme.",
+      "join": "Rejoindre {name}",
+      "create": "Créer votre propre plateforme",
+      "back": "Retour à ma plateforme"
+    },
+    "onboarding": {
+      "meetTitle": "Rencontrez {name}",
+      "meetBody": "L’agent de votre plateforme est prêt quand vous l’êtes.",
+      "allSetTitle": "Tout est prêt",
+      "allSetBody": "{workspace} est prête. Entrez.",
+      "allSetMember": "Merci : votre plateforme a ce qu’il lui faut. Entrez.",
+      "workspace": "Votre plateforme",
+      "continue": "Continuer",
+      "complete": "Terminer",
+      "back": "Retour"
+    },
+    "sample": {
+      "body": "Vous consultez le portefeuille fictif de {name}. Le vôtre se remplit des attestations que votre plateforme vous délivre.",
+      "create": "Créer votre plateforme"
+    }
+  }
+}

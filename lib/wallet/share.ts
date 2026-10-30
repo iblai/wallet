@@ -49,7 +49,7 @@ export function mailtoShare(c: WalletCredential, url: string): string {
 
 export function shareBlurb(c: WalletCredential, url?: string): string {
   const when = c.issuedOn
-    ? ` on ${new Date(c.issuedOn).toLocaleDateString(undefined, { year: "numeric", month: "long" })}`
+    ? ` in ${new Date(c.issuedOn).toLocaleDateString(undefined, { year: "numeric", month: "long" })}`
     : "";
   const skills = c.skills.length ? ` Skills: ${c.skills.slice(0, 6).join(", ")}.` : "";
   return `I earned ${c.name} from ${c.issuer.name}${when}.${skills}${url ? ` Verify it here: ${url}` : ""}`;

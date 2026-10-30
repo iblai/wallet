@@ -15,6 +15,7 @@ import {
   useVisitingTenant,
   useCachedSessionId,
 } from "@iblai/iblai-js/web-utils";
+import { useAgentPermissions } from "@/lib/iblai/agent-permissions";
 import { redirectToAuthSpa } from "@/lib/iblai/auth-utils";
 import config from "@/lib/iblai/config";
 import { resolveAppTenant } from "@/lib/iblai/tenant";
@@ -57,6 +58,7 @@ export function AgentChat({ mentorId }: { mentorId: string }) {
       : true;
 
   const [tenantKey] = useState(resolveAppTenant);
+  useAgentPermissions(mentorId, tenantKey);
   const username = useUsername();
   const axdToken = useAxdToken();
   const { userTenants } = useUserTenants();

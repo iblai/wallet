@@ -67,7 +67,7 @@ export function buildResume(state: WalletState, origin = "", org = ""): ResumeDo
   };
 
   const summary = prefs.summary?.trim() || autoSummary(state);
-  sections.push({ id: "summary", title: "Summary", items: [{ title: summary }] });
+  if (summary) sections.push({ id: "summary", title: "Summary", items: [{ title: summary }] });
 
   if (on.skills) {
     const max = prefs.maxSkills ?? 12;
@@ -183,7 +183,7 @@ export function autoSummary(state: WalletState): string {
       ? `${latestJob.title} at ${latestJob.company}`
       : role
         ? `${role.title} candidate`
-        : "Professional");
+        : "");
   const proof = active.length
     ? ` Holds ${active.length} credential${active.length === 1 ? "" : "s"}${verified ? ` (${verified} independently verifiable)` : ""}${active[0] ? `, including ${active[0].name} from ${active[0].issuer.name}` : ""}.`
     : "";
@@ -193,7 +193,7 @@ export function autoSummary(state: WalletState): string {
     const g = gapAnalysis(role, state.skills);
     fit = ` Targeting ${role.title} roles with ${g.coverage}% of the core skill set already evidenced.`;
   }
-  return `${who}.${proof}${skills}${fit}`.replace(/\s+/g, " ").trim();
+  return `${who && `${who}.`}${proof}${skills}${fit}`.replace(/\s+/g, " ").trim();
 }
 
 /**

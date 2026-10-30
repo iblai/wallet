@@ -21,7 +21,7 @@ const PAGES: [string, string][] = [
   ["/admin/users", "Users"],
   ["/admin/analytics", "Analytics"],
   ["/admin/organization", "Organization"],
-  ["/admin/credentials", "Credentials"],
+  ["/admin/credentials", "Issuing"],
 ];
 
 test.describe("Journey 12: Mobile — Admin", () => {

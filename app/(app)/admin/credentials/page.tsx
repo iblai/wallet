@@ -157,7 +157,7 @@ export default function IssuedCredentialsPage() {
     <div className="flex min-h-0 flex-1 flex-col">
       <PageHeader
         icon={<Award />}
-        title="Credentials"
+        title="Issuing"
         count={issued?.count ?? null}
         description="What this organization can issue, and what it has issued. Issue and assign in the OS (Credentials) or through the credentials API."
         toolbar={

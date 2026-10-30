@@ -24,6 +24,9 @@ export function proxy(request: NextRequest) {
     mode: process.env.NODE_ENV === "development" ? "report-only" : undefined,
     // Nothing embeds the wallet; the share snippet is a link, not a frame.
     frameAncestors: "none",
+    // Badges live on their issuers' hosts (verify, Badge link) and chat uploads go to S3;
+    // img-src already allows any https host, so this opens no new way out.
+    connectSrc: ["https:"],
   });
 }
 

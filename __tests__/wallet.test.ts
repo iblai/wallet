@@ -82,6 +82,7 @@ describe("sharing", () => {
     expect(shareBlurb(base({ skills: ["SQL"] }), "https://x")).toContain(
       "Verify it here: https://x",
     );
+    expect(shareBlurb(base({ issuedOn: "2024-03-15T00:00:00Z" }))).toMatch(/ in [^.]*2024\b/);
     expect(handleFromName("Jordan Rivera")).toBe("jordan-rivera");
     expect(HANDLE_RE.test("jordan-rivera")).toBe(true);
     expect(HANDLE_RE.test("-bad")).toBe(false);
@@ -211,6 +212,23 @@ describe("résumé", () => {
     expect(md).toContain("[verify](https://w/verify/");
     expect(resumeToText(doc)).toContain("LICENSES & CERTIFICATIONS");
     expect(autoSummary(demoState())).toMatch(/Data Scientist roles/);
+  });
+
+  it("opens the summary with a headline only when there is one", () => {
+    const thin = (credentials: WalletCredential[] = []) =>
+      deriveState({
+        profile: { username: "jane", name: "Jane Doe" },
+        settings: { ...WALLET_SETTINGS_DEFAULTS, credentials },
+        platformCredentials: [],
+        platformEducation: [],
+        platformExperience: [],
+        platformEarnedSkills: [],
+        isLoading: false,
+        isDemo: false,
+      });
+    expect(autoSummary(thin())).toBe("");
+    expect(buildResume(thin(), "https://w").sections.map((s) => s.id)).not.toContain("summary");
+    expect(autoSummary(thin([base()]))).toMatch(/^Holds 1 credential/);
   });
 
   it("hands the summary prompt the facts of the record, and only those", () => {

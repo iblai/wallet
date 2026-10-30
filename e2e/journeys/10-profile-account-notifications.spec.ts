@@ -1,35 +1,23 @@
 import { test, expect } from "../fixtures/wallet-test";
-import { gotoApp, panelControl, section, switchFor, toast } from "../utils/app";
+import { gotoApp, panelControl, section, toast } from "../utils/app";
 
 /**
- * Journey 10 — Profile, account & notifications: the SDK profile with the
- * app's preferences (a round trip through the platform), the account panel,
- * the notifications inbox, and the demo's own profile forms.
+ * Journey 10 — Profile, account & notifications: the SDK profile, the account
+ * panel, the notifications inbox, and the demo's own profile forms.
  */
 test.describe("Journey 10: Profile, Account & Notifications — Admin", () => {
   // prof-01
-  test("admin opens the profile, flips a preference, finds it after a reload, and flips it back", async ({
+  test("admin opens the profile: the SDK profile, without the starter's example preferences", async ({
     page,
   }) => {
     await gotoApp(page, "/profile");
-    await expect(page.getByText("App preferences")).toBeVisible({ timeout: 60_000 });
     await expect(
       page
         .getByRole("tab", { name: "Education" })
         .or(page.getByRole("button", { name: "Education" }))
         .first(),
-    ).toBeVisible();
-    const onboarding = switchFor(page, "Onboarding done");
-    await expect(onboarding).toBeEnabled();
-    const before = await onboarding.isChecked();
-    await onboarding.click();
-    await expect(toast(page, "Preferences saved")).toBeVisible();
-    await gotoApp(page, "/profile");
-    const after = switchFor(page, "Onboarding done");
-    await expect(after).toBeEnabled({ timeout: 60_000 });
-    expect(await after.isChecked()).toBe(!before);
-    await after.click();
-    await expect(toast(page, "Preferences saved")).toBeVisible();
+    ).toBeVisible({ timeout: 60_000 });
+    await expect(page.getByText("App preferences")).toHaveCount(0);
   });
 
   // prof-02

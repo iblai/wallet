@@ -48,17 +48,10 @@ function assertRead(data: unknown) {
 
 /** Extend with your own fields; keep them flat and JSON-serializable. */
 export type UserSettings = {
-  theme?: "light" | "dark";
-  onboardingStep?: number;
-  onboardingDone?: boolean;
   [key: string]: unknown;
 };
 
-export const USER_SETTINGS_DEFAULTS: UserSettings = {
-  theme: "light",
-  onboardingStep: 0,
-  onboardingDone: false,
-};
+export const USER_SETTINGS_DEFAULTS: UserSettings = {};
 
 /**
  * The signed-in user's settings for this app in this org.

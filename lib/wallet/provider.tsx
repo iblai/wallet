@@ -30,7 +30,7 @@ import { useUserSettings } from "@/lib/iblai/metadata";
 import { readTenants, resolveAppTenant } from "@/lib/iblai/tenant";
 import { sessionFetch } from "@/lib/iblai/session-fetch";
 import { deriveState, fromAssertion } from "./derive";
-import { isSampleWallet } from "./sample";
+import { isSampleOrg } from "@/lib/iblai/house-journeys";
 
 export { deriveState, fromAssertion };
 import {
@@ -77,7 +77,6 @@ export interface WalletActions {
   removeEducation: (id: string) => Promise<void>;
   saveExperience: (e: WalletExperience) => Promise<void>;
   removeExperience: (id: string) => Promise<void>;
-  setOnboardingDone: (done: boolean) => Promise<void>;
   resetDemo: () => void;
   isSaving: boolean;
 }
@@ -201,7 +200,6 @@ function useActions(store: Store, platformIds: Set<string>, reset: () => void): 
       }),
     removeExperience: async (id) =>
       update({ experience: (settings.experience ?? []).filter((x) => x.id !== id) }),
-    setOnboardingDone: async (done) => update({ onboardingDone: done }),
     resetDemo: reset,
   };
 }
@@ -223,7 +221,6 @@ function demoSeed(): WalletSettings {
     education: DEMO_EDUCATION,
     experience: DEMO_EXPERIENCE,
     profile: DEMO_PROFILE,
-    onboardingDone: true,
   };
 }
 
@@ -515,7 +512,7 @@ function platformImpl() {
 
 export function WalletProvider({ children }: { children: ReactNode }) {
   if (config.demoMode()) return <DemoSource>{children}</DemoSource>;
-  return isSampleWallet(resolveAppTenant(), readTenants(), config.mainTenantKey()) ? (
+  return isSampleOrg(resolveAppTenant()) ? (
     <SampleSource>{children}</SampleSource>
   ) : (
     <PlatformSource>{children}</PlatformSource>

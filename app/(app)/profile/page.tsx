@@ -8,7 +8,6 @@ import config from "@/lib/iblai/config";
 import { resolveAppTenant } from "@/lib/iblai/tenant";
 import { useWallet } from "@/lib/wallet/provider";
 import { newId, type WalletEducation, type WalletExperience } from "@/lib/wallet/types";
-import { AppPreferences } from "@/components/settings/app-preferences";
 import { Page, Section } from "@/components/wallet/section";
 import { PageHeader } from "@/components/page-header";
 import { LoadingScreen } from "@/components/loading-screen";
@@ -75,9 +74,6 @@ function PlatformProfile() {
           customization={{ showPlatformName: true, useGravatarPicFallback: true }}
           targetTab="education"
         />
-      </div>
-      <div className="mt-6">
-        <AppPreferences />
       </div>
     </div>
   );

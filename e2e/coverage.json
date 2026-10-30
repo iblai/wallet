@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "lastUpdated": "2026-10-30",
+  "lastUpdated": "2026-10-31",
   "summary": {
-    "totalCheckpoints": 84,
-    "coveredCheckpoints": 82,
+    "totalCheckpoints": 101,
+    "coveredCheckpoints": 99,
     "pendingCheckpoints": 2,
     "percent": 98,
-    "totalJourneys": 14
+    "totalJourneys": 15
   },
   "journeys": [
     {
@@ -60,7 +60,8 @@
         "app/(app)/layout.tsx",
         "components/shell/wallet-sidebar.tsx",
         "components/shell/top-bar.tsx",
-        "components/navbar/admin-mode-switch.tsx"
+        "components/navbar/admin-mode-switch.tsx",
+        "lib/iblai/house-journeys.ts"
       ],
       "checkpoints": [
         {
@@ -101,6 +102,11 @@
         {
           "id": "nav-08",
           "description": "User mode hides Analytics and the admin footer rows; Admin mode brings them back",
+          "status": "covered"
+        },
+        {
+          "id": "nav-09",
+          "description": "The credit balance’s Upgrade Plan asks for a checkout that comes back through the sign-in app, not to the page’s own origin",
           "status": "covered"
         }
       ]
@@ -385,7 +391,7 @@
         },
         {
           "id": "shr-08",
-          "description": "Public page Off → Public page is off; the wallet is emptied again",
+          "description": "Public page Off → Public page is off and the link is hidden; the wallet is emptied again",
           "status": "covered"
         }
       ]
@@ -397,7 +403,9 @@
       "sourceFiles": [
         "app/(app)/coach/page.tsx",
         "app/(app)/agents/page.tsx",
-        "components/wallet/agent-chat.tsx"
+        "components/wallet/agent-chat.tsx",
+        "lib/iblai/agent-permissions.ts",
+        "store/iblai-store.ts"
       ],
       "checkpoints": [
         {
@@ -412,7 +420,7 @@
         },
         {
           "id": "coach-03",
-          "description": "Admin: the agents browser (heading, search, Create Custom Agent); a card opens the Coach with ?agent=",
+          "description": "Admin: the agents browser (heading, search, Create Custom Agent); a card opens the Coach with ?agent=, its composer ready and no page error",
           "status": "covered"
         },
         {
@@ -429,13 +437,12 @@
       "sourceFiles": [
         "app/(app)/profile/page.tsx",
         "app/(app)/account/page.tsx",
-        "app/(app)/notifications/[[...id]]/page.tsx",
-        "components/settings/app-preferences.tsx"
+        "app/(app)/notifications/[[...id]]/page.tsx"
       ],
       "checkpoints": [
         {
           "id": "prof-01",
-          "description": "Admin: the SDK profile tabs and App preferences; Onboarding done flipped survives a reload",
+          "description": "Admin: the SDK profile tabs, without the starter’s example App preferences",
           "status": "covered"
         },
         {
@@ -584,10 +591,10 @@
         "app/(app)/credentials/page.tsx",
         "app/(app)/credentials/[id]/page.tsx",
         "app/(app)/resume/page.tsx",
-        "components/wallet/sample-notice.tsx",
-        "components/wallet/upgrade-modal.tsx",
+        "components/house/sample-notice.tsx",
+        "components/house/upgrade-modal.tsx",
         "lib/wallet/provider.tsx",
-        "lib/wallet/sample.ts"
+        "lib/iblai/house-journeys.ts"
       ],
       "checkpoints": [
         {
@@ -613,6 +620,106 @@
         {
           "id": "smp-05",
           "description": "The upgrade dialog's Upgrade for free opens the wallet's $0 checkout",
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "id": "house",
+      "name": "House journeys",
+      "spec": "15-house.spec.ts",
+      "sourceFiles": [
+        "app/(app)/onboarding/[[...agentId]]/page.tsx",
+        "app/(app)/layout.tsx",
+        "components/house/first-run-gate.tsx",
+        "components/house/onboarding-page.tsx",
+        "components/house/organization-preview.tsx",
+        "components/house/sample-notice.tsx",
+        "components/house/upgrade-modal.tsx",
+        "components/shell/wallet-sidebar.tsx",
+        "components/shell/top-bar.tsx",
+        "lib/iblai/house-journeys.ts",
+        "providers/iblai-providers.tsx"
+      ],
+      "checkpoints": [
+        {
+          "id": "house-01",
+          "description": "Lands on the community platform inside the shell, with the admin cluster shown",
+          "status": "covered"
+        },
+        {
+          "id": "house-02",
+          "description": "A trial-gated click opens the SDK upgrade dialog, and Escape closes it",
+          "status": "covered"
+        },
+        {
+          "id": "house-03",
+          "description": "The platform is previewed, and Join goes to the auth page's join for it",
+          "status": "covered"
+        },
+        {
+          "id": "house-04",
+          "description": "Create Your Own Platform is ibl.ai's $0 sign-up with this app nested in the return address",
+          "status": "covered"
+        },
+        {
+          "id": "house-05",
+          "description": "A readably keyed platform is not asked its name: the first run is sector, team, done, and the home holds afterwards",
+          "status": "covered"
+        },
+        {
+          "id": "house-06",
+          "description": "An admin who finished it stays home",
+          "status": "covered"
+        },
+        {
+          "id": "house-07",
+          "description": "A member is sent to the platform's form, answers it, sees the final step and lands home",
+          "status": "covered"
+        },
+        {
+          "id": "house-08",
+          "description": "With nothing configured, /onboarding says so and Continue goes home",
+          "status": "covered"
+        },
+        {
+          "id": "house-09",
+          "description": "Back to My Platform leaves the preview for the user's own platform home",
+          "status": "covered"
+        },
+        {
+          "id": "house-10",
+          "description": "Management › Onboarding opens for the admin, its agent links based on this app's onboarding route",
+          "status": "covered"
+        },
+        {
+          "id": "house-11",
+          "description": "A named platform whose sector is set gets only the team step and the finish",
+          "status": "covered"
+        },
+        {
+          "id": "house-12",
+          "description": "The community platform shows the sample: the admin rows, a filled Credentials list and the notice",
+          "status": "covered"
+        },
+        {
+          "id": "house-13",
+          "description": "A write on the sample opens the upgrade dialog",
+          "status": "covered"
+        },
+        {
+          "id": "house-14",
+          "description": "The upgrade dialog's Upgrade for free opens this app's $0 checkout",
+          "status": "covered"
+        },
+        {
+          "id": "house-15",
+          "description": "Still on the community platform while the platform lists their own, the SDK moves them to it",
+          "status": "covered"
+        },
+        {
+          "id": "house-16",
+          "description": "Upgrade Plan asks for a pricing page that returns through the sign-in app",
           "status": "covered"
         }
       ]

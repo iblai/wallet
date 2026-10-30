@@ -140,6 +140,8 @@ test.describe("Journey 8: Share & public page — Admin", () => {
   }) => {
     await gotoApp(page, "/share");
     await share.setPublic(false);
+    // Off hides the link: one already sent keeps working (it carries its own copy), so none is offered.
+    await expect(share.link).toHaveCount(0);
     await removeE2eCredentials(page);
     await expect(credentials.emptyTitle).toHaveText("No credentials yet");
   });

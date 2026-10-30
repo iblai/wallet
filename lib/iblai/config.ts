@@ -99,8 +99,12 @@ const config = {
   asgiUrl: () => new URL(wsBase()).origin.replace(/^ws/, "http"),
 
   mainTenantKey: () => getEnv("NEXT_PUBLIC_MAIN_TENANT_KEY", "main"),
+  /** `app=` sent to the Auth SPA — the OS's, so every platform signs in. */
+  iblPlatform: () => "mentor",
   tauriCustomScheme: () => getEnv("NEXT_PUBLIC_TAURI_CUSTOM_SCHEME", ""),
   platformBaseDomain: () => domain(),
+  /** The name the setup flow shows. */
+  appName: () => "Credential Wallet",
   // This app's public URL: where ibl.ai's $0 checkout returns a new organization's admin.
   appUrl: () => (getEnv("NEXT_PUBLIC_APP_URL") || "https://wallet.iblai.me").replace(/\/+$/, ""),
 

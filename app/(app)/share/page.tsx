@@ -121,7 +121,7 @@ export default function SharePage() {
       <Page>
         <Section
           title="Public wallet page"
-          description="Employers and admissions offices open it without an account. The link itself carries your public credentials; platform-issued ones are verified live against ibl.ai by the viewer\u2019s browser. Re-copy it after changes."
+          description="Employers and admissions offices open it without an account. The link itself carries your public credentials; platform-issued ones are verified live against ibl.ai by the viewer’s browser. Re-copy it after changes."
           actions={
             <div className="flex items-center gap-2 text-sm">
               <Label htmlFor="public-on">{enabled ? "On" : "Off"}</Label>
@@ -144,30 +144,32 @@ export default function SharePage() {
         >
           <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
             <div>
-              <Label className="text-muted-foreground text-xs">Your link</Label>
-              <div className="mt-1 flex gap-2">
-                <Input readOnly value={publicUrl} className="font-mono text-xs" />
-                <Button
-                  variant="outline"
-                  size="icon"
-                  aria-label="Copy public link"
-                  onClick={() => copy(publicUrl)}
-                  disabled={!enabled}
-                >
-                  <Copy />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  aria-label="Open public page"
-                  nativeButton={false}
-                  render={<Link href={publicPath} target="_blank" />}
-                  disabled={!enabled}
-                >
-                  <ExternalLink />
-                </Button>
-              </div>
-              <div className="mt-3">
+              {enabled ? (
+                <>
+                  <Label className="text-muted-foreground text-xs">Your link</Label>
+                  <div className="mt-1 flex gap-2">
+                    <Input readOnly value={publicUrl} className="font-mono text-xs" />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      aria-label="Copy public link"
+                      onClick={() => copy(publicUrl)}
+                    >
+                      <Copy />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      aria-label="Open public page"
+                      nativeButton={false}
+                      render={<Link href={publicPath} target="_blank" />}
+                    >
+                      <ExternalLink />
+                    </Button>
+                  </div>
+                </>
+              ) : null}
+              <div className={enabled ? "mt-3" : undefined}>
                 <Label htmlFor="handle" className="text-muted-foreground text-xs">
                   Display handle (shown on the page)
                 </Label>
@@ -220,7 +222,7 @@ export default function SharePage() {
           {!enabled ? (
             <p className="text-muted-foreground mt-3 text-xs">
               Turn the page on to share it. Private credentials and declined or expired ones never
-              appear.
+              appear. A link you already sent keeps working: it carries its own copy.
             </p>
           ) : null}
         </Section>

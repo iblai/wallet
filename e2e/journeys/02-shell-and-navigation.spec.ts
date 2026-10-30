@@ -1,10 +1,11 @@
 import { test, expect } from "../fixtures/wallet-test";
-import { gotoApp } from "../utils/app";
+import { AUTH_HOST } from "../fixtures/test-data";
+import { esc, gotoApp } from "../utils/app";
 
 /**
  * Journey 2 — Shell & navigation: the sidebar rows, the primary action, the
- * collapse toggle, the top bar's bell and avatar menu, the footer cluster's
- * dialogs, and the User/Admin switch.
+ * collapse toggle, the top bar's bell, avatar menu and credit balance, the
+ * footer cluster's dialogs, and the User/Admin switch.
  */
 const ROWS: [string, string, string][] = [
   ["Credentials", "/credentials", "Credentials"],
@@ -114,9 +115,37 @@ test.describe("Journey 2: Shell & Navigation — Admin", () => {
     await shell.setAdminMode(false);
     await expect(shell.row("Analytics")).toHaveCount(0);
     await expect(shell.row("Management")).toHaveCount(0);
-    await expect(shell.row("Credentials")).toHaveCount(1);
+    await expect(shell.row("Issuing")).toHaveCount(0);
     await shell.setAdminMode(true);
     await expect(shell.row("Analytics")).toBeVisible();
     await expect(shell.row("Management")).toBeVisible();
+    await expect(shell.row("Issuing")).toBeVisible();
+  });
+
+  // nav-09
+  test("admin opens the credit balance and Upgrade asks for a checkout that comes back through sign-in", async ({
+    page,
+  }) => {
+    // The SDK shows the balance only on a paywalled platform with a billing account: give the admin's both.
+    await page.route(/\/api\/core\/users\/platforms\//, async (r) => {
+      const res = await r.fetch();
+      const all = (await res.json()) as object[];
+      await r.fulfill({ response: res, json: all.map((p) => ({ ...p, show_paywall: true })) });
+    });
+    await page.route(/\/api\/billing\/account\//, (r) =>
+      r.fulfill({ json: { available_credits: "10", current_plan: "free" } }),
+    );
+    // Off iblai.app the platform refuses a checkout that returns to the page's own origin.
+    let asked: URL | undefined;
+    await page.route(/\/stripe\/pricing-page-session\//, (route) => {
+      asked = new URL(route.request().url());
+      return route.fulfill({ status: 400, json: { redirect_url: "stubbed" } });
+    });
+    await gotoApp(page, "/");
+    await page.getByTestId("credit-balance-trigger").click();
+    await page.getByRole("button", { name: "Upgrade Plan" }).click();
+    await expect
+      .poll(() => asked?.searchParams.get("redirect_url"))
+      .toMatch(new RegExp(`^${esc(AUTH_HOST)}/login\\?app=mentor&redirect-to=.`));
   });
 });

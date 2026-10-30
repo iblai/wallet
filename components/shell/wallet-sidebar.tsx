@@ -108,12 +108,15 @@ function NavRow({ row, collapsed }: { row: NavRowSpec; collapsed: boolean }) {
 
 export function WalletSidebar({
   isAdmin,
+  trial,
   tenantKey,
   currentTenant,
   onFooterAction,
   demo,
 }: {
   isAdmin: boolean;
+  /** On the community organization as a trial user: the admin cluster shows and upgrades. */
+  trial: boolean;
   tenantKey: string;
   currentTenant?: {
     key?: string | null;
@@ -125,15 +128,17 @@ export function WalletSidebar({
 }) {
   const router = useRouter();
   const { isMobile, setOpenMobile } = useSidebar();
-  const { adminMode } = useAdminMode();
-  const liveAdmin = isAdmin && adminMode;
+  // This app's rows follow the admin-mode context (the sample's admin too); the SDK
+  // footer keeps the session's own role.
+  const { adminMode: liveAdmin } = useAdminMode();
   const footerConfig = useMemo<PlatformSidebarFooterConfig | null>(
     () =>
       demo
         ? null
         : {
             isAdmin,
-            isLiveAdmin: liveAdmin,
+            isLiveAdmin: isAdmin && liveAdmin,
+            showTrialGatedAdminMenu: trial,
             enableRbac: false,
             rbacPermissions: {},
             tenantKey,
@@ -143,7 +148,7 @@ export function WalletSidebar({
             supportUrl: "https://ibl.ai/docs",
             onAction: onFooterAction,
           },
-    [demo, isAdmin, liveAdmin, tenantKey, currentTenant, onFooterAction],
+    [demo, isAdmin, liveAdmin, trial, tenantKey, currentTenant, onFooterAction],
   );
 
   const sections = useMemo<PlatformSidebarSectionConfig[]>(() => {
@@ -249,7 +254,7 @@ function FooterCluster({
         ? [
             {
               id: "credentials",
-              label: "Credentials",
+              label: "Issuing",
               icon: ShieldCheck as NavIcon,
               href: "/admin/credentials",
             },

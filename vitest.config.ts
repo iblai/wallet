@@ -5,13 +5,27 @@ export default defineConfig({
   resolve: { alias: { "@": fileURLToPath(new URL(".", import.meta.url)) } },
   test: {
     include: ["__tests__/**/*.test.ts"],
+    // The store test loads the SDK, whose ESM imports `next/navigation` without an
+    // extension (Node can't resolve it); bundled, it loads.
+    deps: {
+      optimizer: {
+        ssr: {
+          enabled: true,
+          include: [
+            "@iblai/iblai-js/data-layer",
+            "@iblai/iblai-js/web-utils",
+            "@iblai/iblai-js/web-containers/next",
+          ],
+        },
+      },
+    },
     coverage: {
       provider: "v8",
       // The pure modules the unit tests own; components and the API slices are exercised by e2e.
       include: [
-        "lib/iblai/auth-redirect.ts",
         "lib/iblai/completions.ts",
         "lib/iblai/config.ts",
+        "lib/iblai/house-journeys.ts",
         "lib/iblai/metadata-core.ts",
         "lib/iblai/sso-redirect.ts",
         "lib/iblai/tenant.ts",
@@ -21,7 +35,6 @@ export default defineConfig({
         "lib/wallet/market.ts",
         "lib/wallet/open-badges.ts",
         "lib/wallet/resume.ts",
-        "lib/wallet/sample.ts",
         "lib/wallet/share.ts",
         "lib/wallet/types.ts",
       ],

@@ -51,7 +51,7 @@ test.describe("Journey 14: Sample wallet — Member on the community organizatio
     await gotoApp(memberPage, "/");
     const notice = memberPage.getByTestId("sample-notice");
     await expect(notice).toContainText("sample wallet");
-    await expect(notice.getByRole("button", { name: "Create your organization" })).toBeVisible();
+    await expect(notice.getByRole("button", { name: "Create Your Platform" })).toBeVisible();
   });
 
   // smp-02
@@ -114,7 +114,7 @@ test.describe("Journey 14: Sample wallet — Member on the community organizatio
     await gotoApp(memberPage, "/");
     await memberPage
       .getByTestId("sample-notice")
-      .getByRole("button", { name: "Create your organization" })
+      .getByRole("button", { name: "Create Your Platform" })
       .click();
     await memberPage.getByRole("dialog").getByRole("button", { name: "Upgrade for free" }).click();
     await expect
