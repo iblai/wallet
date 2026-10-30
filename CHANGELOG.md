@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.0](https://github.com/iblai/wallet/compare/v0.4.0...v0.5.0) (2026-10-30)
+
+### Features
+
+* read-only sample wallet on main, checkouts to the app URL, iblai-js 2.59.0 (profile fix) ([85993bc](https://github.com/iblai/wallet/commit/85993bc2de8ec4d694e912f2ba3698a53deec38e))
+
 ## [0.4.0](https://github.com/iblai/wallet/compare/v0.3.0...v0.4.0) (2026-10-27)
 
 ### Features
