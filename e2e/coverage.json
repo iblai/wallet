@@ -2,8 +2,8 @@
   "version": 2,
   "lastUpdated": "2026-10-30",
   "summary": {
-    "totalCheckpoints": 83,
-    "coveredCheckpoints": 81,
+    "totalCheckpoints": 84,
+    "coveredCheckpoints": 82,
     "pendingCheckpoints": 2,
     "percent": 98,
     "totalJourneys": 14
@@ -43,6 +43,11 @@
         {
           "id": "auth-05",
           "description": "Log Out from More options clears the session and goes to the Auth SPA logout",
+          "status": "covered"
+        },
+        {
+          "id": "auth-06",
+          "description": "Back from the $0 checkout on main's session, holding [main, own]: the SDK's switch goes to /login/complete for the own organization",
           "status": "covered"
         }
       ]

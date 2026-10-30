@@ -108,7 +108,7 @@ test.describe("Journey 14: Sample wallet — Member on the community organizatio
     let checkout = "";
     await memberPage.route(/credits-free-plan/, (route) => {
       checkout = route.request().url();
-      return route.fulfill({ status: 204, body: "" });
+      return route.fulfill({ contentType: "text/html", body: "<title>checkout stub</title>" });
     });
     await onMain(memberPage);
     await gotoApp(memberPage, "/");

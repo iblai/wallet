@@ -246,9 +246,8 @@ export function IblaiProviders({ children }: { children: ReactNode }) {
             onAuthFailure={(reason: string) =>
               console.error("[TenantProvider] Auth failure:", reason)
             }
-            handleTenantSwitch={async () => {
-              await switchTenant(resolveAppTenant());
-            }}
+            // Switch to the platform the SDK names; any other key leaves the loading screen up.
+            handleTenantSwitch={switchTenant}
             redirectToAuthSpa={redirectToAuthSpa}
             username={username}
             fallback={LOADING}

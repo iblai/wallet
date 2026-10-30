@@ -1,6 +1,6 @@
 # Credential Wallet E2E Coverage — User Journey Checklist
 
-> Last updated: 2026-10-30 | 83 checkpoints (81 covered, 2 pending/fixme) | 14 journeys | 98% covered | Auth: admin + member storageState, plus the demo project
+> Last updated: 2026-10-30 | 84 checkpoints (82 covered, 2 pending/fixme) | 14 journeys | 98% covered | Auth: admin + member storageState, plus the demo project
 
 ## How This Works
 
@@ -28,7 +28,7 @@ Not covered yet: a platform-issued credential ("Verified on ibl.ai") end to end 
 
 ---
 
-## Journey 1: Authentication (5 checkpoints) — `journeys/01-authentication.spec.ts`
+## Journey 1: Authentication (6 checkpoints) — `journeys/01-authentication.spec.ts`
 
 **Source files:** `providers/iblai-providers.tsx`, `lib/iblai/auth-utils.ts`, `lib/iblai/tenant.ts`, `components/navbar/user-profile-button.tsx`
 
@@ -37,6 +37,7 @@ Not covered yet: a platform-issued credential ("Verified on ibl.ai") end to end 
 - [x] Signed-in admin: tenant is the key, current_tenant its record and an entry of tenants, no app_tenant pin _(auth-03)_
 - [x] ?tenant=<own organization> pins app_tenant and the page renders _(auth-04)_
 - [x] Log Out from More options clears the session and goes to the Auth SPA logout _(auth-05)_
+- [x] Back from the $0 checkout on main's session, holding [main, own]: the SDK's switch goes to /login/complete for the own organization _(auth-06)_
 
 ---
 
