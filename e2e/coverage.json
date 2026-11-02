@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "lastUpdated": "2026-10-31",
+  "lastUpdated": "2026-11-02",
   "summary": {
-    "totalCheckpoints": 101,
-    "coveredCheckpoints": 99,
+    "totalCheckpoints": 103,
+    "coveredCheckpoints": 101,
     "pendingCheckpoints": 2,
     "percent": 98,
     "totalJourneys": 15
@@ -523,7 +523,7 @@
         },
         {
           "id": "adm-08",
-          "description": "Member: /setup says only admins choose; /admin/users and /admin/organization send them home",
+          "description": "Member: /setup sends them back to the Coach with the admins-only toast; /admin/users and /admin/organization send them home",
           "status": "covered"
         }
       ]
@@ -594,7 +594,9 @@
         "components/house/sample-notice.tsx",
         "components/house/upgrade-modal.tsx",
         "lib/wallet/provider.tsx",
-        "lib/iblai/house-journeys.ts"
+        "lib/iblai/house-journeys.ts",
+        "app/(app)/coach/page.tsx",
+        "app/setup/page.tsx"
       ],
       "checkpoints": [
         {
@@ -620,6 +622,16 @@
         {
           "id": "smp-05",
           "description": "The upgrade dialog's Upgrade for free opens the wallet's $0 checkout",
+          "status": "covered"
+        },
+        {
+          "id": "smp-06",
+          "description": "Choose an agent on the Coach opens the upgrade dialog; the address stays on the Coach",
+          "status": "covered"
+        },
+        {
+          "id": "smp-07",
+          "description": "/setup by its address sends the member back to the Coach with the upgrade dialog",
           "status": "covered"
         }
       ]

@@ -145,12 +145,14 @@ test.describe("Journey 11: Admin — Admin", () => {
 
 test.describe("Journey 11: Admin — Non-Admin", () => {
   // adm-08
-  test("member is told setup is for admins and the admin pages send them home", async ({
+  test("member opens setup: sent back to the Coach with the admins-only toast, and the admin pages send them home", async ({
     memberPage,
   }) => {
     const { admin } = pages(memberPage);
-    await gotoBare(memberPage, "/setup");
+    await memberPage.goto(`${APP_HOST}/setup`);
+    // The toast lives a few seconds; the Coach's shell can take longer to settle.
     await expect(admin.adminOnly).toBeVisible({ timeout: 60_000 });
+    await memberPage.waitForURL((url) => url.pathname === "/coach", { timeout: 30_000 });
     for (const path of ["/admin/users", "/admin/organization"]) {
       await memberPage.goto(`${APP_HOST}${path}`);
       await memberPage.waitForURL((url) => url.pathname === "/", { timeout: 30_000 });

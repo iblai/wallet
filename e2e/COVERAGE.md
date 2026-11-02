@@ -1,6 +1,6 @@
 # Credential Wallet E2E Coverage — User Journey Checklist
 
-> Last updated: 2026-10-31 | 101 checkpoints (99 covered, 2 pending/fixme) | 15 journeys | 98% covered | Auth: admin + member storageState, plus the demo project
+> Last updated: 2026-11-02 | 103 checkpoints (101 covered, 2 pending/fixme) | 15 journeys | 98% covered | Auth: admin + member storageState, plus the demo project
 
 ## How This Works
 
@@ -175,7 +175,7 @@ Not covered yet: a platform-issued credential ("Verified on ibl.ai") end to end 
 - [x] /admin/billing and /admin/memory render the SDK panel _(adm-05)_
 - [x] /setup: Which agent is the Coach?, Search Agents, Create a new agent opens a modal, Cancel → /coach _(adm-06)_
 - [x] /setup: an agent picked and saved sends the Coach to it; Use the platform's default agent restores the organization _(adm-07)_
-- [x] Member: /setup says only admins choose; /admin/users and /admin/organization send them home _(adm-08)_
+- [x] Member: /setup sends them back to the Coach with the admins-only toast; /admin/users and /admin/organization send them home _(adm-08)_
 
 ---
 
@@ -199,15 +199,17 @@ Not covered yet: a platform-issued credential ("Verified on ibl.ai") end to end 
 
 ---
 
-## Journey 14: Sample wallet (5 checkpoints) — `journeys/14-sample-wallet.spec.ts`
+## Journey 14: Sample wallet (7 checkpoints) — `journeys/14-sample-wallet.spec.ts`
 
-**Source files:** `app/(app)/layout.tsx`, `app/(app)/page.tsx`, `app/(app)/credentials/page.tsx`, `app/(app)/credentials/[id]/page.tsx`, `app/(app)/resume/page.tsx`, `components/house/sample-notice.tsx`, `components/house/upgrade-modal.tsx`, `lib/wallet/provider.tsx`, `lib/iblai/house-journeys.ts`
+**Source files:** `app/(app)/layout.tsx`, `app/(app)/page.tsx`, `app/(app)/credentials/page.tsx`, `app/(app)/credentials/[id]/page.tsx`, `app/(app)/resume/page.tsx`, `components/house/sample-notice.tsx`, `components/house/upgrade-modal.tsx`, `lib/wallet/provider.tsx`, `lib/iblai/house-journeys.ts`, `app/(app)/coach/page.tsx`, `app/setup/page.tsx`
 
 - [x] A member whose only organization is main sees Jordan Rivera's sample wallet under the amber notice _(smp-01)_
 - [x] The sample's credentials are listed and one opens _(smp-02)_
 - [x] Declining a pending sample credential opens the upgrade dialog and saves nothing _(smp-03)_
 - [x] The sample résumé offers no AI draft _(smp-04)_
 - [x] The upgrade dialog's Upgrade for free opens the wallet's $0 checkout _(smp-05; skips until web-containers carries `checkoutUrl`, iblai-web-frontend#2195)_
+- [x] Choose an agent on the Coach opens the upgrade dialog; the address stays on the Coach _(smp-06)_
+- [x] /setup by its address sends the member back to the Coach with the upgrade dialog _(smp-07)_
 
 ---
 

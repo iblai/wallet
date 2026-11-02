@@ -1,12 +1,14 @@
 "use client";
 
 import { Suspense, type ReactNode } from "react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useDispatch } from "react-redux";
 import { Sparkles } from "lucide-react";
+import { setOpenPricingModal } from "@iblai/iblai-js/web-utils";
 import { useOrgSettings } from "@/lib/iblai/metadata";
 import { useAdminMode } from "@/lib/iblai/admin-mode";
 import config from "@/lib/iblai/config";
+import { useWallet } from "@/lib/wallet/provider";
 import { AgentChat } from "@/components/wallet/agent-chat";
 import { Page } from "@/components/wallet/section";
 import { PageHeader } from "@/components/page-header";
@@ -36,7 +38,10 @@ export default function CoachPage() {
 
 function PlatformCoach() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const dispatch = useDispatch();
   const { isAdmin } = useAdminMode();
+  const { state } = useWallet();
   const { settings, platformDefaultAgentId, isLoading } = useOrgSettings();
   const mentorId =
     searchParams.get("agent") ||
@@ -55,10 +60,12 @@ function PlatformCoach() {
         }
         action={
           isAdmin ? (
+            // The sample's "admin" upgrades, like every other write on main.
             <Button
-              nativeButton={false}
-              render={<Link href="/setup" />}
               className="ibl-button-primary"
+              onClick={() =>
+                state.isSample ? dispatch(setOpenPricingModal(true)) : router.push("/setup")
+              }
             >
               Choose an agent
             </Button>

@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Page } from "@playwright/test";
-import { test, expect } from "../fixtures/wallet-test";
+import { test, expect, pages } from "../fixtures/wallet-test";
 import { DEMO } from "../fixtures/test-data";
-import { gotoApp } from "../utils/app";
+import { gotoApp, gotoBare } from "../utils/app";
 
 /**
  * Journey 14 — The sample wallet on the community organization: a member whose
@@ -33,6 +33,16 @@ async function onMain(page: Page) {
     const res = await r.fetch();
     const all = (await res.json()) as { key: string }[];
     await r.fulfill({ response: res, json: all.filter((p) => p.key === MAIN) });
+  });
+  // The Coach's read of main: no agent chosen, no default — its empty state is the precondition here.
+  await page.context().route(new RegExp(`/api/core/orgs/${MAIN}/metadata/`), async (r) => {
+    if (r.request().method() !== "GET") return r.continue();
+    const res = await r.fetch();
+    const body = (await res.json()) as { metadata?: Record<string, unknown> };
+    const meta = body.metadata ?? (body as Record<string, unknown>);
+    delete meta.overall_default_mentor;
+    delete meta.apps;
+    await r.fulfill({ response: res, json: body });
   });
   await page.context().addInitScript((only: typeof entry) => {
     localStorage.setItem("tenants", JSON.stringify([only]));
@@ -123,5 +133,37 @@ test.describe("Journey 14: Sample wallet — Member on the community organizatio
     const back = new URL(new URL(checkout).searchParams.get("redirect_url") ?? "");
     expect(back.searchParams.get("app")).toBe("mentor");
     expect(back.searchParams.get("redirect-to")).toBe(appUrl);
+  });
+
+  // smp-06
+  test("member on main asks to choose the Coach's agent: the upgrade dialog opens, the address stays on the Coach", async ({
+    memberPage,
+  }) => {
+    const { coach, admin } = pages(memberPage);
+    await onMain(memberPage);
+    await gotoApp(memberPage, "/coach");
+    await expect(coach.noAgent).toBeVisible({ timeout: 60_000 });
+    await coach.chooseAgent.click();
+    await expect(
+      memberPage.getByRole("dialog").filter({ hasText: "Upgrade for free" }),
+    ).toBeVisible({
+      timeout: 15_000,
+    });
+    expect(new URL(memberPage.url()).pathname).toBe("/coach");
+    await expect(admin.adminOnly).toHaveCount(0);
+  });
+
+  // smp-07
+  test("member on main opens setup by its address: back on the Coach with the upgrade dialog", async ({
+    memberPage,
+  }) => {
+    await onMain(memberPage);
+    await gotoBare(memberPage, "/setup");
+    await memberPage.waitForURL((url) => url.pathname === "/coach", { timeout: 30_000 });
+    await expect(
+      memberPage.getByRole("dialog").filter({ hasText: "Upgrade for free" }),
+    ).toBeVisible({
+      timeout: 15_000,
+    });
   });
 });

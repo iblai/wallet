@@ -1,5 +1,5 @@
 import type { Locator, Page } from "@playwright/test";
-import { content } from "../utils/app";
+import { content, toast } from "../utils/app";
 
 /** The admin surfaces: Users, Organization, the organization's credentials, Analytics, and /setup. */
 export class AdminPages {
@@ -48,7 +48,7 @@ export class AdminPages {
     this.cancelSetup = page.getByRole("button", { name: "Cancel", exact: true });
     this.createAgent = page.getByRole("button", { name: "Create a new agent" });
     this.useDefaultAgent = page.getByRole("button", { name: "Use the platform's default agent" });
-    this.adminOnly = page.getByText("Only admins of this platform can choose the Coach's agent.");
+    this.adminOnly = toast(page, "Only admins of this platform can choose the Coach's agent.");
   }
 
   /** The setup grid's agent tiles: buttons around an h4 with the agent's name. */
