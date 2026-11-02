@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.2](https://github.com/iblai/wallet/compare/v0.6.1...v0.6.2) (2026-11-02)
+
+### Bug Fixes
+
+* send non-admins from the Coach's setup back — the sample upgrades, a member gets a toast ([d0399c3](https://github.com/iblai/wallet/commit/d0399c346b95cbd8ab4b01b190a28bbb72324bf0))
+
 ## [0.6.1](https://github.com/iblai/wallet/compare/v0.6.0...v0.6.1) (2026-11-02)
 
 ### Chores
