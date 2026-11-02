@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.1](https://github.com/iblai/wallet/compare/v0.6.0...v0.6.1) (2026-11-02)
+
+### Chores
+
+* redact request headers in the chrome-devtools MCP server ([ff78c5c](https://github.com/iblai/wallet/commit/ff78c5c3031d1aa273bdfe419e5f8abf8e22a164))
+
 ## [0.6.0](https://github.com/iblai/wallet/compare/v0.5.1...v0.6.0) (2026-10-30)
 
 ### Features
