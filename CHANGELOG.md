@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.0](https://github.com/iblai/wallet/compare/v0.6.2...v0.7.0) (2026-11-03)
+
+### Features
+
+* house Tauri shell (desktop, iOS, Android), mobile init, shell CI;README in the OS shape ([250d45e](https://github.com/iblai/wallet/commit/250d45e10dc376cef03350164dff9bd47f134d2a))
+
 ## [0.6.2](https://github.com/iblai/wallet/compare/v0.6.1...v0.6.2) (2026-11-02)
 
 ### Bug Fixes
