@@ -101,7 +101,7 @@ const config = {
   mainTenantKey: () => getEnv("NEXT_PUBLIC_MAIN_TENANT_KEY", "main"),
   /** `app=` sent to the Auth SPA — the OS's, so every platform signs in. */
   iblPlatform: () => "mentor",
-  tauriCustomScheme: () => getEnv("NEXT_PUBLIC_TAURI_CUSTOM_SCHEME", ""),
+  tauriCustomScheme: () => getEnv("NEXT_PUBLIC_TAURI_CUSTOM_SCHEME", "iblai-wallet"),
   platformBaseDomain: () => domain(),
   /** The name the setup flow shows. */
   appName: () => "Credential Wallet",

@@ -57,6 +57,8 @@ export async function redirectToAuthSpa(
   // Multi-org: only pin a tenant when a caller asks for one (re-auth, switch).
   if (platformKey) authUrl += `&tenant=${encodeURIComponent(platformKey)}`;
   if (logout) authUrl += "&logout=1";
+  // Native shells: the Auth SPA returns provider sign-ins through this scheme.
+  if (isTauri()) authUrl += `&scheme=${encodeURIComponent(config.tauriCustomScheme())}`;
 
   // All platforms (web, desktop Tauri, mobile Tauri): navigate the window
   // to the Auth SPA.  On desktop Tauri the auth page loads in-app, and
