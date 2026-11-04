@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.4](https://github.com/iblai/wallet/compare/v0.7.3...v0.7.4) (2026-11-04)
+
+### Bug Fixes
+
+* the app is named "<App>" on every installer and launcher, not "ibl.ai <App>" ([e11009c](https://github.com/iblai/wallet/commit/e11009c4b56e9a77d6982e689994c0745304e1b7))
+
 ## [0.7.3](https://github.com/iblai/wallet/compare/v0.7.2...v0.7.3) (2026-11-04)
 
 ### Bug Fixes
