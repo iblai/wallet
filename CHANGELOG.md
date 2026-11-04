@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.3](https://github.com/iblai/wallet/compare/v0.7.2...v0.7.3) (2026-11-04)
+
+### Bug Fixes
+
+* shells load the app's iblai.me host in dev and builds; the ibl.ai icon like the OS everywhere ([5abc930](https://github.com/iblai/wallet/commit/5abc930a057a8e1577ebfb4cdc7c2c1d28d79ebf))
+
 ## [0.7.2](https://github.com/iblai/wallet/compare/v0.7.1...v0.7.2) (2026-11-04)
 
 ### Bug Fixes
