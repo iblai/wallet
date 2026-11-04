@@ -241,20 +241,23 @@ New to ibl.ai? [ibl.ai/join](https://ibl.ai/join) creates your account and your 
 
 ### Scripts
 
-| Command                          | What it does                                                                                            |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `pnpm dev`                       | Dev server on port 3000                                                                                 |
-| `pnpm build`                     | Production build                                                                                        |
-| `pnpm start`                     | Serve the production build                                                                              |
-| `pnpm typecheck`                 | TypeScript                                                                                              |
-| `pnpm lint`                      | oxlint, zero warnings                                                                                   |
-| `pnpm format`                    | oxfmt (`pnpm format:check` is the CI gate)                                                              |
-| `pnpm test`                      | Vitest                                                                                                  |
-| `pnpm test:coverage`             | Vitest with the coverage thresholds (CI)                                                                |
-| `pnpm e2e:accounts`              | Once: creates the two Playwright accounts in the throwaway organization `iblai.env` names               |
-| `pnpm test:e2e`                  | Playwright against `pnpm dev`: Chrome, a Pixel 7, the demo project (`test:e2e:demo` needs no account)   |
-| `pnpm release`                   | release-it: version from the commits, CHANGELOG, tag, GitHub Release (CI runs it on every push to main) |
-| `pnpm tauri:dev` / `tauri:build` | Desktop shell (needs Rust); `pnpm tauri:dev:ios` / `tauri:dev:android` for a simulator or emulator      |
+| Command                                                                                | What it does                                                                                                                               |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pnpm dev`                                                                             | Dev server on port 3000                                                                                                                    |
+| `pnpm build`                                                                           | Production build                                                                                                                           |
+| `pnpm start`                                                                           | Serve the production build                                                                                                                 |
+| `pnpm typecheck`                                                                       | TypeScript                                                                                                                                 |
+| `pnpm lint`                                                                            | oxlint, zero warnings                                                                                                                      |
+| `pnpm format`                                                                          | oxfmt (`pnpm format:check` is the CI gate)                                                                                                 |
+| `pnpm test`                                                                            | Vitest                                                                                                                                     |
+| `pnpm test:coverage`                                                                   | Vitest with the coverage thresholds (CI)                                                                                                   |
+| `pnpm e2e:accounts`                                                                    | Once: creates the two Playwright accounts in the throwaway organization `iblai.env` names                                                  |
+| `pnpm test:e2e`                                                                        | Playwright against `pnpm dev`: Chrome, a Pixel 7, the demo project (`test:e2e:demo` needs no account)                                      |
+| `pnpm release`                                                                         | release-it: version from the commits, CHANGELOG, tag, GitHub Release (CI runs it on every push to main)                                    |
+| `pnpm tauri:dev` / `tauri:build`                                                       | Desktop shell (needs Rust); `pnpm tauri:dev:ios` / `tauri:dev:android` for a simulator or emulator                                         |
+| `pnpm shell:smoke` / `shell:smoke:windows`                                             | The shell headless against a local page: the navigation guard and both sign-in returns (CI runs the Linux one on every shell change)       |
+| `pnpm shell:touch` / `shell:touch:windows` / `shell:touch:ios` / `shell:touch:android` | The built shell on this machine (Linux, macOS, Windows), on an iOS simulator or on an Android phone, with the touch-test checklist         |
+| `pnpm shell:clear` [`android`, `ios`] / `shell:clear:windows`                          | Forgets the shell's cookies, localStorage and caches on this machine, the phone or the simulator, so the next touch test starts signed out |
 
 ---
 
@@ -377,6 +380,7 @@ This project is covered by Vitest unit tests in [`__tests__/`](__tests__/) and P
 | Command                | What it does                                                                                                                                                                               |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `pnpm test`            | Vitest — config, organization resolution, SSO landing, metadata, Open Badges import and export, the market layer, the résumé completion, the CSP proxy, the house journeys, the e2e ledger |
+| `pnpm shell:smoke`     | The Tauri shell headless (`shell:smoke:windows` on Windows): the navigation guard and both sign-in returns on a local page                                                                 |
 | `pnpm test:coverage`   | The unit tests with the coverage thresholds CI runs                                                                                                                                        |
 | `pnpm e2e:accounts`    | Once: creates the two Playwright accounts in the throwaway organization `iblai.env` names                                                                                                  |
 | `pnpm test:e2e`        | Playwright against `pnpm dev`: Chrome, a Pixel 7 and the demo project                                                                                                                      |
