@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.2](https://github.com/iblai/wallet/compare/v0.7.1...v0.7.2) (2026-11-04)
+
+### Bug Fixes
+
+* mobile touch tests load the app's iblai.me host, not frontendDist ([a26913b](https://github.com/iblai/wallet/commit/a26913b888739c1a3bff279d01abcef1aa8bb674))
+
 ## [0.7.1](https://github.com/iblai/wallet/compare/v0.7.0...v0.7.1) (2026-11-04)
 
 ### Tests
