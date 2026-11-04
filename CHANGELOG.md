@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.1](https://github.com/iblai/wallet/compare/v0.7.0...v0.7.1) (2026-11-04)
+
+### Tests
+
+* shell smoke, touch and clear scripts for every platform; check the shell on three OSes ([7555260](https://github.com/iblai/wallet/commit/755526021a1e6c1aff55ce8785b6743a67d4ef1f))
+
 ## [0.7.0](https://github.com/iblai/wallet/compare/v0.6.2...v0.7.0) (2026-11-03)
 
 ### Features
