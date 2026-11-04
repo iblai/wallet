@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.5](https://github.com/iblai/wallet/compare/v0.7.4...v0.7.5) (2026-11-04)
+
+### Chores
+
+* a .vercelignore keeps secrets, test sessions and the native shell off a CLI deploy ([70325cd](https://github.com/iblai/wallet/commit/70325cd370d4f1a88f747897c351392e9b54f2b7))
+
 ## [0.7.4](https://github.com/iblai/wallet/compare/v0.7.3...v0.7.4) (2026-11-04)
 
 ### Bug Fixes
