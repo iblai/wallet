@@ -1,9 +1,14 @@
-# The Vercel CLI does not read .gitignore: keep the platform shorthand, local env and test sessions off an upload.
-iblai.env
+# The Vercel CLI reads this file, not .gitignore: keep secrets, test sessions,
+# local state and the native shell off an upload (a Git deploy never has them).
 .env
 .env.*
 !.env.example
 e2e/.env*
-coverage
-playwright-report
-test-results
+iblai.env*
+playwright/
+playwright-report/
+test-results/
+coverage/
+src-tauri/
+.claude/
+CLAUDE.local.md
